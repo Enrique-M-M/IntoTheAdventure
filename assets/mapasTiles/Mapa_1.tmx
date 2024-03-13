@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="isometric" renderorder="right-down" width="8" height="8" tilewidth="16" tileheight="8" infinite="0" nextlayerid="3" nextobjectid="1">
+ <editorsettings>
+  <export target="Mapa_1.json" format="json"/>
+ </editorsettings>
+ <tileset firstgid="1" source="Tiles_Map.tsx"/>
+ <layer id="1" name="Capa_1" width="8" height="8">
+  <data encoding="csv">
+90,90,90,90,90,90,90,90,
+90,90,90,90,90,90,90,90,
+90,90,90,90,90,90,90,90,
+90,90,90,90,90,90,90,90,
+90,90,90,90,90,90,90,90,
+90,90,90,90,90,90,90,90,
+90,90,90,90,90,90,90,90,
+90,90,90,90,90,90,90,90
+</data>
+ </layer>
+</map>

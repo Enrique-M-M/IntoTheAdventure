@@ -1,0 +1,30 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+    },
+    "last.exportedFilePath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/mapasTiles",
+    "last.imagePath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/sprites",
+    "map.height": 8,
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.orientation": null,
+    "map.tileHeight": 6,
+    "map.tileWidth": 16,
+    "map.width": 8,
+    "openFiles": [
+    ],
+    "project": "sin nombre.tiled-project",
+    "recentFiles": [
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 17,
+        "width": 16
+    }
+}
