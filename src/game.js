@@ -18,7 +18,7 @@ let config = {
         mode: Phaser.Scale.FIT,  
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    pixelArt: false,
+    pixelArt: true,
     scene: [Boot, Combate, End],
     physics: {
         default: 'arcade',
