@@ -1,7 +1,7 @@
 import Platform from './platform.js';
 import Player from './player.js';
 import Phaser from 'phaser'
-
+import enemies_sp from '../assets/sprites/IsometricTRPGAssetPack_Entities.png'
 import tileset from '../assets/sprites/Isometric_MedievalFantasy_Tiles.png'
 import tilemap from '../assets/mapasTiles/Mapa_1.json'
 import mapIndicators from '../assets/sprites/TRPGIsometricAssetPack_MapIndicators.png'
@@ -28,6 +28,10 @@ export default class Combate extends Phaser.Scene {
         this.load.spritesheet('mapIndicators',
                                 mapIndicators,
                                 {frameWidth: 16, frameHeight: 8 })
+                                        
+        this.load.spritesheet('enemies_sp',
+                                enemies_sp,
+                                {frameWidth: 16, frameHeight: 17 })
     }
 
     create(){   
@@ -42,19 +46,27 @@ export default class Combate extends Phaser.Scene {
         this.map = this.make.tilemap({ 
             key: nombreMapa
           });
-          //nombre de la paleta de tiles usado para pintar en tiled 
-          //Mantener nombres constantes al crear mapa -> Tiles_Map
-          const tileset1 = this.map.addTilesetImage('Tiles_Map', 'Tiles_Map');
-          this.capaSuelo = this.map.createLayer('Suelo', [tileset1]);
-          
-          this.capaSelect = this.map.createFromObjects('SelectLayer', {name: 'SelectIndicator',
-                                                        classType: Phaser.GameObjects.Sprite})
-          this.capaJuego = this.map.createLayer('CapaJuego', [tileset1]);
-          this.capaSelect.map(si => {
-            si.setTexture('mapIndicators', 4);
-            si.setScale(1,1);
+        //nombre de la paleta de tiles usado para pintar en tiled 
+        //Mantener nombres constantes al crear mapa -> Tiles_Map
+        const tileset1 = this.map.addTilesetImage('Tiles_Map', 'Tiles_Map');
+        this.capaSuelo = this.map.createLayer('Suelo', [tileset1]);
+        
+        this.capaSelect = this.map.createFromObjects('SelectLayer', {name: 'SelectIndicator',
+                                                    classType: Phaser.GameObjects.Sprite})
+        this.enemies = this.map.createFromObjects('Enemy_layer', {name: 'enemy', 
+                                                    classType: Phaser.GameObjects.Sprite});
+        this.enemies.map(en => {
+                        en.setTexture('enemies_sp', 38) ;
+                        en.setScale(1,1);    
+                        
         });
-          this.capaSelect.map(si => si.setVisible(false));
+        this.enemies.map(en => en.setVisible(true));                                              
+        this.capaJuego = this.map.createLayer('CapaJuego', [tileset1]);
+        this.capaSelect.map(si => {
+        si.setTexture('mapIndicators', 4);
+        si.setScale(1,1);
+    });
+        this.capaSelect.map(si => si.setVisible(false));
 
     }
 
@@ -113,3 +125,7 @@ export default class Combate extends Phaser.Scene {
         })
     }
 }
+
+
+
+        
