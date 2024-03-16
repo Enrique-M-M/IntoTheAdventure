@@ -73,6 +73,14 @@ export default class Combate extends Phaser.Scene {
             const targetVec = this.capaJuego.worldToTileXY(worldX, worldY);
             targetVec.x = Math.trunc(targetVec.x);
             targetVec.y = Math.trunc(targetVec.y);
+
+            
+            console.log("clicked on " + targetVec.x +" " + targetVec.y)
+            if(targetVec.x === 8) {targetVec.x=7 
+                targetVec.y--}
+            if(targetVec.y === 8) {targetVec.y=7
+                targetVec.x--
+            }
             if(this.capaJuego.getTileAt(targetVec.x,targetVec.y,true).index != -1){
                 this.capaSelect.map(si =>{
                      si.setTexture('mapIndicators', 2)
@@ -90,7 +98,6 @@ export default class Combate extends Phaser.Scene {
             });
             this.capaSelect.map(si => si.setVisible(true));
             this.capaJuego.forEachTile(tl => tl.setAlpha(1))
-            console.log("clicked on " + targetVec.x +" " + targetVec.y)
             for(let cords of this.neigbours){
                 if( targetVec.x + cords[0] >= 0 && targetVec.x + cords[0] < this.map.height 
                     && targetVec.y + cords[1] >= 0 && targetVec.y + cords[1] < this.map.height 

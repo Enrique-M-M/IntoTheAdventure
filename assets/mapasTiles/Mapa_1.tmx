@@ -4,7 +4,7 @@
   <export target="Mapa_1.json" format="json"/>
  </editorsettings>
  <tileset firstgid="1" source="Tiles_Map.tsx"/>
- <layer id="1" name="Suelo" width="8" height="8">
+ <layer id="1" name="Suelo" width="8" height="8" offsetx="0" offsety="4">
   <data encoding="csv">
 90,90,90,90,90,90,90,90,
 90,90,90,90,90,90,90,90,
@@ -16,11 +16,11 @@
 1,1,94,3,3,90,90,3
 </data>
  </layer>
- <objectgroup id="8" name="SelectLayer" offsetx="0" offsety="-8">
+ <objectgroup id="8" name="SelectLayer" offsetx="0" offsety="-4">
   <object id="4" name="SelectIndicator" x="40" y="8" width="8" height="8"/>
  </objectgroup>
  <objectgroup id="5" name="Objetos" offsetx="0" offsety="-8"/>
- <layer id="6" name="CapaJuego" width="8" height="8" offsetx="0" offsety="-8">
+ <layer id="6" name="CapaJuego" width="8" height="8" offsetx="0" offsety="-4">
   <data encoding="csv">
 3,3,90,90,0,0,0,0,
 0,0,0,0,0,44,0,0,
