@@ -31,11 +31,16 @@ export default class Combate extends Phaser.Scene {
     }
 
     create(){   
-
-
         console.log("create map");
+        this.createMap('Mapa_1')
+        this.configurarCamara()
+        this.controlInputMouseClick()
+    }
+    
+   
+    createMap(nombreMapa){
         this.map = this.make.tilemap({ 
-            key: 'Mapa_1'
+            key: nombreMapa
           });
           //nombre de la paleta de tiles usado para pintar en tiled 
           //Mantener nombres constantes al crear mapa -> Tiles_Map
@@ -51,13 +56,18 @@ export default class Combate extends Phaser.Scene {
         });
           this.capaSelect.map(si => si.setVisible(false));
 
-          this.cameras.main.setZoom(4);
-          this.cameras.main.scrollX = -this.map.widthInPixels / 2 - 425;
-          this.cameras.main.scrollY = -this.map.heightInPixels / 2 - 260;
-          console.log("pos cameras " +this.cameras.main.scrollX +" " +this.cameras.main.scrollY );
+    }
 
-          
-          this.input.on(Phaser.Input.Events.POINTER_UP, (pointer) => {
+    configurarCamara(){
+        this.cameras.main.setZoom(4);
+        this.cameras.main.scrollX = -this.map.widthInPixels / 2 - 425;
+        this.cameras.main.scrollY = -this.map.heightInPixels / 2 - 260;
+        console.log("pos cameras " +this.cameras.main.scrollX +" " +this.cameras.main.scrollY );
+    }
+
+    controlInputMouseClick(){
+  
+        this.input.on(Phaser.Input.Events.POINTER_UP, (pointer) => {
             const { worldX, worldY } = pointer;
     
             const targetVec = this.capaJuego.worldToTileXY(worldX, worldY);
@@ -94,9 +104,5 @@ export default class Combate extends Phaser.Scene {
         this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
             this.input.off(Phaser.Input.Events.POINTER_UP)
         })
-
     }
-    
-   
-        
 }

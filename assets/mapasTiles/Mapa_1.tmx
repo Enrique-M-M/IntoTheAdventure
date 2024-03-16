@@ -18,7 +18,6 @@
  </layer>
  <objectgroup id="8" name="SelectLayer" offsetx="0" offsety="-8">
   <object id="4" name="SelectIndicator" x="40" y="8" width="8" height="8"/>
-  <object id="7" x="31.2025" y="5.10024" width="0.119025" height="0.119025"/>
  </objectgroup>
  <objectgroup id="5" name="Objetos" offsetx="0" offsety="-8"/>
  <layer id="6" name="CapaJuego" width="8" height="8" offsetx="0" offsety="-8">

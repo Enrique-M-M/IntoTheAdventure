@@ -1,0 +1,9 @@
+Nombres Crear mapas tiled:
+    Capas de patrones:
+        1.- Suelo
+        2.- CapaJuego
+    CapasDeObjetos:
+        1.-SelectLayer: con un objeto llamado -> SelectIndicator
+
+    Conjunto de patrones:
+        Tiles_Map
