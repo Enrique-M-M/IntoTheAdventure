@@ -17,16 +17,16 @@
 </data>
  </layer>
  <objectgroup id="5" name="SelectedCapa" parallaxy="1.1"/>
- <layer id="6" name="SelectedCapa" width="8" height="8" offsetx="0" offsety="-8" parallaxy="1.2">
+ <layer id="6" name="SelectedCapa" width="8" height="8" visible="0" offsetx="0" offsety="-8" parallaxy="1">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0
+0,25,25,25,25,0,0,0,
+0,25,0,25,25,25,0,0,
+0,25,25,25,25,25,0,0,
+0,25,25,0,25,25,0,0,
+0,25,0,25,25,25,0,0,
+0,25,25,25,25,25,0,0,
+25,25,25,0,25,0,0,0
 </data>
  </layer>
 </map>
