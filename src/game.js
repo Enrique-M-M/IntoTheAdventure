@@ -2,7 +2,6 @@
 
 import Boot from './boot.js';
 import End from './end.js';
-import Level from './level.js';
 import Combate from './combate.js';
 import Phaser from 'phaser'
 

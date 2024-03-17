@@ -1,12 +1,16 @@
-import Platform from './platform.js';
-import Player from './player.js';
+import Player from './playerChar.js';
 import Phaser from 'phaser'
 import enemies_sp from '../assets/sprites/IsometricTRPGAssetPack_Entities.png'
 import tileset from '../assets/sprites/Isometric_MedievalFantasy_Tiles.png'
 import tilemap from '../assets/mapasTiles/Mapa_1.json'
 import mapIndicators from '../assets/sprites/TRPGIsometricAssetPack_MapIndicators.png'
-import tileSelected from './tileSelected.js';
+import characters_sp from '../assets/sprites/CharactersSprites.png'
 
+
+import { neigbours } from './constants.js';
+import { CombatManager } from './combatManager.js';
+import {personajes  } from '../assets/CharactersInfo/CharactersDATA.js';
+import PlayerChar from './playerChar.js';
 
 /* 
  * @abstract 
@@ -14,7 +18,7 @@ import tileSelected from './tileSelected.js';
  */
 export default class Combate extends Phaser.Scene {
 
-    neigbours = [[1,1],[0,1],[-1,1],[1,0],[0,0],[-1,0],[1,-1],[0,-1],[-1,-1]]
+    playerCharacters = {}
 
     constructor() {
         super({ key: 'Combate' });
@@ -32,11 +36,16 @@ export default class Combate extends Phaser.Scene {
         this.load.spritesheet('enemies_sp',
                                 enemies_sp,
                                 {frameWidth: 16, frameHeight: 17 })
+        this.load.spritesheet('characters_sp',
+                                characters_sp,
+                                {frameWidth: 16, frameHeight: 17 })
+        
     }
 
-    create(){   
+    create(){  
         console.log("create map");
         this.createMap('Mapa_1')
+        this.createManager();
         this.configurarCamara()
         this.controlInputMouseClick()
     }
@@ -48,26 +57,41 @@ export default class Combate extends Phaser.Scene {
           });
         //nombre de la paleta de tiles usado para pintar en tiled 
         //Mantener nombres constantes al crear mapa -> Tiles_Map
-        const tileset1 = this.map.addTilesetImage('Tiles_Map', 'Tiles_Map');
-        this.capaSuelo = this.map.createLayer('Suelo', [tileset1]);
+        const tiles_map = this.map.addTilesetImage('Tiles_Map', 'Tiles_Map');
+        const tiles_desp = this.map.addTilesetImage('TileIndicators','mapIndicators')
+        this.capaSuelo = this.map.createLayer('Suelo', [tiles_map]);                               
+        this.capaJuego = this.map.createLayer('CapaJuego', [tiles_map]);                         
+        this.despliegue = this.map.createLayer('CapaDespliegue', [tiles_desp]);
         
-        this.capaSelect = this.map.createFromObjects('SelectLayer', {name: 'SelectIndicator',
+        this.capaSelect = this.map.createFromObjects('LayerInfo', {name: 'SelectIndicator',
                                                     classType: Phaser.GameObjects.Sprite})
         this.enemies = this.map.createFromObjects('Enemy_layer', {name: 'enemy', 
                                                     classType: Phaser.GameObjects.Sprite});
         this.enemies.map(en => {
-                        en.setTexture('enemies_sp', 38) ;
-                        en.setScale(1,1);    
-                        
-        });
-        this.enemies.map(en => en.setVisible(true));                                              
-        this.capaJuego = this.map.createLayer('CapaJuego', [tileset1]);
+                        en.setScale(1,1);
+                        en.set
+                        //en.x = this.capaSuelo.getTileAt(en.x,en.y,true).getCenterX()
+                        en.setTexture('enemies_sp', 32) ;
+                    });
+        this.enemies.map(en => en.setVisible(true));               
         this.capaSelect.map(si => {
-        si.setTexture('mapIndicators', 4);
-        si.setScale(1,1);
-    });
+                        si.setTexture('mapIndicators', 4);
+                        si.setScale(1,1);
+                    });
         this.capaSelect.map(si => si.setVisible(false));
+        this.despliegue.setVisible(false)
 
+    }
+
+    mostrarDespliegue(){
+        this.despliegue.setVisible(true)
+    }
+    createManager(){
+        
+        this.playerTeam = [new PlayerChar(personajes.Caballero, this)]; 
+        this.combatManager = new CombatManager(this.enemies,this.playerTeam,1,this);
+        console.log("Creado personaje "+ this.playerTeam[0].name)
+        this.combatManager.nextTurn();
     }
 
     configurarCamara(){
@@ -110,7 +134,7 @@ export default class Combate extends Phaser.Scene {
             });
             this.capaSelect.map(si => si.setVisible(true));
             this.capaJuego.forEachTile(tl => tl.setAlpha(1))
-            for(let cords of this.neigbours){
+            for(let cords of neigbours){
                 if( targetVec.x + cords[0] >= 0 && targetVec.x + cords[0] < this.map.height 
                     && targetVec.y + cords[1] >= 0 && targetVec.y + cords[1] < this.map.height 
                     && (this.capaJuego.getTileAt(targetVec.x + cords[0],targetVec.y +cords[1],true).index !== -1))
@@ -118,6 +142,8 @@ export default class Combate extends Phaser.Scene {
                         this.capaJuego.getTileAt(targetVec.x+ cords[0],targetVec.y +cords[1],true).setAlpha(0.6);
                     }
             }
+            
+            this.combatManager.clickOnTile(targetVec);
             // use startVec and targetVec
         })
         this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {

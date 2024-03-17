@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="isometric" renderorder="right-down" width="8" height="8" tilewidth="16" tileheight="8" infinite="0" nextlayerid="10" nextobjectid="8">
+<map version="1.10" tiledversion="1.10.2" orientation="isometric" renderorder="right-down" width="8" height="8" tilewidth="16" tileheight="8" infinite="0" nextlayerid="15" nextobjectid="20">
  <editorsettings>
   <export target="Mapa_1.json" format="json"/>
  </editorsettings>
  <tileset firstgid="1" source="Tiles_Map.tsx"/>
- <layer id="1" name="Suelo" width="8" height="8" offsetx="0" offsety="4">
+ <tileset firstgid="111" source="TileIndicators.tsx"/>
+ <layer id="1" name="Suelo" width="8" height="8">
   <data encoding="csv">
 90,90,90,90,90,90,90,90,
 90,90,90,90,90,90,90,90,
 90,90,90,3,3,3,90,3,
 90,6,90,3,3,3,3,3,
-6,6,6,6,6,5,5,5,
-6,6,6,6,6,6,6,5,
+6,6,6,98,6,5,5,5,
+6,6,6,98,6,6,6,5,
 90,90,90,90,90,90,3,3,
 1,1,94,3,3,90,90,3
 </data>
  </layer>
- <objectgroup id="8" name="SelectLayer" offsetx="0" offsety="-4">
+ <objectgroup id="8" name="LayerInfo" offsetx="0" offsety="-8">
   <object id="4" name="SelectIndicator" x="40" y="8" width="8" height="8"/>
  </objectgroup>
- <objectgroup id="5" name="Objetos" offsetx="0" offsety="-8"/>
- <layer id="6" name="CapaJuego" width="8" height="8" offsetx="0" offsety="-4">
+ <objectgroup id="5" name="Enemy_layer" offsetx="0" offsety="-8"/>
+ <layer id="6" name="CapaJuego" width="8" height="8" offsetx="0" offsety="-8">
   <data encoding="csv">
 3,3,90,90,0,0,0,0,
 0,0,0,0,0,44,0,0,
@@ -30,6 +31,18 @@
 0,0,0,0,0,0,0,0,
 94,0,0,0,0,0,0,0,
 94,94,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="14" name="CapaDespliegue" width="8" height="8" opacity="0.9" tintcolor="#0000ff" offsetx="0" offsety="1" parallaxy="1.2">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,114,114,114,114,0,0,
+0,0,114,114,114,114,0,0
 </data>
  </layer>
 </map>
