@@ -32,11 +32,14 @@
         },
         "Mapa_1.tmx": {
             "scale": 3,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 91,
-                "y": 63.66666666666667
+                "x": 90,
+                "y": 63.33333333333334
             }
+        },
+        "TileIndicators.tsx": {
+            "scaleInDock": 1
         },
         "Tiles_Map.tsx": {
             "scaleInDock": 1,
@@ -57,10 +60,10 @@
     ],
     "project": "sin nombre.tiled-project",
     "recentFiles": [
-        "Mapa_1.json",
-        "Tiles_Map.tsx",
+        "Mapa_1.tmx",
         "MapaPrueba.json",
-        "Mapa_1.tmx"
+        "Mapa_1.json",
+        "Tiles_Map.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

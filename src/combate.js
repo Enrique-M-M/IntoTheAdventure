@@ -5,9 +5,10 @@ import tileset from '../assets/sprites/Isometric_MedievalFantasy_Tiles.png'
 import tilemap from '../assets/mapasTiles/Mapa_1.json'
 import mapIndicators from '../assets/sprites/TRPGIsometricAssetPack_MapIndicators.png'
 import characters_sp from '../assets/sprites/CharactersSprites.png'
+import ui_elements from '../assets/sprites/IsometricTRPGAssetPack_UI.png'
 
 
-import { neigbours } from './constants.js';
+import { neigbours, frontNeigbours } from './constants.js';
 import { CombatManager } from './combatManager.js';
 import {personajes  } from '../assets/CharactersInfo/CharactersDATA.js';
 import PlayerChar from './playerChar.js';
@@ -32,13 +33,13 @@ export default class Combate extends Phaser.Scene {
         this.load.spritesheet('mapIndicators',
                                 mapIndicators,
                                 {frameWidth: 16, frameHeight: 8 })
-                                        
         this.load.spritesheet('enemies_sp',
                                 enemies_sp,
                                 {frameWidth: 16, frameHeight: 17 })
         this.load.spritesheet('characters_sp',
                                 characters_sp,
-                                {frameWidth: 16, frameHeight: 17 })
+                                {frameWidth: 16, frameHeight: 17 })     
+        //this.load.spritesheet('ui_elements',ui_elements,)
         
     }
 
@@ -88,8 +89,16 @@ export default class Combate extends Phaser.Scene {
     }
     createManager(){
         
-        this.playerTeam = [new PlayerChar(personajes.Caballero, this)]; 
-        this.combatManager = new CombatManager(this.enemies,this.playerTeam,1,this);
+        this.playerTeam = [new PlayerChar(personajes.Caballero, this),
+                                new PlayerChar(personajes.Picaro, this),
+                                new PlayerChar(personajes.Brujo, this),
+                                new PlayerChar(personajes.Guerrero, this),
+                                new PlayerChar(personajes.Clerigo, this),
+                                new PlayerChar(personajes.Vampiro, this),
+                                new PlayerChar(personajes.Ranger, this),
+                                new PlayerChar(personajes.Mago, this)
+        ]; 
+        this.combatManager = new CombatManager(this.enemies,this.playerTeam,8,this);
         console.log("Creado personaje "+ this.playerTeam[0].name)
         this.combatManager.nextTurn();
     }
@@ -134,22 +143,23 @@ export default class Combate extends Phaser.Scene {
             });
             this.capaSelect.map(si => si.setVisible(true));
             this.capaJuego.forEachTile(tl => tl.setAlpha(1))
-            for(let cords of neigbours){
+            for(let cords of frontNeigbours){
                 if( targetVec.x + cords[0] >= 0 && targetVec.x + cords[0] < this.map.height 
                     && targetVec.y + cords[1] >= 0 && targetVec.y + cords[1] < this.map.height 
                     && (this.capaJuego.getTileAt(targetVec.x + cords[0],targetVec.y +cords[1],true).index !== -1))
                     {
-                        this.capaJuego.getTileAt(targetVec.x+ cords[0],targetVec.y +cords[1],true).setAlpha(0.6);
+                        this.capaJuego.getTileAt(targetVec.x+ cords[0],targetVec.y +cords[1],true).setAlpha(0.6 );
                     }
             }
             
             this.combatManager.clickOnTile(targetVec);
             // use startVec and targetVec
-        })
+        6})
         this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
             this.input.off(Phaser.Input.Events.POINTER_UP)
         })
     }
+
 }
 
 
