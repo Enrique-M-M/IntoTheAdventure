@@ -3,9 +3,12 @@ Nombres Crear mapas tiled:
         1.- Suelo
         2.- CapaJuego
             #Desplazamiento y -8
+        3.- CapaDespliegue y 1
+            Con TileIndicators azules
     CapasDeObjetos:
-        1.-SelectLayer: con un objeto llamado -> SelectIndicator
-            #Desplazamiento y -4
+        1.-LayerInfo: con un objeto llamado -> SelectIndicator
+            #Desplazamiento y -8
 
     Conjunto de patrones:
         Tiles_Map
+        TileIndicators
