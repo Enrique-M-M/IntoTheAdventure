@@ -63,7 +63,7 @@ export default class Combate extends Phaser.Scene {
         this.createUI()
     }
     
-   
+   //+++++++++++++ User Interface y Pintado Mapa +++++++++++++++++++++++++
 
     createUI(){
         this.empezarCombate_btn = new TextButton(this, -82,-44, 'Iniciar', {fill: '#FFF'}, () => this.pasarTurno(),'ui_buttons',4)
@@ -95,6 +95,33 @@ export default class Combate extends Phaser.Scene {
         this.pasarTurno_btn.setVisible(true)
         this.pasarTurno_btn.setInteractive(true)
     }
+
+    configurarCamara(){
+        this.cameras.main.setZoom(4);
+        this.cameras.main.scrollX = -this.map.widthInPixels / 2 - 425;
+        this.cameras.main.scrollY = -this.map.heightInPixels / 2 - 260;
+        console.log("pos cameras " +this.cameras.main.scrollX +" " +this.cameras.main.scrollY );
+    }
+
+    
+    mostrarDespliegue(val){
+        this.despliegue.setVisible(val)
+    }
+
+    visibilidadSeleccion(targetVec){
+        this.capaJuego.forEachTile(tl => tl.setAlpha(1))
+            for(let cords of frontNeigbours){
+                if( targetVec.x + cords[0] >= 0 && targetVec.x + cords[0] < this.map.height 
+                    && targetVec.y + cords[1] >= 0 && targetVec.y + cords[1] < this.map.height 
+                    && (this.capaJuego.getTileAt(targetVec.x + cords[0],targetVec.y +cords[1],true).index !== -1))
+                    {
+                        this.capaJuego.getTileAt(targetVec.x+ cords[0],targetVec.y +cords[1],true).setAlpha(0.6 );
+                    }
+            }
+    }
+
+    //+++++++++++++ Tile Map +++++++++++++++++++++++++
+
     createMap(nombreMapa){  
         this.map = this.make.tilemap({ 
             key: nombreMapa
@@ -123,27 +150,6 @@ export default class Combate extends Phaser.Scene {
 
     }
 
-    mostrarDespliegue(val){
-        this.despliegue.setVisible(val)
-    }
-    createManager(){
-        //input del player
-        this.playerTeam = [new PlayerChar(personajes.Caballero, this),
-                                new PlayerChar(personajes.Picaro, this),
-                                new PlayerChar(personajes.Brujo, this)
-        ]; 
-        this.combatManager = new CombatManager(this.enemies,this.playerTeam,3 ,this);
-        console.log("Creado personaje "+ this.playerTeam[0].name)
-        this.combatManager.nextTurn();
-    }
-
-    configurarCamara(){
-        this.cameras.main.setZoom(4);
-        this.cameras.main.scrollX = -this.map.widthInPixels / 2 - 425;
-        this.cameras.main.scrollY = -this.map.heightInPixels / 2 - 260;
-        console.log("pos cameras " +this.cameras.main.scrollX +" " +this.cameras.main.scrollY );
-    }
-
     calculaTileXYClicked(worldX, worldY){
         const targetVec = this.capaJuego.worldToTileXY(worldX, worldY,true);
         targetVec.x = Math.trunc(targetVec.x);
@@ -159,17 +165,28 @@ export default class Combate extends Phaser.Scene {
         return targetVec
     }
 
-    visibilidadSeleccion(targetVec){
-        this.capaJuego.forEachTile(tl => tl.setAlpha(1))
-            for(let cords of frontNeigbours){
-                if( targetVec.x + cords[0] >= 0 && targetVec.x + cords[0] < this.map.height 
-                    && targetVec.y + cords[1] >= 0 && targetVec.y + cords[1] < this.map.height 
-                    && (this.capaJuego.getTileAt(targetVec.x + cords[0],targetVec.y +cords[1],true).index !== -1))
-                    {
-                        this.capaJuego.getTileAt(targetVec.x+ cords[0],targetVec.y +cords[1],true).setAlpha(0.6 );
-                    }
-            }
+     //+++++++++++++ Combat Manager +++++++++++++++++++++++++
+
+    createManager(){
+        //input del player
+        this.playerTeam = [new PlayerChar(personajes.Caballero, this),
+                                new PlayerChar(personajes.Picaro, this),
+                                new PlayerChar(personajes.Brujo, this)
+        ]; 
+        this.combatManager = new CombatManager(this.enemies,this.playerTeam,3 ,this);
+        console.log("Creado personaje "+ this.playerTeam[0].name)
+        this.combatManager.nextTurn();
     }
+    
+    pasarTurno(){
+        this.combatManager.nextTurn()
+        this.indicatorTile.setVisible(false)
+    }
+
+
+   
+     //+++++++++++++ Controles +++++++++++++++++++++++++
+    
     controlInputMouseClick(){
         this.input.on(Phaser.Input.Events.POINTER_UP, (pointer) => {
 
@@ -203,9 +220,8 @@ export default class Combate extends Phaser.Scene {
         })
     }
 
-    pasarTurno(){
-        this.combatManager.nextTurn()
-    }
+    
+
 }
 
 
