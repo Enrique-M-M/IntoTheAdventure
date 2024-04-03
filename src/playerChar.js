@@ -27,6 +27,16 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
     desterity;
 
     spriteIndex;
+    selectSpriteIndex;
+    ui_icon;
+
+    arma;
+    armaduraSup;
+    armaduraInf;
+    amuleto;
+
+    desplegado
+    seleccionado
 
     constructor(charData, scene) {
         super(scene, 0,0,'characters_sp');
@@ -46,6 +56,11 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         this.desterity= charData.desterity;
 
         this.spriteIndex = charData.spriteIndex*8
+        this.selectSpriteIndex = this.spriteIndex + 64
+        this.seleccionado = false;
+        this.desplegado = false;
+        this.ui_icon = charData.ui_index
+
         this.setVisible(true)
         this.anims.create({
             key: 'idle_'+this.name,
@@ -71,6 +86,30 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
             frameRate: 2, // Velocidad de la animación
             repeat: 1    // Animación en bucle
             });
+        this.anims.create({
+            key: 'idle_s_'+this.name,
+            frames: this.anims.generateFrameNumbers('characters_sp', { start: this.selectSpriteIndex, end: (this.selectSpriteIndex+1)}),
+            frameRate: 2, // Velocidad de la animación
+            repeat: -1    // Animación en bucle
+            });
+        this.anims.create({
+            key: 'atack_s_'+this.name,
+            frames: this.anims.generateFrameNumbers('characters_sp', { start:( this.selectSpriteIndex+2), end: (this.selectSpriteIndex+3)}),
+            frameRate: 2, // Velocidad de la animación
+            repeat: 0    // Animación en bucle
+            });
+        this.anims.create({
+                key: 'idleBack_s_'+this.name,
+                frames: this.anims.generateFrameNumbers('characters_sp', { start: (this.selectSpriteIndex+4), end: (this.selectSpriteIndex+5)}),
+                frameRate: 2, // Velocidad de la animación
+                repeat: -1    // Animación en bucle
+                });
+        this.anims.create({
+            key: 'atackBack_s_'+this.name,
+            frames: this.anims.generateFrameNumbers('characters_sp', { start: (this.selectSpriteIndex+6), end: (this.selectSpriteIndex+7)}),
+            frameRate: 2, // Velocidad de la animación
+            repeat: 1    // Animación en bucle
+            });
        
     }
     /**
@@ -80,12 +119,14 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         super.preUpdate(t,dt)
     }
 
-    desplegar(targetVec){
+    desplegar(targetVec, index){
         this.scene.add.existing(this);
         this.mover(targetVec)
         this.setScale(1,1);
         console.log("Desplegando " +this.name +" en " + this.x + " " + this.y);
         this.play('idle_'+this.name);
+        this.scene.botonesPersonajes[index].activar()
+        this.desplegado = true
     }
 
     mover(targetVec){
@@ -98,8 +139,20 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         return {x:this.tileX, y:this.tileY}
     }
 
-    setSeleccionado(){
-        this.play('atack_'+this.name)
-        this.playAfterDelay('idle_'+this.name,1000)
+    playIdleAnim(){
+        if(this.seleccionado){
+            this.play('idle_s_'+this.name)
+        } else{
+            this.play('idle_'+this.name)
+        }
     }
+
+    setSeleccionado(val){
+        console.log('selecciona '+ this.name + ' seleccionado ' + this.seleccionado)
+        if(val !== this.seleccionado) {
+            this.seleccionado = val
+        }
+        this.playIdleAnim();
+    }
+    getUi_icon(){return this.ui_icon}
 }

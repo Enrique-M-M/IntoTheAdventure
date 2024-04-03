@@ -12,3 +12,8 @@ Nombres Crear mapas tiled:
     Conjunto de patrones:
         Tiles_Map
         TileIndicators
+
+Tiles Background Index
+    Lava: 25, 36
+    Agua: 5,6,7,8, 16, 17, 18, 19
+    AguaVerde: 27,28, 29, 30, 38, 39, 40, 4
