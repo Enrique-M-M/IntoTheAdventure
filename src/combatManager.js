@@ -34,7 +34,6 @@ export class CombatManager {
         this.indexDespliegue = 0
     }
 
-
     nextTurn(){
         switch(this.currentTurn){
             case 'init':

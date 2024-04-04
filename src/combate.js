@@ -1,17 +1,6 @@
 import Player from './playerChar.js';
 import Phaser from 'phaser'
-import enemies_sp from '../assets/sprites/IsometricTRPGAssetPack_Entities.png'
-import tileset from '../assets/sprites/Isometric_MedievalFantasy_Tiles.png'
-import tilemap from '../assets/mapasTiles/Mapa_1.json'
-import mapIndicators from '../assets/sprites/TRPGIsometricAssetPack_MapIndicators.png'
-import characters_sp from '../assets/sprites/CharactersSprites.png'
-import tileSprites from '../assets/sprites/Isometric_MedievalFantasy_Tiles-copia.png'
 
-import ui_characters from '../assets/sprites/CharacterFaceSprite.png'
-import ui_buttons from '../assets/sprites/ButtonSprites.png'
-import ui_actions_icon from '../assets/sprites/ActionsIcons.png'
-import ui_barraVida from '../assets/sprites/LifeBar_UI.png'
-import ui_barraVida_ex from '../assets/sprites/LifeBar_Exterior_UI.png'
 
 
 
@@ -23,6 +12,7 @@ import { neigbours, frontNeigbours, crossNeigbours, indexBadTileBackground } fro
 import { CombatManager } from './combatManager.js';
 import { personajes  } from '../assets/CharactersInfo/CharactersDATA.js';
 import PlayerChar from './playerChar.js';
+import { log } from 'console';
 
 /* 
  * @abstract 
@@ -35,41 +25,7 @@ export default class Combate extends Phaser.Scene {
         super({ key: 'Combate' });
     }
     preload(){
-        console.log("preload");
         this.load.setPath('assets/sprites/');
-        //nombre del archivo del tilemap usado para pintar en tiled
-        this.load.image('Tiles_Map', tileset);    
-        this.load.tilemapTiledJSON('Mapa_1', tilemap);
-        this.load.spritesheet('mapIndicators',
-                                mapIndicators,
-                                {frameWidth: 16, frameHeight: 8 })
-        this.load.spritesheet('enemies_sp',
-                                enemies_sp,
-                                {frameWidth: 16, frameHeight: 17 })
-        this.load.spritesheet('characters_sp',
-                                characters_sp,
-                                {frameWidth: 16, frameHeight: 17 })     
-        this.load.spritesheet('ui_buttons',
-                                ui_buttons,
-                                {frameWidth: 16, frameHeight: 16})
-        this.load.spritesheet('ui_characters',
-                                ui_characters,
-                                {frameWidth: 8, frameHeight: 8})
-        this.load.spritesheet('ui_actions_icon',
-                                ui_actions_icon,
-                                {frameWidth: 8, frameHeight:8})
-                                
-        this.load.spritesheet('Tiles_Map_Spr',
-                                tileset,
-                                {frameWidth: 16, frameHeight:17})
-        this.load.spritesheet('ui_barraVida', 
-                                ui_barraVida,
-                                {frameWidth: 16, frameHeight:4})
-        this.load.spritesheet('ui_barraVida_ex', 
-                                ui_barraVida_ex,
-                                {frameWidth: 16, frameHeight:8})
-                                
-        
     }
 
     create(){  
@@ -83,38 +39,52 @@ export default class Combate extends Phaser.Scene {
     
    //+++++++++++++ User Interface y Pintado Mapa +++++++++++++++++++++++++
 
+    configurarCamara(){
+        this.cameras.main.setZoom(4);
+        this.cameras.main.scrollX = -this.map.widthInPixels / 2 - 465;
+        this.cameras.main.scrollY = -this.map.heightInPixels / 2 - 260;
+        console.log("pos cameras " +this.cameras.main.scrollX +" " +this.cameras.main.scrollY );
+    }
     createUI(){
-
+        //@indicatorTile -> Indicador al clickar en una casilla
         this.indicatorTile = this.add.sprite(0,0,'mapIndicators',4) ;
         this.indicatorTile.setVisible(false);
         this.indicatorTile.setScale(1,1);
         
+        //@hoverIndicatorTile -> Indicador al mover el raton sobre un area resaltada
         this.hoverIndicatorTile = this.add.sprite(0,0,'mapIndicators',5) ;
         this.hoverIndicatorTile.setVisible(false);
         this.hoverIndicatorTile.setScale(1,1);
 
-
+        //@emempezarCombate_btn -> boton para pasar el primer turno en el despliegue
         this.empezarCombate_btn = new TextButton(this, -122,-44, 'Iniciar', {fill: '#FFF'}, () => this.pasarTurno(),'ui_buttons',4)
+
+        //@pasarTurno_btn -> boton para pasar el turno
         this.pasarTurno_btn = new TextButton(this, -116,-44, 'Fin Turno', {fill: '#FFF'}, () => this.pasarTurno(),'ui_buttons',4)
         this.pasarTurno_btn.setVisible(false)
         this.pasarTurno_btn.setInteractive(false)
 
+        //@casillasSeleccionadas -> array de sprites que resaltan un area de seleccion. Si no hay accion seleccionada se vacia
         this.casillasSeleccionadas = []
 
-        console.log("ui icon 1 " + this.playerTeam[0].getUi_icon())
-        console.log("ui icon 2 " + this.playerTeam[1].getUi_icon())
-        console.log("ui icon 3 " + this.playerTeam[2].getUi_icon())
+        //@botonPersonaje1 2 3 -> Boton con la cara del personaje. Al clickar selecciona al personaje asignado segun el orden del playerTeam
         let botonPersonaje1 = new SpriteButton(this, -140, -20, 'ui_buttons', 1, () => this.selecciona(this.playerTeam[0]), 'ui_characters', this.playerTeam[0].getUi_icon(),false)
         
         let botonPersonaje2 = new SpriteButton(this, -140, 10, 'ui_buttons', 1, () => this.selecciona(this.playerTeam[1]), 'ui_characters', this.playerTeam[1].getUi_icon(),false)
     
         let botonPersonaje3 = new SpriteButton(this, -140, 40, 'ui_buttons', 1, () => this.selecciona(this.playerTeam[2]), 'ui_characters', this.playerTeam[2].getUi_icon(),false)
+        
+        //@botonesPersonajes -> Array que contiene los botones en orden de los personajes
         this.botonesPersonajes = [botonPersonaje1, botonPersonaje2, botonPersonaje3]
         this.botonesPersonajes.forEach(element => {
-            element.desactivar()
+            element.desactivar() //inician desactivados hasta el despliegue
         })
+
+        //@botonerasPersonajes -> Matriz de botones de accion de los personajes. La primera coordenada indica el index del personaje.
+        //La segunda coordenada recorre los botones de las acciones. 
         this.botonerasPersonajes = []
         for(let i = 0; i < 3; i++){
+            //TODO: Refactor de la creaccion para comodarse al array de acciones
             let botonera = [new SpriteButton(this, this.botonesPersonajes[i].x + 17, this.botonesPersonajes[i].y, 'ui_buttons', 1, () => {this.seleccionaAccion(this.playerTeam[i].acciones.Mover, i)}, 'ui_actions_icon', 1,true, this.playerTeam[i].acciones.Mover.nombre),
             new SpriteButton(this, this.botonesPersonajes[i].x + 16*2 +1, this.botonesPersonajes[i].y, 'ui_buttons', 1, () => {this.seleccionaAccion(this.playerTeam[i].acciones.AtaqueBasico,i)}, 'ui_actions_icon', 3, true, this.playerTeam[i].acciones.AtaqueBasico.nombre)]
             botonera.forEach(btn => {
@@ -123,15 +93,6 @@ export default class Combate extends Phaser.Scene {
             });
            this.botonerasPersonajes.push(botonera) 
         }
-    }
-
-    findButtom(indexChar, accion){
-        let ret
-        this.botonerasPersonajes[indexChar].forEach(btn => {
-            if(accion === btn.nombreA)
-                ret= btn
-        });
-        return ret
     }
 
     selecciona(char){
@@ -153,120 +114,90 @@ export default class Combate extends Phaser.Scene {
         this.pasarTurno_btn.setInteractive(true)
     }
 
-    configurarCamara(){
-        this.cameras.main.setZoom(4);
-        this.cameras.main.scrollX = -this.map.widthInPixels / 2 - 465;
-        this.cameras.main.scrollY = -this.map.heightInPixels / 2 - 260;
-        console.log("pos cameras " +this.cameras.main.scrollX +" " +this.cameras.main.scrollY );
-    }
-
-    
     mostrarDespliegue(val){
         this.despliegue.setVisible(val)
     }
 
+    //Reduce la opacidad de los objetos entre la camara y la seleccion
     visibilidadSeleccion(targetVec){
-            for(let cords of frontNeigbours){
-                if(this.checkCasillaEnTablero({x: targetVec.x + cords[0], y:targetVec.y +cords[1]}))
-                    this.spritesEnCapaJuego.forEach(tile =>{ 
-                        if(tile.x === targetVec.x +cords[0] && tile.y === targetVec.y +cords[1]){
-                            tile.sprite.setAlpha(0.6)
+        for(let cords of frontNeigbours){
+            if(this.checkCasillaEnTablero({x: targetVec.x + cords[0], y:targetVec.y +cords[1]}))
+                this.spritesEnCapaJuego.forEach(tile =>{ 
+                    if(tile.x === targetVec.x +cords[0] && tile.y === targetVec.y +cords[1]){
+                        tile.sprite.setAlpha(0.6)
+                    }     
+                })
+        }
+    }
 
-                        }     
-                    })
-                }
-            }
-    
-
+    //-------------- Algoritmo para mostrar el rango para la seleccion de casillas de una accion --------------------------
     mostrarRangoAccion(char, range, tipoSeleccion){
-        
-            this.combatManager.resetrAlpha()
-        let tilesToCheck = []
+        this.combatManager.resetrAlpha()
         let tilesChecked = []
+        let tilesToCheck = []
         let targetVec = new Phaser.Math.Vector2(char.tileX, char.tileY)
         console.log("Personaje en " + targetVec.x + " " +targetVec.y)
-        this._mostrarRango(targetVec,range, 0, tipoSeleccion,tilesToCheck,tilesChecked)
-        
+        this._mostrarRango(targetVec,targetVec,range,0, tipoSeleccion,tilesToCheck,tilesChecked)
     }
 
-    casillaOcupada(targetVec){
-        return this.capaJuego.getTileAt(targetVec.x,targetVec.y,true).index != -1 || this.combatManager.casillaOcupada(targetVec)
-    }
-
-    _mostrarRango(targetVec, range, i,  tipoSeleccion, tilesToCheck, tilesChecked){
-        tilesChecked.push(targetVec);
-
-       
-        this._casillaAMostrar(targetVec, tipoSeleccion)
-
+    //Recorre recursivamente las casillas vecina de una casilla y si entran dentro del rango llama a _CasillaAMostrar
+    _mostrarRango(originVec, targetVec, range, dist = 0, tipoSeleccion, tilesToCheck, tilesChecked){
+        if(!this._arrayContieneVector(tilesChecked,targetVec)){
+            
+            this._casillaAMostrar(targetVec, tipoSeleccion)
+        }
+        tilesChecked.push({x: targetVec.x, y: targetVec.y, di: dist});
         let newVec = new Phaser.Math.Vector2()
         for (let cords of crossNeigbours){
             newVec.x = targetVec.x + cords[0]
             newVec.y =  targetVec.y + cords[1]
-            
-            if(this.checkCasillaEnTablero(newVec) && !tilesChecked.find(vec => {vec.x === newVec.x && vec.y === newVec.y}) ){
-                if(range >= i + 1
-                    && (tipoSeleccion !== 'Movimiento' 
-                    || (!indexBadTileBackground.find(ind => ind === this.capaSuelo.getTileAt(newVec.x, newVec.y, true).index) && !this.casillaOcupada(newVec)))
+            if(this.checkCasillaEnTablero(newVec) && range > dist
+             && (!this._arrayContieneVector(tilesChecked,newVec) || !this._arrayObjetoEnVector(tilesChecked,newVec).di < dist + 1 )
+            ){
+                if((tipoSeleccion != 'Movimiento' 
+                    || (!indexBadTileBackground.find(i => i === this.capaSuelo.getTileAt(newVec.x, newVec.y, true).index) && !this.casillaOcupada(newVec)))
                     ){
-                        if(this.capaJuego.getTileAt(newVec.x,newVec.y,true).index === -1 )
-                         tilesToCheck.push(new Phaser.Math.Vector2(newVec.x, newVec.y))
+                        if(this.capaJuego.getTileAt(newVec.x,newVec.y,true).index === -1 ){
+                            this._mostrarRango(originVec, newVec, range, dist + 1,  tipoSeleccion,tilesToCheck, tilesChecked)
+                        }
                     }
                 }
         }
-        while(tilesToCheck.length > 0){
-            let tile = tilesToCheck.pop()
-            this._mostrarRango({x: tile.x, y: tile.y}, range, i, tipoSeleccion,tilesToCheck, tilesChecked)
-        }
+        
     }
 
+    //Crea un sprite en la posicion targetVec. 
     _casillaAMostrar(targetVec,tipoSeleccion){
         let cS;
         let tileCJ = this.capaJuego.getTileAt(targetVec.x,targetVec.y,true)
         if(tipoSeleccion === 'Movimiento'){
             cS = new Phaser.GameObjects.Sprite(this,tileCJ.getCenterX(), tileCJ.getBottom() +5,'mapIndicators',0)
-            cS.setInteractive({ useHandCursor: true })
-            .on('pointerover', () => {
-                this.hoverIndicatorTile.x = cS.x
-                this.hoverIndicatorTile.y = cS.y
-                this.hoverIndicatorTile.setDepth(cS.depth+1)
-                this.hoverIndicatorTile.setVisible(true)
-                } )
-            .on('pointerout', () => this.hoverIndicatorTile.setVisible(false) )
-            .on('pointerdown', () => {this.combatManager.realizaAccion({x: targetVec.x, y: targetVec.y}) 
-                    this.hoverIndicatorTile.setVisible(false)
-            }
-            );
         }
         else{
             cS = new Phaser.GameObjects.Sprite(this,tileCJ.getCenterX(), tileCJ.getBottom() +5,'mapIndicators',1)
-            cS.setInteractive({ useHandCursor: true })
-            .on('pointerover', () => {
-                this.hoverIndicatorTile.x = cS.x
-                this.hoverIndicatorTile.y = cS.y
-                this.hoverIndicatorTile.setDepth(cS.depth+1)
-                this.hoverIndicatorTile.setVisible(true)
-                } )
-            .on('pointerout', () => this.hoverIndicatorTile.setVisible(false) )
-            .on('pointerdown', () => {
-                this.combatManager.realizaAccion({x: targetVec.x, y: targetVec.y}) 
-                this.hoverIndicatorTile.setVisible(false)
-                }
-            );
         }
-        
+        cS.setInteractive({ useHandCursor: true })
+        .on('pointerover', () => this.moveHoverToSprite(cS) )
+        .on('pointerout', () => this.hoverIndicatorTile.setVisible(false) )
+        .on('pointerdown', () => this.combatManager.realizaAccion({x: tileCJ.x, y: tileCJ.y})
+        );
         this.visibilidadSeleccion(targetVec)
         cS.setDepth(0)
         this.casillasSeleccionadas.push(cS)        
         this.add.existing(cS)
     }
-
+    moveHoverToSprite(tile){
+        this.hoverIndicatorTile.x = tile.x
+        this.hoverIndicatorTile.y = tile.y
+        this.hoverIndicatorTile.setDepth(tile.depth+1)
+        this.hoverIndicatorTile.setVisible(true)
+    }
     _borrarCasillasMostradas(){
         while(this.casillasSeleccionadas.length > 0){
-        let sp = this.casillasSeleccionadas.pop()
-        sp.destroy(true)
+            let sp = this.casillasSeleccionadas.pop()
+            sp.destroy(true)
         }
-
+        this.hoverIndicatorTile.setVisible(false)
     }
 
     //+++++++++++++ Tile Map +++++++++++++++++++++++++
@@ -284,6 +215,7 @@ export default class Combate extends Phaser.Scene {
         this.capaJuego = this.map.createLayer('CapaJuego', [tiles_map]);
         this.spritesEnCapaJuego = []
         
+        //Los tiles de la capa de juego se gestionaran como sprites para permitir el renderizado en orden de los personajes.
         for(let j = 0; j < this.map.height; j++ ){
             for (let i = 0; i < this.map.width; i++){
                 let obj = this.capaJuego.getTileAt(i,j,true)
@@ -312,20 +244,6 @@ export default class Combate extends Phaser.Scene {
 
     }
 
-    calculaTileXYClicked(worldX, worldY){
-        const targetVec = this.capaJuego.worldToTileXY(worldX, worldY,true);
-        targetVec.x = Math.trunc(targetVec.x);
-        targetVec.y = Math.trunc(targetVec.y);
-
-        //Corrige por abajo para + comodidad
-        if(targetVec.x === 8) {targetVec.x=7 
-            targetVec.y--}
-        if(targetVec.y === 8) {targetVec.y=7
-            targetVec.x--
-        }
-
-        return targetVec
-    }
 
      //+++++++++++++ Combat Manager +++++++++++++++++++++++++
 
@@ -341,7 +259,9 @@ export default class Combate extends Phaser.Scene {
     }
 
     pasarTurno(){
+        //LLAMA A COMBATMANAGER
         this.combatManager.nextTurn()
+        //RESETEA LA UI AL INICIO DEL TURNO
         this.indicatorTile.setVisible(false)
         this.botonerasPersonajes.forEach(btns => {
             btns.forEach(btn => {
@@ -350,33 +270,18 @@ export default class Combate extends Phaser.Scene {
         })
     }
 
-    seleccionaAccion(accion, indexChar){
-
-        if(!this.combatManager.accionSeleccionada){
-            if(this.combatManager.seleccionaAccion(accion, indexChar))
-            this.mostrarRangoAccion(this.playerTeam[indexChar],accion.rango, accion.tipoSeleccion)
-        }
-        else if(this.combatManager.accionSeleccionada && this.combatManager.ultimaAccionSeleccionada === accion ){
-            this.combatManager.deseleccionaAccion()
-        } else {
-            findButton({indexP: indexChar, nombreA: accion.nombre}).unSelect()
-            if(this.combatManager.seleccionaAccion(accion, indexChar))
-            this.mostrarRangoAccion(this.playerTeam[indexChar],accion.rango,accion.tipoSeleccion)
-        }
-      
-    }
-
+    //gestionar la ui de un personaje que ha muerto
     personajeMuerto(char){
         let index = this.combatManager.personajeMuerto(char)
         this.botonerasPersonajes[index].forEach(btn => btn.setInteractive(false))
         this.botonesPersonajes[index].desactivar()
     }
-   
      //+++++++++++++ Controles +++++++++++++++++++++++++
     
+     //TODO?: Si se clicka en una casilla para seleccion de una habilidad no hacer visible el marcador
     controlInputMouseClick(){
         this.input.on(Phaser.Input.Events.POINTER_UP, (pointer) => {
-
+            
             //Consigue Index XY de la tile de la capaJuego
             const { worldX, worldY } = pointer;
             const targetVec = this.calculaTileXYClicked(worldX,worldY);
@@ -410,13 +315,81 @@ export default class Combate extends Phaser.Scene {
         })
     }
 
+    //----------------------------- Seleccion en Combate ---------------------------------------------------------
+
+
+    seleccionaAccion(accion, indexChar){
+        if(!this.combatManager.accionSeleccionada){
+            if(this.combatManager.seleccionaAccion(accion, indexChar))
+            this.mostrarRangoAccion(this.playerTeam[indexChar],accion.rango, accion.tipoSeleccion)
+        }
+        else if(this.combatManager.accionSeleccionada && this.combatManager.ultimaAccionSeleccionada === accion ){
+            this.combatManager.deseleccionaAccion()
+        } else {
+            findButton({indexP: indexChar, nombreA: accion.nombre}).unSelect()
+            if(this.combatManager.seleccionaAccion(accion, indexChar))
+            this.mostrarRangoAccion(this.playerTeam[indexChar],accion.rango,accion.tipoSeleccion)
+        }
+    }
+
+
+    //----------------------------- Funciones de busqueda y utilidades -------------------------------------------
+    
     checkCasillaEnTablero(targetVec){
-       return !(targetVec.x >= this.map.width || targetVec.x < 0 || targetVec.y >= this.map.height || targetVec.y < 0)
+        return !(targetVec.x >= this.map.width || targetVec.x < 0 || targetVec.y >= this.map.height || targetVec.y < 0)
+     }
+
+    casillaOcupada(targetVec){
+        return this.capaJuego.getTileAt(targetVec.x,targetVec.y,true).index != -1 || this.combatManager.casillaOcupada(targetVec)
+    }
+     
+
+
+    calculaTileXYClicked(worldX, worldY){
+        const targetVec = this.capaJuego.worldToTileXY(worldX, worldY,true);
+        targetVec.x = Math.trunc(targetVec.x);
+        targetVec.y = Math.trunc(targetVec.y);
+
+        //Corrige por abajo para + comodidad
+        if(targetVec.x === 8) {targetVec.x=7 
+            targetVec.y--}
+        if(targetVec.y === 8) {targetVec.y=7
+            targetVec.x--
+        }
+
+        return targetVec
     }
     
 
+
+    _arrayContieneVector(array, vector){
+        let ret = false
+        array.forEach(val => {
+            if(val.x == vector.x && val.y == vector.y) {
+                ret = true
+            }
+        })
+        return ret
+    }
+
+    _arrayObjetoEnVector(array, vector){
+        let ret = null
+        array.forEach(val => {
+            if(val.x == vector.x && val.y == vector.y) {
+                ret = val
+            }
+        })
+        return ret
+    }
+
+
+
+    findButtom(indexChar, accion){
+        let ret
+        this.botonerasPersonajes[indexChar].forEach(btn => {
+            if(accion === btn.nombreA)
+                ret= btn
+        });
+        return ret
+    }
 }
-
-
-
-        
