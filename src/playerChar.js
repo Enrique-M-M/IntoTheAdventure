@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { CombatManager } from './combatManager';
 
 /**
  * Clase que representa el jugador del juego. El jugador se mueve por el mundo usando los cursores.
@@ -63,7 +64,7 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         this.desplegado = false;
         this.ui_icon = charData.ui_index
 
-        
+        this.danoBasico = 18
 
         //Acciones de personaje prototipo
         this.acciones = {Mover:{nombre: 'mover', rango: this.movementRange, accion: (targetVec) => this.mover(targetVec), tipoSeleccion: 'Movimiento' }, AtaqueBasico: {nombre: 'atacar', objetivo: 'enemy' , rango: 1, area: 1, accion: (targetVec) => this.hacerDano(targetVec) , tipoSeleccion: 'Habilidad'} }
@@ -168,6 +169,21 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
             this.seleccionado = val
         }
         this.playIdleAnim();
+    }
+
+    hacerDano(targetVec){
+        this.scene.combatManager.getEnemyAt(targetVec).recibeDano(this.danoBasico)
+    }
+
+    recibeDano(num){
+        this.currentHp - num
+        if(this.currentHp <= 0)
+            this.muere()
+    }
+
+    muere(){
+        this.scene.personajeMuerto(this)
+        this.setVisible(false)
     }
     getUi_icon(){return this.ui_icon}
 }

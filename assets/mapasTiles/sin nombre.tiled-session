@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Ui_assets.tsx",
+    "activeFile": "Mapa_1.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -35,10 +35,10 @@
                 8
             ],
             "scale": 4,
-            "selectedLayer": 0,
+            "selectedLayer": 2,
             "viewCenter": {
                 "x": 95.875,
-                "y": 19.5
+                "y": 19.75
             }
         },
         "PruebaMapa_index.json": {
@@ -88,8 +88,8 @@
     ],
     "project": "sin nombre.tiled-project",
     "recentFiles": [
-        "Mapa_1.tmx",
         "Ui_assets.tsx",
+        "Mapa_1.tmx",
         "MapaPrueba.json",
         "Mapa_1.json",
         "Tiles_Map.tsx"

@@ -5,6 +5,7 @@ import tileset from '../assets/sprites/Isometric_MedievalFantasy_Tiles.png'
 import tilemap from '../assets/mapasTiles/Mapa_1.json'
 import mapIndicators from '../assets/sprites/TRPGIsometricAssetPack_MapIndicators.png'
 import characters_sp from '../assets/sprites/CharactersSprites.png'
+import tileSprites from '../assets/sprites/Isometric_MedievalFantasy_Tiles-copia.png'
 
 import ui_characters from '../assets/sprites/CharacterFaceSprite.png'
 import ui_buttons from '../assets/sprites/ButtonSprites.png'
@@ -55,6 +56,11 @@ export default class Combate extends Phaser.Scene {
         this.load.spritesheet('ui_actions_icon',
                                 ui_actions_icon,
                                 {frameWidth: 8, frameHeight:8})
+                                
+        this.load.spritesheet('Tiles_Map_Spr',
+                                tileset,
+                                {frameWidth: 16, frameHeight:17})
+                               
         
     }
 
@@ -90,25 +96,34 @@ export default class Combate extends Phaser.Scene {
         console.log("ui icon 1 " + this.playerTeam[0].getUi_icon())
         console.log("ui icon 2 " + this.playerTeam[1].getUi_icon())
         console.log("ui icon 3 " + this.playerTeam[2].getUi_icon())
-        let botonPersonaje1 = new SpriteButton(this, -140, -20, 'ui_buttons', 2, () => this.selecciona(this.playerTeam[0]), 'ui_characters', this.playerTeam[0].getUi_icon(),false)
+        let botonPersonaje1 = new SpriteButton(this, -140, -20, 'ui_buttons', 1, () => this.selecciona(this.playerTeam[0]), 'ui_characters', this.playerTeam[0].getUi_icon(),false)
         
-        let botonPersonaje2 = new SpriteButton(this, -140, 10, 'ui_buttons', 2, () => this.selecciona(this.playerTeam[1]), 'ui_characters', this.playerTeam[1].getUi_icon(),false)
+        let botonPersonaje2 = new SpriteButton(this, -140, 10, 'ui_buttons', 1, () => this.selecciona(this.playerTeam[1]), 'ui_characters', this.playerTeam[1].getUi_icon(),false)
     
-        let botonPersonaje3 = new SpriteButton(this, -140, 40, 'ui_buttons', 2, () => this.selecciona(this.playerTeam[2]), 'ui_characters', this.playerTeam[2].getUi_icon(),false)
+        let botonPersonaje3 = new SpriteButton(this, -140, 40, 'ui_buttons', 1, () => this.selecciona(this.playerTeam[2]), 'ui_characters', this.playerTeam[2].getUi_icon(),false)
         this.botonesPersonajes = [botonPersonaje1, botonPersonaje2, botonPersonaje3]
         this.botonesPersonajes.forEach(element => {
-            element.disableInteractive()
+            element.desactivar()
         })
         this.botonerasPersonajes = []
         for(let i = 0; i < 3; i++){
-            let botonera = [new SpriteButton(this, this.botonesPersonajes[i].x + 17, this.botonesPersonajes[i].y, 'ui_buttons', 1, () => this.seleccionaAccion(this.playerTeam[i].acciones.Mover, i), 'ui_actions_icon', 1,true, this.playerTeam[i].acciones.Mover.nombre),
-            new SpriteButton(this, this.botonesPersonajes[i].x + 16*2 +1, this.botonesPersonajes[i].y, 'ui_buttons', 1, () => this.seleccionaAccion(this.playerTeam[i].acciones.AtaqueBasico,i), 'ui_actions_icon', 3, true, this.playerTeam[i].acciones.AtaqueBasico.nombre)]
+            let botonera = [new SpriteButton(this, this.botonesPersonajes[i].x + 17, this.botonesPersonajes[i].y, 'ui_buttons', 1, () => {this.seleccionaAccion(this.playerTeam[i].acciones.Mover, i)}, 'ui_actions_icon', 1,true, this.playerTeam[i].acciones.Mover.nombre),
+            new SpriteButton(this, this.botonesPersonajes[i].x + 16*2 +1, this.botonesPersonajes[i].y, 'ui_buttons', 1, () => {this.seleccionaAccion(this.playerTeam[i].acciones.AtaqueBasico,i)}, 'ui_actions_icon', 3, true, this.playerTeam[i].acciones.AtaqueBasico.nombre)]
             botonera.forEach(btn => {
                 btn.setScale(0.8,0.8)
                 btn.setVisible(false)
             });
            this.botonerasPersonajes.push(botonera) 
         }
+    }
+
+    findButtom(indexChar, accion){
+        let ret
+        this.botonerasPersonajes[indexChar].forEach(btn => {
+            if(accion === btn.nombreA)
+                ret= btn
+        });
+        return ret
     }
 
     selecciona(char){
@@ -144,13 +159,15 @@ export default class Combate extends Phaser.Scene {
 
     visibilidadSeleccion(targetVec){
             for(let cords of frontNeigbours){
-                if(this.checkCasillaEnTablero({x: targetVec.x + cords[0], y:targetVec.y +cords[1]})
-                    && (this.capaJuego.getTileAt(targetVec.x + cords[0],targetVec.y +cords[1],true).index !== -1))
-                    {
-                        this.capaJuego.getTileAt(targetVec.x+ cords[0],targetVec.y +cords[1],true).setAlpha(0.6 );
-                    }
+                if(this.checkCasillaEnTablero({x: targetVec.x + cords[0], y:targetVec.y +cords[1]}))
+                    this.spritesEnCapaJuego.forEach(tile =>{ 
+                        if(tile.x === targetVec.x +cords[0] && tile.y === targetVec.y +cords[1]){
+                            tile.sprite.setAlpha(0.6 )
+                        }     
+                    })
+                }
             }
-    }
+    
 
     mostrarRangoAccion(char, range, tipoSeleccion){
         
@@ -196,7 +213,6 @@ export default class Combate extends Phaser.Scene {
     }
 
     _casillaAMostrar(targetVec,tipoSeleccion){
-        console.log('Casilla a mostrar ' + targetVec.x +" "+ targetVec.y)
         let cS;
         let tileCJ = this.capaJuego.getTileAt(targetVec.x,targetVec.y,true)
         if(tipoSeleccion === 'Movimiento'){
@@ -210,7 +226,9 @@ export default class Combate extends Phaser.Scene {
                 } )
             .on('pointerout', () => this.hoverIndicatorTile.setVisible(false) )
             .on('pointerdown', () => {this.combatManager.realizaAccion({x: targetVec.x, y: targetVec.y}) 
-            this.hoverIndicatorTile.setVisible(false)}
+                    this.hoverIndicatorTile.setVisible(false)
+                    this.botonSelecciondo.unSelect()
+            }
             );
         }
         else{
@@ -223,8 +241,10 @@ export default class Combate extends Phaser.Scene {
                 this.hoverIndicatorTile.setVisible(true)
                 } )
             .on('pointerout', () => this.hoverIndicatorTile.setVisible(false) )
-            .on('pointerdown', () => {this.combatManager.realizaAccion({x: targetVec.x, y: targetVec.y}) 
-            this.hoverIndicatorTile.setVisible(false)}
+            .on('pointerdown', () => {
+                this.combatManager.realizaAccion({x: targetVec.x, y: targetVec.y}) 
+                this.hoverIndicatorTile.setVisible(false)
+                }
             );
         }
         
@@ -254,7 +274,22 @@ export default class Combate extends Phaser.Scene {
         const tiles_map = this.map.addTilesetImage('Tiles_Map', 'Tiles_Map');
         const tiles_desp = this.map.addTilesetImage('TileIndicators','mapIndicators')
         this.capaSuelo = this.map.createLayer('Suelo', [tiles_map]);                               
-        this.capaJuego = this.map.createLayer('CapaJuego', [tiles_map]);                         
+        this.capaJuego = this.map.createLayer('CapaJuego', [tiles_map]);
+        this.spritesEnCapaJuego = []
+        
+        for(let j = 0; j < this.map.height; j++ ){
+            for (let i = 0; i < this.map.width; i++){
+                let obj = this.capaJuego.getTileAt(i,j,true)
+                if(obj!= null && obj.index != -1){
+                    let spr = this.add.sprite(obj.getCenterX(),obj.getCenterY(),'Tiles_Map_Spr',obj.index -1 )
+                    spr.setDepth(i+j)
+                    this.spritesEnCapaJuego.push({x: i, y: j, sprite: spr })
+                }
+            }
+        }
+        this.capaJuego.setVisible(false)
+        
+
         this.despliegue = this.map.createLayer('CapaDespliegue', [tiles_desp]);
     
         this.enemies = this.map.createFromObjects('Enemy_layer', {name: 'enemy',
@@ -293,7 +328,7 @@ export default class Combate extends Phaser.Scene {
                                 new PlayerChar(personajes.Guerrero, this),
                                 new PlayerChar(personajes.Brujo, this)
         ]; 
-        this.combatManager = new CombatManager(this.enemies,this.playerTeam,3 ,this);
+        this.combatManager = new CombatManager(this.enemies,this.playerTeam,3 ,this,this.spritesEnCapaJuego);
         console.log("Creado personaje "+ this.playerTeam[0].name)
         this.combatManager.nextTurn();
     }
@@ -311,22 +346,24 @@ export default class Combate extends Phaser.Scene {
     seleccionaAccion(accion, indexChar){
 
         if(!this.combatManager.accionSeleccionada){
-            this.combatManager.seleccionaAccion(accion, indexChar)
+            if(this.combatManager.seleccionaAccion(accion, indexChar))
             this.mostrarRangoAccion(this.playerTeam[indexChar],accion.rango, accion.tipoSeleccion)
         }
         else if(this.combatManager.accionSeleccionada && this.combatManager.ultimaAccionSeleccionada === accion ){
             this.combatManager.deseleccionaAccion()
         } else {
-            this.botonerasPersonajes[indexChar].forEach(btn => {
-                if(accion.nombre !== btn.nombreA)
-                    btn.unSelect()
-            });
-            this.combatManager.seleccionaAccion(accion, indexChar)
+            findButton({indexP: indexChar, nombreA: accion.nombre}).unSelect()
+            if(this.combatManager.seleccionaAccion(accion, indexChar))
             this.mostrarRangoAccion(this.playerTeam[indexChar],accion.rango,accion.tipoSeleccion)
         }
       
     }
 
+    personajeMuerto(char){
+        let index = this.combatManager.personajeMuerto(char)
+        this.botonerasPersonajes[index].forEach(btn => btn.setInteractive(false))
+        this.botonesPersonajes[index].desactivar()
+    }
    
      //+++++++++++++ Controles +++++++++++++++++++++++++
     
@@ -367,7 +404,6 @@ export default class Combate extends Phaser.Scene {
     }
 
     checkCasillaEnTablero(targetVec){
-        console.log(targetVec.x +" " +this.map.width +" "+ targetVec.y +" "+ this.map.height )
        return !(targetVec.x >= this.map.width || targetVec.x < 0 || targetVec.y >= this.map.height || targetVec.y < 0)
     }
     

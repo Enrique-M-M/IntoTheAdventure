@@ -15,10 +15,13 @@ export class CombatManager {
     currentTurn;
     _nextTurn;
 
-    constructor(enemyTeam,playerTeam,partySize,scene){
+    objectList;
+
+    constructor(enemyTeam,playerTeam,partySize,scene, objectList){
         this.enemyTeam = enemyTeam;
         this.enemySize = enemyTeam.length;
         this.livingEnemies = this.enemySize;
+        this.objectList = objectList
 
         this.playerTeam = playerTeam;
         this.teamSize = partySize;
@@ -51,7 +54,7 @@ export class CombatManager {
             case 'playerTurn':
                 this.combatScene.pasarTurno_btn.setInteractive(false);
                 this.combatScene.pasarTurno_btn.setTexture(this.combatScene.pasarTurno_btn.texture, 5)
-                this.deseleccionaAccion()
+                this.borraPersonajeSeleccionado()
                 
                 break;
             case 'resolveActions':
@@ -141,13 +144,16 @@ export class CombatManager {
 
     _selecccionaPersonaje(char){
         let previousChar = null
+
         if(this.hayPersonajeSeleccionado){
             if(this.hayAccionSeleccionada){
                 this.deseleccionaAccion()
-            }
-                
-            this.ultimoPersonajeSeleccionado.setSeleccionado(false)
+            }                
             previousChar = this.ultimoPersonajeSeleccionado
+            if(previousChar === char){
+                return
+            }
+            this.ultimoPersonajeSeleccionado.setSeleccionado(false)
         }
         this.ultimoPersonajeSeleccionado=char
         this.ultimoPersonajeSeleccionado.setSeleccionado(true)
@@ -164,16 +170,22 @@ export class CombatManager {
 
     seleccionaAccion(accion){
         if(this.hayAccionSeleccionada){
+            let previousAction = this.ultimaAccionSeleccionada
             this.deseleccionaAccion()
+            if(previousAction === accion){
+                return false
+            }
         }
         this.hayAccionSeleccionada = true
         this.ultimaAccionSeleccionada = accion
         console.log("Seleccionada Accion " +this.ultimaAccionSeleccionada.nombre)
+        return true;
     }
 
     deseleccionaAccion(){
         console.log("Deseleccionada Accion " +this.ultimaAccionSeleccionada.nombre)
         this.combatScene._borrarCasillasMostradas()
+        this.combatScene.findButtom(this.playerTeam.indexOf(this.ultimoPersonajeSeleccionado),this.ultimaAccionSeleccionada.nombre).unSelect()
         this.hayAccionSeleccionada = false
         this.ultimaAccionSeleccionada = null
     }
@@ -213,6 +225,31 @@ export class CombatManager {
                 }
                 break;
         }
+    }
+
+    getEnemyAt(targetVec){
+        let enc = false
+        let ret = null
+        this.enemyTeam.forEach(element => {
+            if(element.tileX === targetVec.x && element.tileY === targetVec.y){
+                enc = true
+                ret = element
+            }
+        });
+        this.playerTeam.forEach(element => {
+            if(element.tileX === targetVec.x && element.tileY === targetVec.y){
+                enc = true
+                ret = element
+            }
+        });
+        this.objectList.forEach(element => {
+            if(element.tileX === targetVec.x && element.tileY === targetVec.y){
+                enc = true
+                ret = element
+            }
+        });
+
+        return ret
     }
 
 }
