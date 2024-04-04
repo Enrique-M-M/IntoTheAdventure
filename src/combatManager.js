@@ -8,7 +8,8 @@ export class CombatManager {
 
     ultimoPersonajeSeleccionado;
     hayPersonajeSeleccionado;
-    
+    hayAccionSeleccionada;
+
     combatScene;
 
     currentTurn;
@@ -43,10 +44,18 @@ export class CombatManager {
                 }
                 break;
             case 'enemyTurn':
+                this.combatScene.pasarTurno_btn.setInteractive(true);
+                this.combatScene.pasarTurno_btn.setTexture(this.combatScene.pasarTurno_btn.texture, 4)
+                  
                 break;
             case 'playerTurn':
+                this.combatScene.pasarTurno_btn.setInteractive(false);
+                this.combatScene.pasarTurno_btn.setTexture(this.combatScene.pasarTurno_btn.texture, 5)
+                this.deseleccionaAccion()
+                
                 break;
             case 'resolveActions':
+               
                 break;
         }
         this.currentTurn = this._nextTurn
@@ -75,6 +84,7 @@ export class CombatManager {
                 this.nextTurn()
                 break;
         }
+        this.borraPersonajeSeleccionado() 
     }
 
     checkClickEnZonaDespliegue(targetVec){
@@ -87,46 +97,102 @@ export class CombatManager {
         }
         return null;
     }
-    checkClickEnPersonaje(targetVec){
+    checkEnPersonajeAliadoEnCasilla(targetVec){
         for(let i =0;i<this.teamSize;i++){
-            //console.log('Revisando personaje ' +this.playerTeam[i].name + ' en tile ' + this.playerTeam[i].getTileXY().x + " "+ this.playerTeam[i].getTileXY().y)
             if(this.playerTeam[i].getTileXY().x === targetVec.x && this.playerTeam[i].getTileXY().y ===targetVec.y)
                 return true;
         }
         return false;
     }
 
-    seleccionaPersonajeV(targetVec){
-        if(this.personajeSeleccionado){
-            this.ultimoPersonajeSeleccionado.setSeleccionado(false)
+    checkEnPersonajeEnemigoEnCasilla(targetVec){
+        for(let i =0;i<this.enemySize;i++){
+            if(this.enemyTeam[i].getTileXY().x === targetVec.x && this.enemyTeam[i].getTileXY().y ===targetVec.y)
+                return true;
         }
-        this.ultimoPersonajeSeleccionado=this.personajeClickado(targetVec)
-        this.ultimoPersonajeSeleccionado.setSeleccionado(true)
-        this.personajeSeleccionado=true;
+        return false;
+    }
+
+    casillaOcupada(targetVec){
+        return this.checkEnPersonajeAliadoEnCasilla(targetVec) || this.checkEnPersonajeEnemigoEnCasilla(targetVec)
+    }
+
+    seleccionaPersonajeV(targetVec){ 
+        this._selecccionaPersonaje(this.personajeClickado(targetVec))
         console.log('click en personaje ' + this.ultimoPersonajeSeleccionado.name)
     }
 
     seleccionaPersonajeC(char){
-        if(this.personajeSeleccionado){
-            this.ultimoPersonajeSeleccionado.setSeleccionado(false)
-        }
-        this.ultimoPersonajeSeleccionado=char
-        this.ultimoPersonajeSeleccionado.setSeleccionado(true)
-        this.personajeSeleccionado=true;
+        this._selecccionaPersonaje(char)
         console.log('click en personaje ' + this.ultimoPersonajeSeleccionado.name)
     }
 
+    borraPersonajeSeleccionado(){
+        if(this.hayPersonajeSeleccionado){
+        switch(this.currentTurn){
+            case 'playerTurn':
+                this.combatScene.showUIChar(this.playerTeam.indexOf(this.ultimoPersonajeSeleccionado),false)        
+        }
+        this.ultimoPersonajeSeleccionado.setSeleccionado(false)
+        this.ultimoPersonajeSeleccionado = null
+        this.hayPersonajeSeleccionado = false
+     }
+    }
+
+    _selecccionaPersonaje(char){
+        let previousChar = null
+        if(this.hayPersonajeSeleccionado){
+            if(this.hayAccionSeleccionada){
+                this.deseleccionaAccion()
+            }
+                
+            this.ultimoPersonajeSeleccionado.setSeleccionado(false)
+            previousChar = this.ultimoPersonajeSeleccionado
+        }
+        this.ultimoPersonajeSeleccionado=char
+        this.ultimoPersonajeSeleccionado.setSeleccionado(true)
+        this.hayPersonajeSeleccionado=true;
+
+        switch(this.currentTurn){
+            case 'playerTurn':
+                this.combatScene.showUIChar(this.playerTeam.indexOf(char),true)
+                if(previousChar!==null)
+                    this.combatScene.showUIChar(this.playerTeam.indexOf(previousChar),false)        
+        }
+    }
+
+
+    seleccionaAccion(accion){
+        if(this.hayAccionSeleccionada){
+            this.deseleccionaAccion()
+        }
+        this.hayAccionSeleccionada = true
+        this.ultimaAccionSeleccionada = accion
+        console.log("Seleccionada Accion " +this.ultimaAccionSeleccionada.nombre)
+    }
+
+    deseleccionaAccion(){
+        console.log("Deseleccionada Accion " +this.ultimaAccionSeleccionada.nombre)
+        this.combatScene._borrarCasillasMostradas()
+        this.hayAccionSeleccionada = false
+        this.ultimaAccionSeleccionada = null
+    }
+
+    realizaAccion(targetVec){
+        this.ultimaAccionSeleccionada.accion(targetVec)
+        this.deseleccionaAccion()
+    }
 
     clickOnTile(targetVec){
         switch(this.currentTurn){
             case 'init':
                 if(this.checkClickEnZonaDespliegue(targetVec)){
-                    if(this.checkClickEnPersonaje(targetVec)){
+                    if(this.checkEnPersonajeAliadoEnCasilla(targetVec)){
                         this.seleccionaPersonajeV(targetVec)
                     }
-                    else if(this.personajeSeleccionado){
+                    else if(this.hayPersonajeSeleccionado){
                         this.ultimoPersonajeSeleccionado.mover(targetVec)
-                        this.personajeSeleccionado=false;
+                        this.hayPersonajeSeleccionado=false;
                         this.ultimoPersonajeSeleccionado.setSeleccionado(false)
                     }
                     else if(this.indexDespliegue<this.teamSize){
@@ -136,6 +202,15 @@ export class CombatManager {
                 }
                 break;
             case 'playerTurn':
+                if(!this.hayPersonajeSeleccionado){
+                    if(this.checkEnPersonajeAliadoEnCasilla(targetVec)){
+                        this.seleccionaPersonajeV(targetVec)
+                       }
+                } else {
+                    if(this.checkEnPersonajeAliadoEnCasilla(targetVec) && this.personajeClickado(targetVec) !== this.ultimoPersonajeSeleccionado ){
+                        this.seleccionaPersonajeV(targetVec)
+                    }
+                }
                 break;
         }
     }

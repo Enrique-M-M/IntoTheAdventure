@@ -38,6 +38,8 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
     desplegado
     seleccionado
 
+    acciones
+
     constructor(charData, scene) {
         super(scene, 0,0,'characters_sp');
         this.name = charData.name;
@@ -60,6 +62,11 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         this.seleccionado = false;
         this.desplegado = false;
         this.ui_icon = charData.ui_index
+
+        
+
+        //Acciones de personaje prototipo
+        this.acciones = {Mover:{nombre: 'mover', rango: this.movementRange, accion: (targetVec) => this.mover(targetVec), tipoSeleccion: 'Movimiento' }, AtaqueBasico: {nombre: 'atacar', objetivo: 'enemy' , rango: 1, area: 1, accion: (targetVec) => this.hacerDano(targetVec) , tipoSeleccion: 'Habilidad'} }
 
         this.setVisible(true)
         this.anims.create({
@@ -130,10 +137,18 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
     }
 
     mover(targetVec){
+        console.log("Mover " +this.name+" a " +targetVec.x +" "+targetVec.y)
         this.tileX=targetVec.x;
         this.tileY=targetVec.y;
         this.x= this.scene.capaJuego.getTileAt(targetVec.x,targetVec.y,true).getCenterX();
         this.y= this.scene.capaJuego.getTileAt(targetVec.x,targetVec.y,true).getBottom();
+        this.setDepth(this.tileX+this.tileY)
+
+    }
+
+    ataqueBasico(targetVec){
+        console.log("Ataque en " + targetVec.x+ " "+ targetVec.y)
+        //this.scene.getEnemyAt(targetVec).recibirAtaque(1)
     }
     getTileXY(){
         return {x:this.tileX, y:this.tileY}

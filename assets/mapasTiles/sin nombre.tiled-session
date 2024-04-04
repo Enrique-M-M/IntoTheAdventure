@@ -35,18 +35,29 @@
                 8
             ],
             "scale": 4,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 85.625,
-                "y": 17
+                "x": 95.875,
+                "y": 19.5
             }
+        },
+        "PruebaMapa_index.json": {
+            "scale": 7.741015624999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 64.0096886511581,
+                "y": 28.032497350759453
+            }
+        },
+        "PruebaMapa_index.json#Tiles_Map": {
+            "scaleInDock": 1
         },
         "PruebaMapa_index.tmx": {
             "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 241.25,
-                "y": -305.5
+                "x": 240.75,
+                "y": -306
             }
         },
         "TileIndicators.tsx": {
