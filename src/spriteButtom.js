@@ -68,7 +68,7 @@ export class SpriteButton extends Phaser.GameObjects.Sprite {
 
     desactivar(){
       this.unSelect()
-      this.setInteractive(false)
+      this.disableInteractive()
       this.index++
       this.setTexture(this.texture, this.index)
     }

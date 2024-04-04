@@ -1,6 +1,6 @@
 export var personajes = {
     Caballero: {
-        name: 'Caballero', maxHp: 50, movementRange: 3,
+        name: 'Caballero', maxHp: 50, movementRange: 2,
         armorType: 3, apt: 2,suete: 0, inteligence:0, strength: 1, desterity:0,
         spriteIndex: 0, ui_index: 2
     },

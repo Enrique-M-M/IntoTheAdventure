@@ -10,6 +10,8 @@ import tileSprites from '../assets/sprites/Isometric_MedievalFantasy_Tiles-copia
 import ui_characters from '../assets/sprites/CharacterFaceSprite.png'
 import ui_buttons from '../assets/sprites/ButtonSprites.png'
 import ui_actions_icon from '../assets/sprites/ActionsIcons.png'
+import ui_barraVida from '../assets/sprites/LifeBar_UI.png'
+import ui_barraVida_ex from '../assets/sprites/LifeBar_Exterior_UI.png'
 
 
 
@@ -60,7 +62,13 @@ export default class Combate extends Phaser.Scene {
         this.load.spritesheet('Tiles_Map_Spr',
                                 tileset,
                                 {frameWidth: 16, frameHeight:17})
-                               
+        this.load.spritesheet('ui_barraVida', 
+                                ui_barraVida,
+                                {frameWidth: 16, frameHeight:4})
+        this.load.spritesheet('ui_barraVida_ex', 
+                                ui_barraVida_ex,
+                                {frameWidth: 16, frameHeight:8})
+                                
         
     }
 
@@ -162,7 +170,8 @@ export default class Combate extends Phaser.Scene {
                 if(this.checkCasillaEnTablero({x: targetVec.x + cords[0], y:targetVec.y +cords[1]}))
                     this.spritesEnCapaJuego.forEach(tile =>{ 
                         if(tile.x === targetVec.x +cords[0] && tile.y === targetVec.y +cords[1]){
-                            tile.sprite.setAlpha(0.6 )
+                            tile.sprite.setAlpha(0.6)
+
                         }     
                     })
                 }
@@ -171,7 +180,7 @@ export default class Combate extends Phaser.Scene {
 
     mostrarRangoAccion(char, range, tipoSeleccion){
         
-        this.capaJuego.forEachTile(tl => tl.setAlpha(1))
+            this.combatManager.resetrAlpha()
         let tilesToCheck = []
         let tilesChecked = []
         let targetVec = new Phaser.Math.Vector2(char.tileX, char.tileY)
@@ -189,17 +198,16 @@ export default class Combate extends Phaser.Scene {
 
        
         this._casillaAMostrar(targetVec, tipoSeleccion)
-        
 
         let newVec = new Phaser.Math.Vector2()
         for (let cords of crossNeigbours){
             newVec.x = targetVec.x + cords[0]
             newVec.y =  targetVec.y + cords[1]
             
-            if(this.checkCasillaEnTablero(newVec) && !tilesChecked.find(vec => {vec.x === newVec.x && vec.y === newVec.y}) && !tilesToCheck.find(vec => {vec.x === newVec.x && vec.y === newVec.y})){
-                if(range >= i+1
+            if(this.checkCasillaEnTablero(newVec) && !tilesChecked.find(vec => {vec.x === newVec.x && vec.y === newVec.y}) ){
+                if(range >= i + 1
                     && (tipoSeleccion !== 'Movimiento' 
-                    || (!indexBadTileBackground.find(i => i === this.capaSuelo.getTileAt(newVec.x, newVec.y, true).index) && !this.casillaOcupada(newVec)))
+                    || (!indexBadTileBackground.find(ind => ind === this.capaSuelo.getTileAt(newVec.x, newVec.y, true).index) && !this.casillaOcupada(newVec)))
                     ){
                         if(this.capaJuego.getTileAt(newVec.x,newVec.y,true).index === -1 )
                          tilesToCheck.push(new Phaser.Math.Vector2(newVec.x, newVec.y))
@@ -208,7 +216,7 @@ export default class Combate extends Phaser.Scene {
         }
         while(tilesToCheck.length > 0){
             let tile = tilesToCheck.pop()
-            this._mostrarRango({x: tile.x, y: tile.y}, range, i+1, tipoSeleccion,tilesToCheck, tilesChecked)
+            this._mostrarRango({x: tile.x, y: tile.y}, range, i, tipoSeleccion,tilesToCheck, tilesChecked)
         }
     }
 
@@ -227,7 +235,6 @@ export default class Combate extends Phaser.Scene {
             .on('pointerout', () => this.hoverIndicatorTile.setVisible(false) )
             .on('pointerdown', () => {this.combatManager.realizaAccion({x: targetVec.x, y: targetVec.y}) 
                     this.hoverIndicatorTile.setVisible(false)
-                    this.botonSelecciondo.unSelect()
             }
             );
         }
@@ -394,7 +401,7 @@ export default class Combate extends Phaser.Scene {
             
             this.combatManager.clickOnTile(targetVec);
             
-            this.capaJuego.forEachTile(tl => tl.setAlpha(1))
+            this.combatManager.resetrAlpha()
             this.visibilidadSeleccion(targetVec)
             // use startVec and targetVec
         })

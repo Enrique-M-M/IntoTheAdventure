@@ -227,7 +227,7 @@ export class CombatManager {
         }
     }
 
-    getEnemyAt(targetVec){
+    getEntityAt(targetVec){
         let enc = false
         let ret = null
         this.enemyTeam.forEach(element => {
@@ -250,6 +250,18 @@ export class CombatManager {
         });
 
         return ret
+    }
+
+    resetrAlpha(){
+        this.enemyTeam.forEach(element => {
+                element.setAlpha(1)
+        });
+        this.playerTeam.forEach(element => {
+                if(element.desplegado)element.setAlpha(1)
+        });
+        this.objectList.forEach(element => {
+                element.sprite.setAlpha(1)
+        });
     }
 
 }
