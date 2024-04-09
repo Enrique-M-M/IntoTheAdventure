@@ -12,8 +12,6 @@ import { neigbours, frontNeigbours, crossNeigbours, indexBadTileBackground } fro
 import { CombatManager } from './combatManager.js';
 import { personajes  } from '../assets/CharactersInfo/CharactersDATA.js';
 import PlayerChar from './playerChar.js';
-import { log } from 'console';
-
 /* 
  * @abstract 
  * @extends Phaser.Scene
@@ -288,6 +286,8 @@ export default class Combate extends Phaser.Scene {
             if(!this.checkCasillaEnTablero(targetVec)){
                 return;
             }
+            this.combatManager.clickOnTile(targetVec);
+
             if(this.combatManager.checkEnPersonajeAliadoEnCasilla(targetVec)){
                 this.indicatorTile.setVisible(false);
             } else{
@@ -304,7 +304,6 @@ export default class Combate extends Phaser.Scene {
                 this.indicatorTile.setDepth(targetVec.x + targetVec.y)
             }
             
-            this.combatManager.clickOnTile(targetVec);
             
             this.combatManager.resetrAlpha()
             this.visibilidadSeleccion(targetVec)

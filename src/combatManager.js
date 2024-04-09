@@ -53,8 +53,7 @@ export class CombatManager {
             case 'playerTurn':
                 this.combatScene.pasarTurno_btn.setInteractive(false);
                 this.combatScene.pasarTurno_btn.setTexture(this.combatScene.pasarTurno_btn.texture, 5)
-                this.borraPersonajeSeleccionado()
-                
+                this.borraPersonajeSeleccionado()                
                 break;
             case 'resolveActions':
                
@@ -76,6 +75,7 @@ export class CombatManager {
                 this.nextTurn()
                 break;
             case 'playerTurn':
+                this.resetTurnoPersonajes()
                 console.log("****player turn****")
                 this._nextTurn = 'resolveActions'
                 
@@ -263,4 +263,7 @@ export class CombatManager {
         });
     }
 
+    resetTurnoPersonajes(){
+        this.playerTeam.forEach(element => element.resetTurno())
+    }
 }

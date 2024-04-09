@@ -19,7 +19,8 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
 
     armorType;
 
-    apt;
+    maxApt;
+    currentApt
 
     suerte;
     inteligence;
@@ -53,7 +54,8 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
 
         this.armorType= charData.armorType;
 
-        this.apt= charData.apt;
+        this.maxApt= charData.apt;
+        this.currentApt = charData.apt;
 
         this.suerte= charData.suerte;
         this.inteligence= charData.inteligence;
@@ -70,8 +72,8 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         this.danoBasico = 18
 
         //Acciones de personaje prototipo
-        this.acciones = {Mover:{nombre: 'mover', rango: this.movementRange, accion: (targetVec) => this.mover(targetVec), tipoSeleccion: 'Movimiento' },
-         AtaqueBasico: {nombre: 'atacar', objetivo: 'enemy' , rango: 1, area: 1, accion: (targetVec) => this.hacerDano(targetVec) , tipoSeleccion: 'Habilidad'} }
+        this.acciones = {Mover:{nombre: 'mover', rango: this.movementRange, accion: (targetVec) => {if(this.realizarAccion(1)) this.mover(targetVec)}, tipoSeleccion: 'Movimiento' },
+         AtaqueBasico: {nombre: 'atacar', objetivo: 'enemy' , rango: 1, area: 1, accion: (targetVec) =>{if(this.realizarAccion(1)) this.hacerDano(targetVec) }, tipoSeleccion: 'Habilidad'} }
 
         this.setVisible(true)
         this.crearAnimaciones()
@@ -216,20 +218,41 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
     }
 
     activaUIdePersonaje(index){
-        
         this.scene.botonesPersonajes[index].activar()
-        this.barraVida = this.scene.add.sprite(this.x,this.y + 8,'ui_barraVida',0)
-        this.barraVidaEx = this.scene.add.sprite(this.x,this.y + 8,'ui_barraVida_ex',0)
-        this.barraVida.setDepth(this.depth-1)
-        this.barraVidaEx.setDepth(this.depth)
-        this.barraVida.setScale(0.8,0.5)
-        this.barraVidaEx.setScale(0.8,0.5)
+        this.barraVida = this.scene.add.sprite(this.scene.botonesPersonajes[index].x,this.scene.botonesPersonajes[index].y+ 10,'ui_barraVida',0)
+        this.barraVidaEx = this.scene.add.sprite(this.scene.botonesPersonajes[index].x,this.scene.botonesPersonajes[index].y+ 10,'ui_barraVida_ex',0)
+        this.barraVida.setDepth(this.scene.botonesPersonajes[index].depth-1)
+        this.barraVidaEx.setDepth(this.scene.botonesPersonajes[index].depth)
+        this.barraVida.setScale(0.9,0.5)
+        this.barraVidaEx.setScale(1,0.5)
+
+        this.indicadores_APT = []
+        for(let i = 0; i < this.maxApt; i++){
+            this.indicadores_APT.push(this.scene.add.sprite(this.scene.botonesPersonajes[index].x - 5 + (5*i),this.scene.botonesPersonajes[index].y+ 16,'ui_indicadorAPT',0))
+            this.indicadores_APT[i].setDepth(this.scene.botonesPersonajes[index].depth)
+            this.indicadores_APT[i].setScale(0.5,0.5)
+        }
+
     }
+
     actualizaBarraDeVida(){
         let cpstep = this.maxHp/ 16
         let currCrop = this.currentHp/cpstep
         currCrop = Math.ceil(currCrop)
         this.barraVida.setCrop(0,0,currCrop,3)
+    }
+        
+    actualizaUIApt()
+    {
+        let i = this.currentApt
+        this.indicadores_APT.forEach(element => {
+            if(i > 0)
+                element.setTexture('ui_indicadorAPT',0)
+            else
+                element.setTexture('ui_indicadorAPT',1)
+
+            i--
+        });
     }
 
     // Colocar al personaje por primera vez en la escena
@@ -259,13 +282,14 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         
 
         this.setDepth(this.tileX+this.tileY)
-
+    /*
         this.barraVida.setX(this.x)
         this.barraVida.setY(this.y -8)
         this.barraVidaEx.setX(this.x)
         this.barraVidaEx.setY(this.y-8)
         this.barraVida.setDepth(this.depth+20)
         this.barraVidaEx.setDepth(this.depth+20)
+        */
     }
 
     ataqueBasico(targetVec){
@@ -276,6 +300,12 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
 
     
     //------------------- Funciones de personajes -----------------------------
+
+    resetTurno(){
+        this.currentApt = this.maxApt
+        this.actualizaUIApt()
+    }
+
 
     //Hacer daño en una casilla
     //Se puede extender para utilizar el area y los diferentes tipos de daño
@@ -293,7 +323,7 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
     //Funcion necesaria para ser objetivo de un ataque
     //Se puede extender para incluir la defensa y el aplicado de estados
     //Evelua si el personaje muere
-    recibeDano(num){s
+    recibeDano(num){
         this.currentHp -= num
         this.actualizaBarraDeVida()
         if(this.currentHp <= 0)
@@ -307,7 +337,16 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         this.scene.personajeMuerto(this)
         this.setVisible(false)
     }
+    realizarAccion(numApt){
+        if(this.currentApt >= numApt){
+            this.currentApt -= numApt
+            this.actualizaUIApt()
+            return true
+        }
+        return false
+    }
 }
+
 /**LISTA DE IDEAS Y TODOS:
  *  1: muerte
  *  2: Introducir mas habilidades
