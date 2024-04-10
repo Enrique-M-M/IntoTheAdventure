@@ -1,12 +1,13 @@
 export class TextButton extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, text, style, callback, bckgnd, num) {
+    constructor(scene, x, y, text, style, callback, bckgnd, num, fontSize = 10) {
       super(scene, x, y, bckgnd,num)
       this.text = new Phaser.GameObjects.Text(scene, x,y, text, style);
-      this.text.setDepth(2)
-      this.text.setFontSize(10); 
-      this.displayWidth = this.text.width+10;
-      this.text.x = this.getTopLeft().x+5
-      this.text.y= this.getTopLeft().y +2
+      this.text.setDepth(20)
+      this.text.setFontSize(fontSize); 
+      this.displayWidth = this.text.width * 1.2;
+      this.displayHeight = this.text.height + fontSize/2
+      this.text.x = this.getTopLeft().x+this.text.width / 10
+      this.text.y= this.getTopLeft().y + this.text.height / 4 
       this.setDepth(1);
       this.scene.add.existing(this)
       this.scene.add.existing(this.text)

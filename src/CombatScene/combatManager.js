@@ -101,7 +101,7 @@ export class CombatManager {
     }
     checkEnPersonajeAliadoEnCasilla(targetVec){
         for(let i =0;i<this.teamSize;i++){
-            if(this.playerTeam[i].getTileXY().x === targetVec.x && this.playerTeam[i].getTileXY().y ===targetVec.y)
+            if(this.playerTeam[i].isAlive() && this.playerTeam[i].getTileXY().x === targetVec.x && this.playerTeam[i].getTileXY().y ===targetVec.y)
                 return true;
         }
         return false;
@@ -109,7 +109,7 @@ export class CombatManager {
 
     checkEnPersonajeEnemigoEnCasilla(targetVec){
         for(let i =0;i<this.enemySize;i++){
-            if(this.enemyTeam[i].getTileXY().x === targetVec.x && this.enemyTeam[i].getTileXY().y ===targetVec.y)
+            if(this.enemySize[i].isAlive() && this.enemyTeam[i].getTileXY().x === targetVec.x && this.enemyTeam[i].getTileXY().y ===targetVec.y)
                 return true;
         }
         return false;
@@ -189,8 +189,8 @@ export class CombatManager {
         this.ultimaAccionSeleccionada = null
     }
 
-    realizaAccion(targetVec){
-        this.ultimaAccionSeleccionada.accion(targetVec)
+    realizaAccion(areaSeleccionIndex){
+        this.ultimaAccionSeleccionada.accion(areaSeleccionIndex)
         this.deseleccionaAccion()
     }
 
@@ -230,19 +230,13 @@ export class CombatManager {
         let enc = false
         let ret = null
         this.enemyTeam.forEach(element => {
-            if(element.tileX === targetVec.x && element.tileY === targetVec.y){
+            if(element.isAlive() && element.tileX === targetVec.x && element.tileY === targetVec.y){
                 enc = true
                 ret = element
             }
         });
         this.playerTeam.forEach(element => {
-            if(element.tileX === targetVec.x && element.tileY === targetVec.y){
-                enc = true
-                ret = element
-            }
-        });
-        this.objectList.forEach(element => {
-            if(element.tileX === targetVec.x && element.tileY === targetVec.y){
+            if(element.isAlive() && element.tileX === targetVec.x && element.tileY === targetVec.y){
                 enc = true
                 ret = element
             }
@@ -265,5 +259,13 @@ export class CombatManager {
 
     resetTurnoPersonajes(){
         this.playerTeam.forEach(element => element.resetTurno())
+    }
+
+    personajeMuerto(char){
+        this.livingParty--
+        if(this.livingParty === 0){
+            this.combatScene.derrotaCombate()
+        }
+        return char.indexCombatManager
     }
 }

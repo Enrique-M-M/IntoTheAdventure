@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { CombatManager } from './combatManager';
+import { CombatManager } from './CombatScene/combatManager';
 
 /*
 Personaje del Jugagor
@@ -31,17 +31,28 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
     selectSpriteIndex;
     ui_icon;
 
-    arma;
-    armaduraSup;
-    armaduraInf;
-    amuleto;
-
     desplegado
     seleccionado
 
     acciones
 
+    inventario
+        /* 
+        arma;
+        armaduraSup;
+        armaduraInf;
+        amuleto;
+        */
+
     lookingBackward
+
+    //Datos a modificar por el Arma equipada
+    danoBasico 
+    areaBasico
+    rangoBasico
+    gastoAPTBasico
+
+    indexCombatManager
 
     //-------------------- Constructor, setters y getters ---------------------
     constructor(charData, scene) {
@@ -70,10 +81,18 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         this.lookingBackward = false
 
         this.danoBasico = 18
+        this.rangoBasico = 2
+        this.areaBasico = 2
+        this.gastoAPTBasico = 1
 
         //Acciones de personaje prototipo
-        this.acciones = {Mover:{nombre: 'mover', rango: this.movementRange, accion: (targetVec) => {if(this.realizarAccion(1)) this.mover(targetVec)}, tipoSeleccion: 'Movimiento' },
-         AtaqueBasico: {nombre: 'atacar', objetivo: 'enemy' , rango: 1, area: 1, accion: (targetVec) =>{if(this.realizarAccion(1)) this.hacerDano(targetVec) }, tipoSeleccion: 'Habilidad'} }
+        this.acciones = {Mover:{nombre: 'mover', rango: this.movementRange, accion: (areaSeleccion) => {if(this.realizarAccion(this.gastoAPTBasico)) this.mover(areaSeleccion[0])}, tipoSeleccion: 'Movimiento' },
+         AtaqueBasico: {nombre: 'atacar', objetivo: 'enemy' , rango: this.rangoBasico, area: this.areaBasico, accion: (areaSeleccion) =>{if(this.realizarAccion(1)) this.ataqueBasico(areaSeleccion) }, tipoSeleccion: 'Habilidad'} }
+        charData.acciones.forEach(element => {
+            this.acciones.push(element)
+        });
+
+        this.inventario = charData.inventario
 
         this.setVisible(true)
         this.crearAnimaciones()
@@ -260,6 +279,7 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         index -> indice en el array de personajes
      */
     desplegar(targetVec, index){
+        this.indexCombatManager = index
         this.scene.add.existing(this);
         this.setScale(1,1);
         this.activaUIdePersonaje(index)
@@ -292,18 +312,25 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         */
     }
 
-    ataqueBasico(targetVec){
-        console.log("Ataque en " + targetVec.x+ " "+ targetVec.y)
-        //this.scene.getEnemyAt(targetVec).recibirAtaque(1)
+    ataqueBasico(areaSeleccion){
+        areaSeleccion.forEach(targetVec => {
+            console.log("Ataque en " + targetVec.x+ " "+ targetVec.y)
+            this.hacerDano(targetVec)
+        });
     }
     
 
     
     //------------------- Funciones de personajes -----------------------------
 
+    isAlive(){
+        return this.currentHp > 0;
+    }
     resetTurno(){
-        this.currentApt = this.maxApt
-        this.actualizaUIApt()
+        if(this.isAlive()){
+            this.currentApt = this.maxApt
+            this.actualizaUIApt()
+        }
     }
 
 

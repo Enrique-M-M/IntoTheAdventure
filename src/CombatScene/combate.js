@@ -1,20 +1,26 @@
-import Player from './playerChar.js';
+import Player from '../playerChar.js';
 import Phaser from 'phaser'
 
 
 
 
-import { TextButton } from './textButtom.js';
-import {SpriteButton } from './spriteButtom.js'
+import { TextButton } from '../textButtom.js';
+import {SpriteButton } from '../spriteButtom.js'
 
 
-import { neigbours, frontNeigbours, crossNeigbours, indexBadTileBackground } from './constants.js';
+import { neigbours, frontNeigbours, crossNeigbours, indexBadTileBackground } from '../constants.js';
 import { CombatManager } from './combatManager.js';
-import { personajes  } from '../assets/CharactersInfo/CharactersDATA.js';
-import PlayerChar from './playerChar.js';
+import { personajes  } from '../../assets/CharactersInfo/CharactersDATA.js';
+import PlayerChar from '../playerChar.js';
 /* 
  * @abstract 
  * @extends Phaser.Scene
+ * 
+ * Input data = {
+ *  mapa_id: NOMBRE_ARCHIVO_MAPA
+ *  allyTeam: array de charData de personajes elegidos
+ *  
+ * }
  */
 export default class Combate extends Phaser.Scene {
 
@@ -22,13 +28,19 @@ export default class Combate extends Phaser.Scene {
     constructor() {
         super({ key: 'Combate' });
     }
+    init (data)
+    {
+        console.log('init', data);
+        this.mapa_id = data.mapa_id 
+    }
+
     preload(){
         this.load.setPath('assets/sprites/');
     }
 
     create(){  
         console.log("create map");
-        this.createMap('Mapa_1')
+        this.createMap()
         this.createManager();
         this.configurarCamara()
         this.controlInputMouseClick()
@@ -64,6 +76,8 @@ export default class Combate extends Phaser.Scene {
 
         //@casillasSeleccionadas -> array de sprites que resaltan un area de seleccion. Si no hay accion seleccionada se vacia
         this.casillasSeleccionadas = []
+        this.areaSeleccion = []
+        this.areaSeleccionIndex = []
 
         //@botonPersonaje1 2 3 -> Boton con la cara del personaje. Al clickar selecciona al personaje asignado segun el orden del playerTeam
         let botonPersonaje1 = new SpriteButton(this, -140, -20, 'ui_buttons', 1, () => this.selecciona(this.playerTeam[0]), 'ui_characters', this.playerTeam[0].getUi_icon(),false)
@@ -129,20 +143,20 @@ export default class Combate extends Phaser.Scene {
     }
 
     //-------------- Algoritmo para mostrar el rango para la seleccion de casillas de una accion --------------------------
-    mostrarRangoAccion(char, range, tipoSeleccion){
+    mostrarRangoAccion(char, range,area, tipoSeleccion){
         this.combatManager.resetrAlpha()
         let tilesChecked = []
         let tilesToCheck = []
         let targetVec = new Phaser.Math.Vector2(char.tileX, char.tileY)
         console.log("Personaje en " + targetVec.x + " " +targetVec.y)
-        this._mostrarRango(targetVec,targetVec,range,0, tipoSeleccion,tilesToCheck,tilesChecked)
+        this._mostrarRango(targetVec,targetVec,range,area,0, tipoSeleccion,tilesToCheck,tilesChecked)
     }
 
     //Recorre recursivamente las casillas vecina de una casilla y si entran dentro del rango llama a _CasillaAMostrar
-    _mostrarRango(originVec, targetVec, range, dist = 0, tipoSeleccion, tilesToCheck, tilesChecked){
+    _mostrarRango(originVec, targetVec, range,area, dist = 0, tipoSeleccion, tilesToCheck, tilesChecked){
         if(!this._arrayContieneVector(tilesChecked,targetVec)){
             
-            this._casillaAMostrar(targetVec, tipoSeleccion)
+            this._casillaAMostrar(targetVec, tipoSeleccion, area)
         }
         tilesChecked.push({x: targetVec.x, y: targetVec.y, di: dist});
         let newVec = new Phaser.Math.Vector2()
@@ -156,7 +170,7 @@ export default class Combate extends Phaser.Scene {
                     || (!indexBadTileBackground.find(i => i === this.capaSuelo.getTileAt(newVec.x, newVec.y, true).index) && !this.casillaOcupada(newVec)))
                     ){
                         if(this.capaJuego.getTileAt(newVec.x,newVec.y,true).index === -1 ){
-                            this._mostrarRango(originVec, newVec, range, dist + 1,  tipoSeleccion,tilesToCheck, tilesChecked)
+                            this._mostrarRango(originVec, newVec, range, area, dist + 1,  tipoSeleccion,tilesToCheck, tilesChecked)
                         }
                     }
                 }
@@ -165,7 +179,7 @@ export default class Combate extends Phaser.Scene {
     }
 
     //Crea un sprite en la posicion targetVec. 
-    _casillaAMostrar(targetVec,tipoSeleccion){
+    _casillaAMostrar(targetVec,tipoSeleccion, area){
         let cS;
         let tileCJ = this.capaJuego.getTileAt(targetVec.x,targetVec.y,true)
         if(tipoSeleccion === 'Movimiento'){
@@ -174,22 +188,66 @@ export default class Combate extends Phaser.Scene {
         else{
             cS = new Phaser.GameObjects.Sprite(this,tileCJ.getCenterX(), tileCJ.getBottom() +5,'mapIndicators',1)
         }
+
         cS.setInteractive({ useHandCursor: true })
-        .on('pointerover', () => this.moveHoverToSprite(cS) )
-        .on('pointerout', () => this.hoverIndicatorTile.setVisible(false) )
-        .on('pointerdown', () => this.combatManager.realizaAccion({x: tileCJ.x, y: tileCJ.y})
+        .on('pointerover', () => {this.moveHoverToSprite(cS,area)} )
+        .on('pointerout', () =>{ this.hoverIndicatorTile.setVisible(false); this._borrarArea() })
+        .on('pointerdown', () => {this.combatManager.realizaAccion(this.areaSeleccionIndex); this._borrarArea()}
         );
         this.visibilidadSeleccion(targetVec)
         cS.setDepth(0)
         this.casillasSeleccionadas.push(cS)        
         this.add.existing(cS)
     }
-    moveHoverToSprite(tile){
+
+    moveHoverToSprite(tile,area){
         this.hoverIndicatorTile.x = tile.x
         this.hoverIndicatorTile.y = tile.y
         this.hoverIndicatorTile.setDepth(tile.depth+1)
         this.hoverIndicatorTile.setVisible(true)
+        let targetVec = {x: this.capaJuego.getTileAtWorldXY(this.hoverIndicatorTile.x, this.hoverIndicatorTile.y,true).x,y: this.capaJuego.getTileAtWorldXY(this.hoverIndicatorTile.x, this.hoverIndicatorTile.y,true).y}
+        this.mostrarAreaAccion(targetVec,area)
     }
+
+    mostrarAreaAccion(targetVec, area){
+        this._borrarArea()
+        let tilesChecked = []
+        let tilesToCheck = []
+        console.log("Area mostrada en casilla " + targetVec.x, +" "+ targetVec.y)
+        this._mostarArea(targetVec,targetVec,area,1,tilesToCheck,tilesChecked)
+    
+    }
+    _mostarArea(originVec, targetVec, area, dist, tilesToCheck, tilesChecked){
+        if(!this._arrayContieneVector(tilesChecked,targetVec)){
+            this._areaAmostrar(targetVec)
+        }
+        tilesChecked.push({x: targetVec.x, y: targetVec.y, di: dist});
+        let newVec = new Phaser.Math.Vector2()
+        for (let cords of crossNeigbours){
+            newVec.x = targetVec.x + cords[0]
+            newVec.y =  targetVec.y + cords[1]
+            if(this.checkCasillaEnTablero(newVec) && area > dist
+            && (!this._arrayContieneVector(tilesChecked,newVec) || !this._arrayObjetoEnVector(tilesChecked,newVec).di < dist + 1 )
+            ){
+                if(this.capaJuego.getTileAt(newVec.x,newVec.y,true).index === -1 ){
+                    this._mostarArea(originVec, newVec, area, dist + 1,tilesToCheck, tilesChecked)
+                }
+            }
+            }
+    }
+    
+
+    _areaAmostrar(targetVec)
+    {
+        let tileCJ = this.capaJuego.getTileAt(targetVec.x,targetVec.y,true)
+        let spt = this.add.sprite(tileCJ.getCenterX(), tileCJ.getBottom() +5,'mapIndicators',5)
+        spt.setVisible(true)
+        this.hoverIndicatorTile.setDepth(tileCJ.depth+1)
+        this.areaSeleccion.push(spt)
+        this.areaSeleccionIndex.push({x:targetVec.x, y: targetVec.y})
+
+    }
+
     _borrarCasillasMostradas(){
         while(this.casillasSeleccionadas.length > 0){
             let sp = this.casillasSeleccionadas.pop()
@@ -197,12 +255,21 @@ export default class Combate extends Phaser.Scene {
         }
         this.hoverIndicatorTile.setVisible(false)
     }
+    _borrarArea(){
+        
+        console.log("+++++++++++++++Area mostrada borrada")
+        while(this.areaSeleccion.length > 0){
+            let sp = this.areaSeleccion.pop()
+            this.areaSeleccionIndex.pop()
+            sp.destroy(true)
+        }
+    }
 
     //+++++++++++++ Tile Map +++++++++++++++++++++++++
 
-    createMap(nombreMapa){  
+    createMap(){  
         this.map = this.make.tilemap({ 
-            key: nombreMapa
+            key: this.mapa_id
           });
 
         //nombre de la paleta de tiles usado para pintar en tiled 
@@ -271,9 +338,15 @@ export default class Combate extends Phaser.Scene {
     //gestionar la ui de un personaje que ha muerto
     personajeMuerto(char){
         let index = this.combatManager.personajeMuerto(char)
-        this.botonerasPersonajes[index].forEach(btn => btn.setInteractive(false))
+        this.botonerasPersonajes[index].forEach(btn =>{btn.setVisible(false); btn.setInteractive(false)})
         this.botonesPersonajes[index].desactivar()
+
     }
+
+    derrotaCombate(){
+        console.log("HAN MUERTO TODOS LOS PERSONAJES")
+    }
+
      //+++++++++++++ Controles +++++++++++++++++++++++++
     
      //TODO?: Si se clicka en una casilla para seleccion de una habilidad no hacer visible el marcador
@@ -320,14 +393,14 @@ export default class Combate extends Phaser.Scene {
     seleccionaAccion(accion, indexChar){
         if(!this.combatManager.accionSeleccionada){
             if(this.combatManager.seleccionaAccion(accion, indexChar))
-            this.mostrarRangoAccion(this.playerTeam[indexChar],accion.rango, accion.tipoSeleccion)
+            this.mostrarRangoAccion(this.playerTeam[indexChar],accion.rango,accion.area, accion.tipoSeleccion)
         }
         else if(this.combatManager.accionSeleccionada && this.combatManager.ultimaAccionSeleccionada === accion ){
             this.combatManager.deseleccionaAccion()
         } else {
             findButton({indexP: indexChar, nombreA: accion.nombre}).unSelect()
             if(this.combatManager.seleccionaAccion(accion, indexChar))
-            this.mostrarRangoAccion(this.playerTeam[indexChar],accion.rango,accion.tipoSeleccion)
+            this.mostrarRangoAccion(this.playerTeam[indexChar],accion.rango,accion.area,accion.tipoSeleccion)
         }
     }
 

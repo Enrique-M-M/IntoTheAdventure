@@ -5,7 +5,8 @@ import tileset from '../assets/sprites/Isometric_MedievalFantasy_Tiles.png'
 import tilemap from '../assets/mapasTiles/Mapa_1.json'
 import mapIndicators from '../assets/sprites/TRPGIsometricAssetPack_MapIndicators.png'
 import characters_sp from '../assets/sprites/CharactersSprites.png'
-import tileSprites from '../assets/sprites/Isometric_MedievalFantasy_Tiles-copia.png'
+
+import mapa_mundo from '../assets/imagenes/mapa_mundo.png'
 
 import ui_characters from '../assets/sprites/CharacterFaceSprite.png'
 import ui_buttons from '../assets/sprites/ButtonSprites.png'
@@ -34,7 +35,8 @@ export default class Boot extends Phaser.Scene {
    * Carga de los assets del juego
    */
   preload() {
-    this.load.image('Tiles_Map', tileset);    
+        this.load.image('Tiles_Map', tileset);    
+        this.load.image('mapa_mundo' , mapa_mundo)
         this.load.tilemapTiledJSON('Mapa_1', tilemap);
         this.load.spritesheet('mapIndicators',
                                 mapIndicators,
@@ -54,7 +56,6 @@ export default class Boot extends Phaser.Scene {
         this.load.spritesheet('ui_actions_icon',
                                 ui_actions_icon,
                                 {frameWidth: 8, frameHeight:8})
-                                
         this.load.spritesheet('Tiles_Map_Spr',
                                 tileset,
                                 {frameWidth: 16, frameHeight:17})
@@ -76,6 +77,6 @@ export default class Boot extends Phaser.Scene {
    */
   create() {
     
-    this.scene.start('Combate');
+    this.scene.start('Mapa');
   }
 }
