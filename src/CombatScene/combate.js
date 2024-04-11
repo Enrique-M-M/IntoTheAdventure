@@ -10,7 +10,6 @@ import {SpriteButton } from '../spriteButtom.js'
 
 import { neigbours, frontNeigbours, crossNeigbours, indexBadTileBackground } from '../constants.js';
 import { CombatManager } from './combatManager.js';
-import { personajes  } from '../../assets/CharactersInfo/CharactersDATA.js';
 import PlayerChar from '../playerChar.js';
 /* 
  * @abstract 
@@ -32,6 +31,7 @@ export default class Combate extends Phaser.Scene {
     {
         console.log('init', data);
         this.mapa_id = data.mapa_id 
+        this.charData = data.peronajesEquipo
     }
 
     preload(){
@@ -314,9 +314,9 @@ export default class Combate extends Phaser.Scene {
 
     createManager(){
         //input del player
-        this.playerTeam = [new PlayerChar(personajes.Caballero, this),
-                                new PlayerChar(personajes.Guerrero, this),
-                                new PlayerChar(personajes.Brujo, this)
+        this.playerTeam = [new PlayerChar(this.charData.personaje1, this),
+                                new PlayerChar(this.charData.personaje2, this),
+                                new PlayerChar(this.charData.personaje3, this)
         ]; 
         this.combatManager = new CombatManager(this.enemies,this.playerTeam,3 ,this,this.spritesEnCapaJuego);
         console.log("Creado personaje "+ this.playerTeam[0].name)

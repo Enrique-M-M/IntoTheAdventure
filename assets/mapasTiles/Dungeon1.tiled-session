@@ -1,0 +1,49 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "PruebaDungeon.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "PruebaDungeon.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 161,
+                "y": -15
+            }
+        },
+        "Tiles.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Tiles_Map.tsx": {
+            "scaleInDock": 1
+        }
+    },
+    "last.imagePath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/sprites",
+    "last.objectTemplatePath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/mapasTiles",
+    "map.fixedSize": false,
+    "map.lastUsedFormat": "tmx",
+    "map.orientation": null,
+    "map.tileHeight": 8,
+    "map.tileWidth": 16,
+    "openFiles": [
+        "PruebaDungeon.tmx"
+    ],
+    "project": "Dungeon1.tiled-project",
+    "property.type": "string",
+    "recentFiles": [
+        "PruebaDungeon.tmx",
+        "Tiles.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 17,
+        "width": 16
+    }
+}
