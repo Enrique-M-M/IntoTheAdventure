@@ -12,7 +12,7 @@ import { neigbours, frontNeigbours, crossNeigbours, indexBadTileBackground } fro
 import { CombatManager } from './combatManager.js';
 import PlayerChar from '../playerChar.js';
 import EnemyChar from '../EnemyChar.js';
-import enemigos from '../../assets/CharactersInfo/EnemyDATA.js';
+import { enemigos } from '../../assets/CharactersInfo/EnemyDATA.js';
 /* 
  * @abstract 
  * @extends Phaser.Scene

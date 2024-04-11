@@ -8,12 +8,23 @@
         "."
     ],
     "fileStates": {
+        "Mapa_1.tmx": {
+            "expandedObjectLayers": [
+                8
+            ],
+            "scale": 5.86328125,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 95.68021319120585,
+                "y": 41.9560293137908
+            }
+        },
         "PruebaDungeon.tmx": {
             "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 161,
-                "y": -15
+                "x": 160.5,
+                "y": -15.5
             }
         },
         "Tiles.tsx": {
@@ -38,6 +49,7 @@
     "project": "Dungeon1.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "Mapa_1.tmx",
         "PruebaDungeon.tmx",
         "Tiles.tsx"
     ],
