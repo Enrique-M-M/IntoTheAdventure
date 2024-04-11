@@ -55,8 +55,8 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
     indexCombatManager
 
     //-------------------- Constructor, setters y getters ---------------------
-    constructor(charData, scene) {
-        super(scene, 0,0,'characters_sp');
+    constructor(charData, scene, x, y) {
+        super(scene, x ,y ,'characters_sp');
         this.name = charData.name;
         this.maxHp = charData.maxHp;
         this.currentHp= charData.maxHp;

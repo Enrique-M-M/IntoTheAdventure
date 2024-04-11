@@ -18,8 +18,9 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
         super(scene, 0,0,'enemies_sp');
         this.name = enemyData.name;
         this.maxHp = enemyData.maxHp;
-        this.currentHp = enemyDato.maxHp;
-        this.spriteIndex = charData.spriteIndex*8
+        this.currentHp = enemyData.maxHp;
+        this.spriteIndex = enemyData.spriteIndex*8
+        this.scene.add.existing(this);
         this.setVisible(true)
         this.anims.create({
             key: 'idle_'+this.name,
@@ -45,8 +46,9 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
             frameRate: 2, // Velocidad de la animación
             repeat: 1    // Animación en bucle
             });
-       
+            this.play("idle_"+this.name);
     }
+    
     /**
      * @override
      */

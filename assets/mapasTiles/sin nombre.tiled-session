@@ -1,13 +1,16 @@
 {
-    "Map/SizeTest": {
-        "height": 4300,
-        "width": 2
-    },
-    "activeFile": "Mapa_1.tmx",
     "expandedProjectPaths": [
         "."
     ],
     "fileStates": {
+        "CharactersSprites.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1.5
+        },
+        "Enemies.tsx": {
+            "dynamicWrapping": false
+        },
         "MapaPrueba.json": {
             "scale": 3.3992187499999997,
             "selectedLayer": 0,
@@ -37,8 +40,8 @@
             "scale": 4,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 95.75,
-                "y": 19.5
+                "x": 111,
+                "y": 39.875
             }
         },
         "PruebaMapa_index.json": {
@@ -61,9 +64,11 @@
             }
         },
         "TileIndicators.tsx": {
+            "dynamicWrapping": false,
             "scaleInDock": 1
         },
         "Tiles_Map.tsx": {
+            "dynamicWrapping": false,
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
@@ -73,31 +78,10 @@
             "scaleInEditor": 8
         }
     },
-    "last.exportedFilePath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/mapasTiles",
-    "last.imagePath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/sprites",
-    "map.height": 8,
-    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
-    "map.lastUsedFormat": "tmx",
-    "map.orientation": null,
-    "map.tileHeight": 8,
-    "map.tileWidth": 16,
-    "map.width": 8,
+    "last.exportedFilePath": "C:/Users/madrid/Documents/GitHub/IntoTheAdventure/assets/mapasTiles",
+    "map.lastUsedExportFilter": "Todos los archivos (*)",
     "openFiles": [
         "Mapa_1.tmx",
         "Ui_assets.tsx"
-    ],
-    "project": "sin nombre.tiled-project",
-    "recentFiles": [
-        "Ui_assets.tsx",
-        "Mapa_1.tmx",
-        "MapaPrueba.json",
-        "Mapa_1.json",
-        "Tiles_Map.tsx"
-    ],
-    "tileset.lastUsedFormat": "tsx",
-    "tileset.tileSize": {
-        "height": 17,
-        "width": 16
-    },
-    "tileset.type": 1
+    ]
 }

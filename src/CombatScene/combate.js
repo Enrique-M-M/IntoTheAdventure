@@ -11,6 +11,8 @@ import {SpriteButton } from '../spriteButtom.js'
 import { neigbours, frontNeigbours, crossNeigbours, indexBadTileBackground } from '../constants.js';
 import { CombatManager } from './combatManager.js';
 import PlayerChar from '../playerChar.js';
+import EnemyChar from '../EnemyChar.js';
+import enemigos from '../../assets/CharactersInfo/EnemyDATA.js';
 /* 
  * @abstract 
  * @extends Phaser.Scene
@@ -296,15 +298,19 @@ export default class Combate extends Phaser.Scene {
 
         this.despliegue = this.map.createLayer('CapaDespliegue', [tiles_desp]);
     
-        this.enemies = this.map.createFromObjects('Enemy_layer', {name: 'enemy',
-                                                    classType: Phaser.GameObjects.Sprite});
-        this.enemies.map(en => {
-                        en.setScale(1,1);
-                        en.set
-                        //en.x = this.capaSuelo.getTileAt(en.x,en.y,true).getCenterX()
-                        en.setTexture('enemies_sp', 32) ;
-                    });
-        this.enemies.map(en => en.setVisible(true));               
+        this.enemies = [];
+        for (const objeto of this.map.getObjectLayer('Enemy_layer').objects) {
+            // `objeto.name` u `objeto.type` nos llegan de las propiedades del
+            // objeto en Tiled
+            //  console.log(objeto.name);
+              let enemy_name = objeto.name;
+             // console.log(enemigos[enemy_name])
+              let enemypj = new EnemyChar (enemigos[enemy_name],this, objeto.x, objeto.y);
+              console.log(enemypj);
+              this.enemies.push(enemypj);
+        }
+        
+        //this.enemies.map(en => en.setVisible(true));               
         this.despliegue.setVisible(false)
 
     }
