@@ -59,8 +59,8 @@
                  "type":"EnemyChar",
                  "visible":true,
                  "width":16,
-                 "x":34.125,
-                 "y":25.875
+                 "x":32,
+                 "y":24
                 }, 
                 {
                  "gid":2147483829,

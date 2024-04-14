@@ -14,14 +14,15 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
     spriteIndex;
     
 
-    constructor(enemyData, scene) {
-        super(scene, 0,0,'enemies_sp');
+    constructor(enemyData, scene, targetVec) {
+        super(scene, targetVec.x,targetVec.y,'enemies_sp');
         this.name = enemyData.name;
         this.maxHp = enemyData.maxHp;
         this.currentHp = enemyData.maxHp;
         this.spriteIndex = enemyData.spriteIndex*8
         this.scene.add.existing(this);
         this.setVisible(true)
+        this.mover(targetVec)
         this.anims.create({
             key: 'idle_'+this.name,
             frames: this.anims.generateFrameNumbers('enemies_sp', { start: this.spriteIndex, end: (this.spriteIndex+1)}),
@@ -64,12 +65,18 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
         this.play('idle_'+this.name);
     }
 
-    // mover(targetVec){
-    //     this.tileX=targetVec.x;
-    //     this.tileY=targetVec.y;
-    //     this.x= this.scene.capaJuego.getTileAt(targetVec.x,targetVec.y,true).getCenterX();
-    //     this.y= this.scene.capaJuego.getTileAt(targetVec.x,targetVec.y,true).getBottom();
-    // }
+    mover(targetVec){
+        //this.orientaPersonajeyPlayAnimation('idle',targetVec)
+        this.tileX=targetVec.x;
+        this.tileY=targetVec.y;
+        this.x= this.scene.capaJuego.getTileAt(targetVec.x,targetVec.y,true).getCenterX();
+        this.y= this.scene.capaJuego.getTileAt(targetVec.x,targetVec.y,true).getBottom();
+
+        
+
+        this.setDepth(this.tileX+this.tileY)
+
+    }
     getTileXY(){
         return {x:this.tileX, y:this.tileY}
     }

@@ -3,20 +3,23 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "PruebaDungeon.tmx",
+    "activeFile": "Mapa_1.tmx",
     "expandedProjectPaths": [
         "."
     ],
     "fileStates": {
+        "Enemies.tsx": {
+            "scaleInDock": 1
+        },
         "Mapa_1.tmx": {
             "expandedObjectLayers": [
                 8
             ],
             "scale": 5.86328125,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 95.68021319120585,
-                "y": 41.9560293137908
+                "x": 71.46169220519654,
+                "y": 30.18787475016655
             }
         },
         "PruebaDungeon.tmx": {
@@ -27,6 +30,9 @@
                 "y": -15.5
             }
         },
+        "TileIndicators.tsx": {
+            "scaleInDock": 1
+        },
         "Tiles.tsx": {
             "dynamicWrapping": false,
             "scaleInDock": 1,
@@ -36,21 +42,24 @@
             "scaleInDock": 1
         }
     },
+    "last.exportedFilePath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/mapasTiles",
     "last.imagePath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/sprites",
     "last.objectTemplatePath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/mapasTiles",
     "map.fixedSize": false,
+    "map.lastUsedExportFilter": "Todos los archivos (*)",
     "map.lastUsedFormat": "tmx",
     "map.orientation": null,
     "map.tileHeight": 8,
     "map.tileWidth": 16,
     "openFiles": [
-        "PruebaDungeon.tmx"
+        "PruebaDungeon.tmx",
+        "Mapa_1.tmx"
     ],
     "project": "Dungeon1.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "Mapa_1.tmx",
         "PruebaDungeon.tmx",
+        "Mapa_1.tmx",
         "Tiles.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
