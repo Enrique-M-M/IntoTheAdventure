@@ -1,4 +1,5 @@
 {
+    "activeFile": "Mapa_1.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -9,7 +10,9 @@
             "scaleInEditor": 1.5
         },
         "Enemies.tsx": {
-            "dynamicWrapping": false
+            "dynamicWrapping": false,
+            "scaleInDock": 2,
+            "scaleInEditor": 1
         },
         "MapaPrueba.json": {
             "scale": 3.3992187499999997,
@@ -40,8 +43,8 @@
             "scale": 4,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 111,
-                "y": 39.875
+                "x": 111.25,
+                "y": 40.125
             }
         },
         "PruebaMapa_index.json": {
@@ -69,7 +72,7 @@
         },
         "Tiles_Map.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1,
+            "scaleInDock": 2,
             "scaleInEditor": 1
         },
         "Ui_assets.tsx": {
@@ -82,6 +85,17 @@
     "map.lastUsedExportFilter": "Todos los archivos (*)",
     "openFiles": [
         "Mapa_1.tmx",
-        "Ui_assets.tsx"
+        "Ui_assets.tsx",
+        "Enemies.tsx"
+    ],
+    "project": "sin nombre.tiled-project",
+    "recentFiles": [
+        "Enemies.tsx",
+        "Ui_assets.tsx",
+        "Mapa_1.tmx",
+        "CharactersSprites.tsx",
+        "MapaPrueba.json",
+        "Mapa_1.json",
+        "Tiles_Map.tsx"
     ]
 }
