@@ -1,4 +1,6 @@
 import Phaser from 'phaser'
+import { neigbours, frontNeigbours } from '../constants';
+import { CombatManager } from './CombatScene/combatManager.js';
 
 /**
  * Clase que representa al enemigo del juego. El enemigo se mueve aleatoriamente por el mapa.
@@ -11,6 +13,9 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
     class;
     maxHp;
     currentHp;
+    mov_range;
+    mov_remaining;
+    attackRange;
     spriteIndex;
     
 
@@ -19,10 +24,12 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
         this.name = enemyData.name;
         this.maxHp = enemyData.maxHp;
         this.currentHp = enemyData.maxHp;
+        this.movementRange = enemyData.mov_Range
+        this.mov_remaining = enemyData.movementRange
         this.spriteIndex = enemyData.spriteIndex*8
         this.scene.add.existing(this);
         this.setVisible(true)
-        this.mover(targetVec)
+   //     this.mover(targetVec)
         this.anims.create({
             key: 'idle_'+this.name,
             frames: this.anims.generateFrameNumbers('enemies_sp', { start: this.spriteIndex, end: (this.spriteIndex+1)}),
@@ -57,16 +64,8 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
         super.preUpdate(t,dt)
     }
 
-    desplegar(targetVec){
-        this.scene.add.existing(this);
-        //this.mover(targetVec)
-        this.setScale(1,1);
-        console.log("Desplegando " +this.name +" en " + this.x + " " + this.y);
-        this.play('idle_'+this.name);
-    }
-
     mover(targetVec){
-        //this.orientaPersonajeyPlayAnimation('idle',targetVec)
+     //   this.orientaPersonajeyPlayAnimation('idle',targetVec)
         this.tileX=targetVec.x;
         this.tileY=targetVec.y;
         this.x= this.scene.capaJuego.getTileAt(targetVec.x,targetVec.y,true).getCenterX();
@@ -84,5 +83,16 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
     setSeleccionado(){
         this.play('atack_'+this.name)
         this.playAfterDelay('idle_'+this.name,1000)
+    }
+
+    isAlieve(){
+        return this.currentHp > 0;
+    }
+    //Si no tiene personaje a rango, se mueve, si tiene personaje a rango, ataca.
+    takeTurn(targetVec){
+        if(this.mov_remaining > 0){
+            this.check
+        }
+
     }
 }

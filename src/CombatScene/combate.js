@@ -308,7 +308,7 @@ export default class Combate extends Phaser.Scene {
               let y = objeto.y/8 -1
              // console.log(enemigos[enemy_name])
               let enemypj = new EnemyChar (enemigos[enemy_name],this, {x: x, y: y});
-              console.log(enemypj);
+              console.log(enemypj.x, enemypj.y);
               this.enemies.push(enemypj);
         }
         
