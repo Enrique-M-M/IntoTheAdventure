@@ -1,6 +1,4 @@
 import Phaser from 'phaser'
-import { neigbours, frontNeigbours } from '../constants';
-import { CombatManager } from './CombatScene/combatManager.js';
 
 /**
  * Clase que representa al enemigo del juego. El enemigo se mueve aleatoriamente por el mapa.
@@ -17,9 +15,11 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
     mov_remaining;
     attackRange;
     spriteIndex;
+
+    lookingBackward;
     
 
-    constructor(enemyData, scene, targetVec) {
+    constructor(enemyData, scene, targetVec, flipX, lookingBackward) {
         super(scene, targetVec.x,targetVec.y,'enemies_sp');
         this.name = enemyData.name;
         this.maxHp = enemyData.maxHp;
@@ -28,8 +28,24 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
         this.mov_remaining = enemyData.movementRange
         this.spriteIndex = enemyData.spriteIndex*8
         this.scene.add.existing(this);
+        this.createAnims()
+        this.createUIEnemy()
+
         this.setVisible(true)
-   //     this.mover(targetVec)
+        this.setFlipX(flipX)
+        console.log(targetVec.x, targetVec.y);
+        this.lookingBackward= lookingBackward
+        this.mover(targetVec)
+        
+    }
+    
+    /**
+     * @override
+     */
+    preUpdate(t, dt) {
+        super.preUpdate(t,dt)
+    }
+    createAnims(){
         this.anims.create({
             key: 'idle_'+this.name,
             frames: this.anims.generateFrameNumbers('enemies_sp', { start: this.spriteIndex, end: (this.spriteIndex+1)}),
@@ -56,24 +72,63 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
             });
             this.play("idle_"+this.name);
     }
-    
-    /**
-     * @override
-     */
-    preUpdate(t, dt) {
-        super.preUpdate(t,dt)
+
+    createUIEnemy(){
+        this.barraVida = this.scene.add.sprite(this.x,this.y+ 5,'ui_barraVida',0)
+        this.barraVidaEx = this.scene.add.sprite(this.x,this.y+ 5,'ui_barraVida_ex',0)
+        this.barraVida.setDepth(this.depth+1)
+        this.barraVidaEx.setDepth(this.depth+2)
+        this.barraVida.setScale(0.6,0.3)
+        this.barraVidaEx.setScale(0.7,0.3)
+    }
+    orientaPersonajeyPlayAnimation(nameAnim, targetVec = null){
+        if(targetVec != null){
+            if(targetVec.x < this.tileX){
+                this.lookingBackward = true;
+                this.setFlipX(true)
+            } else if(targetVec.x > this.tileX){
+                this.lookingBackward = false;
+                this.setFlipX(false)
+            } else if(targetVec.y < this.tileY){
+                this.lookingBackward = true;
+                this.setFlipX(false)
+            } else if(targetVec.y > this.tileY){
+                this.lookingBackward = false;
+                this.setFlipX(true)
+            }
+        }
+
+        switch(nameAnim){
+            case 'idle':
+                if(!this.lookingBackward){
+                        this.play('idle_'+this.name)
+                } else {
+                        this.play('idleBack_'+this.name)
+                    }
+                break
+            case 'atack':
+                if(!this.lookingBackward){
+                        this.play('atack_'+this.name)
+                } else {
+                        this.play('atackBack_'+this.name)
+                }
+        }
     }
 
     mover(targetVec){
-     //   this.orientaPersonajeyPlayAnimation('idle',targetVec)
+        this.orientaPersonajeyPlayAnimation('idle',targetVec)
         this.tileX=targetVec.x;
         this.tileY=targetVec.y;
         this.x= this.scene.capaJuego.getTileAt(targetVec.x,targetVec.y,true).getCenterX();
         this.y= this.scene.capaJuego.getTileAt(targetVec.x,targetVec.y,true).getBottom();
-
-        
+        this.barraVida.x = this.x
+        this.barraVida.y = this.y + 7
+        this.barraVidaEx.x = this.x
+        this.barraVidaEx.y = this.y + 7
 
         this.setDepth(this.tileX+this.tileY)
+        this.barraVida.setDepth(this.depth+1)
+        this.barraVidaEx.setDepth(this.depth+2)
 
     }
     getTileXY(){
@@ -85,7 +140,7 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
         this.playAfterDelay('idle_'+this.name,1000)
     }
 
-    isAlieve(){
+    isAlive(){
         return this.currentHp > 0;
     }
     //Si no tiene personaje a rango, se mueve, si tiene personaje a rango, ataca.

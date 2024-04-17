@@ -109,7 +109,7 @@ export class CombatManager {
 
     checkEnPersonajeEnemigoEnCasilla(targetVec){
         for(let i =0;i<this.enemySize;i++){
-            if(this.enemySize[i].isAlive() && this.enemyTeam[i].getTileXY().x === targetVec.x && this.enemyTeam[i].getTileXY().y ===targetVec.y)
+            if(this.enemyTeam[i].isAlive() && this.enemyTeam[i].getTileXY().x === targetVec.x && this.enemyTeam[i].getTileXY().y ===targetVec.y)
                 return true;
         }
         return false;

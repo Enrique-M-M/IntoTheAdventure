@@ -22,10 +22,10 @@
   <object id="4" name="SelectIndicator" x="40" y="8" width="8" height="8"/>
  </objectgroup>
  <objectgroup id="5" name="Enemy_layer" offsetx="0" offsety="-8">
-  <object id="20" name="Shadowy_Rogue" type="EnemyChar" gid="2147483829" x="34.125" y="25.875" width="16" height="17"/>
+  <object id="20" name="Shadowy_Rogue" type="EnemyChar" gid="2147483829" x="32" y="24" width="16" height="17"/>
   <object id="21" name="Shadowy_Rogue" type="EnemyChar" gid="2147483829" x="48" y="32" width="16" height="17"/>
   <object id="22" name="Wizard" type="EnemyChar" gid="2147483837" x="16" y="24" width="16" height="17"/>
-  <object id="23" name="Wizard" type="EnemyChar" gid="2147483837" x="64" y="16" width="16" height="17"/>
+  <object id="23" name="Wizard" type="EnemyChar" gid="3221225661" x="64" y="64" width="16" height="17"/>
  </objectgroup>
  <layer id="6" name="CapaJuego" width="8" height="8" offsetx="0" offsety="-8">
   <data encoding="csv">
