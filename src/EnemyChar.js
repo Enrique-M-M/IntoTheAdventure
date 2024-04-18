@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { crossNeigbours, indexBadTileBackground } from './constants';
 
 /**
  * Clase que representa al enemigo del juego. El enemigo se mueve aleatoriamente por el mapa.
@@ -144,10 +145,65 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
         return this.currentHp > 0;
     }
     //Si no tiene personaje a rango, se mueve, si tiene personaje a rango, ataca.
-    takeTurn(targetVec){
-        if(this.mov_remaining > 0){
-            this.check
+    takeTurn(){
+        const matrizpath = this._generarPathfinding(targetVec);
+        const listaCasillas = generarCamino(targetVec,matrizpath);
+        this._recorrerCamino(listaCasillas);
+    }
+    _generarPathfinding(targetVec) {
+        // Crear matriz de 8x8 inicializada con valores de -1
+        const matriz = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => -1));
+    
+        // Función auxiliar para verificar si una celda está dentro de los límites del mapa
+        function estaEnMapa(x, y) {
+            return x >= 0 && x < 8 && y >= 0 && y < 8;
         }
+    
 
+        matriz[targetVec.x][targetVec.y] = 0;
+    
+       
+            for (const [dx, dy] of crossNeigbours) {
+                if(!indexBadTileBackground.find(i => i === this.capaSuelo.getTileAt(newVec.x, newVec.y, true).index)){
+                const nx = x + dx;
+                const ny = y + dy;
+    
+                    if (estaEnMapa(nx, ny) && matriz[nx][ny] === -1) {
+                        matriz[nx][ny] = matriz[x][y] + 1;
+
+                    }
+                }
+            
+            }
+    
+        return matriz;
+    }   
+
+    //Generamos el camino hacia el objetivo.
+    _generarCamino(targetVec, matrizPath){
+        const cola = [[targetVec.x, targetVec.y]];
+        for (const [dx, dy] of crossNeigbours) {
+            const nx = x + dx;
+            const ny = y + dy; 
+            if (estaEnMapa(nx, ny) && matrizPath[targetVec.x][targetVec.y] > matrizPath[nx][ny] && matrizPath[nx][ny] !== -1)  {
+                cola.push({x: nx, y: ny});  
+                targetVec.x = nx;
+                targetVec.y = ny;  
+            }
+           
+        }
+        return cola;
+    }
+    //recorremos el camino
+    _recorrerCamino(colaCasillas){
+        for(let i = 0; i < this.mov_remaining; i++){
+            this.mover(colaCasillas[i]);
+        }
+        _resetMov();
+    }
+
+    //reset de rango
+    _resetMov(){
+        this.mov_remaining=this.mov_range;
     }
 }
