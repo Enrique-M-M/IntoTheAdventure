@@ -15,6 +15,8 @@ export class SpriteButton extends Phaser.GameObjects.Sprite {
       this.clicked = false
 
       this.nombreA = nombreA
+
+      this.activo = true
       this.setInteractive({ useHandCursor: true })
         .on('pointerover', () => this.enterButtonHoverState() )
         .on('pointerout', () => this.enterButtonRestState() )
@@ -52,6 +54,7 @@ export class SpriteButton extends Phaser.GameObjects.Sprite {
       this.setInteractive()
       this.index--
       this.setTexture(this.texture, this.index)
+      this.activo = true
     }
 
     setVisible(val){
@@ -71,5 +74,14 @@ export class SpriteButton extends Phaser.GameObjects.Sprite {
       this.disableInteractive()
       this.index++
       this.setTexture(this.texture, this.index)
+      this.activo=false
+    }
+
+    setDepth(n){
+      this.depth = n
+      this.icon.setDepth(n+1)
+    }
+    isActivo(){
+      return this.activo
     }
   }

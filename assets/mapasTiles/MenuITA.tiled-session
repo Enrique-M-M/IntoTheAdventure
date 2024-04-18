@@ -1,0 +1,105 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Ui_assets.tsx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "Todos los archivos (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "PruebaMapa_index.tmx": {
+            "scale": 4.37890625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 64.17127564674398,
+                "y": 28.089206066012494
+            }
+        },
+        "Seleccion_Personajes..tmx": {
+            "scale": 3.127083333333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 86.02265156562291,
+                "y": 78.02798134576949
+            }
+        },
+        "Seleccion_Personajes..tmx#UI_patrones": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Seleccion_Personajes..tmx#UI_patrones_menu": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Seleccion_Personajes.tmx": {
+            "scale": 3.127083333333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 75.78947368421052,
+                "y": 119.28047968021319
+            }
+        },
+        "Tiles_Map.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "UI_patrones.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 4
+        },
+        "UI_patrones_menu.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Ui_assets.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tilesMenuTabernaSeleccion.tmx": {
+            "scale": 2.3354166666666667,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 120.32114183764496,
+                "y": 80.07136485280998
+            }
+        }
+    },
+    "last.exportedFilePath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/mapasTiles",
+    "last.externalTilesetPath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/mapasTiles",
+    "last.imagePath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/GUI",
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 8,
+    "map.tileWidth": 8,
+    "openFiles": [
+        "Ui_assets.tsx",
+        "Tiles_Map.tsx",
+        "UI_patrones.tsx"
+    ],
+    "project": "MenuITA.tiled-project",
+    "recentFiles": [
+        "Seleccion_Personajes.tmx",
+        "Seleccion_Personajes..tmx",
+        "UI_patrones.tsx",
+        "UI_patrones_menu.tsx",
+        "Tiles_Map.tsx",
+        "Ui_assets.tsx"
+    ],
+    "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 8,
+        "width": 8
+    }
+}

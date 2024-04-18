@@ -273,7 +273,7 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
             i--
         });
     }
-
+    
     // Colocar al personaje por primera vez en la escena
     /*  targetVec -> posicion de la casilla en tiles
         index -> indice en el array de personajes

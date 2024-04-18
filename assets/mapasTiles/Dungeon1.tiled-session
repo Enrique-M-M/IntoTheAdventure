@@ -5,7 +5,6 @@
     },
     "activeFile": "Mapa_1.tmx",
     "expandedProjectPaths": [
-        "."
     ],
     "fileStates": {
         "Enemies.tsx": {
@@ -18,16 +17,16 @@
             "scale": 5.86328125,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 71.46169220519654,
-                "y": 30.18787475016655
+                "x": 79.13657561625584,
+                "y": 40.07994670219854
             }
         },
         "PruebaDungeon.tmx": {
             "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 160,
-                "y": -0.25
+                "x": 271,
+                "y": 76.5
             }
         },
         "TileIndicators.tsx": {

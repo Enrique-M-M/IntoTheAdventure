@@ -33,7 +33,7 @@ export default class Combate extends Phaser.Scene {
     {
         console.log('init', data);
         this.mapa_id = data.mapa_id 
-        this.charData = data.peronajesEquipo
+        this.playerTeam = data.peronajesEquipo
     }
 
     preload(){
@@ -324,10 +324,9 @@ export default class Combate extends Phaser.Scene {
 
     createManager(){
         //input del player
-        this.playerTeam = [new PlayerChar(this.charData.personaje1, this),
-                                new PlayerChar(this.charData.personaje2, this),
-                                new PlayerChar(this.charData.personaje3, this)
-        ]; 
+        this.playerTeam.forEach(c => {
+            c.scene = this
+        });
         this.combatManager = new CombatManager(this.enemies,this.playerTeam,3 ,this,this.spritesEnCapaJuego);
         console.log("Creado personaje "+ this.playerTeam[0].name)
         this.combatManager.nextTurn();
