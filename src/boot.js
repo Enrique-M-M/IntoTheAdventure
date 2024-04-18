@@ -6,6 +6,9 @@ import tilemap from '../assets/mapasTiles/Mapa_1.json'
 import mapIndicators from '../assets/sprites/TRPGIsometricAssetPack_MapIndicators.png'
 import characters_sp from '../assets/sprites/CharactersSprites.png'
 
+import tilesMenuSet from '../assets/GUI/GUI_1x.png' 
+import tilesMenuTabernaSeleccion from '../assets/mapasTiles/Seleccion_Personajes.json'
+
 import mapa_mundo from '../assets/imagenes/mapa_mundo.png'
 
 import ui_characters from '../assets/sprites/CharacterFaceSprite.png'
@@ -35,9 +38,14 @@ export default class Boot extends Phaser.Scene {
    * Carga de los assets del juego
    */
   preload() {
-        this.load.image('Tiles_Map', tileset);    
-        this.load.image('mapa_mundo' , mapa_mundo)
+    this.load.image('mapa_mundo' , mapa_mundo)
+
+        this.load.image('Tiles_Map', tileset);  
         this.load.tilemapTiledJSON('Mapa_1', tilemap);
+
+        this.load.tilemapTiledJSON('tilesMenuTabernaSeleccion', tilesMenuTabernaSeleccion);
+        this.load.image('tilesMenuSet', tilesMenuSet);  
+
         this.load.spritesheet('mapIndicators',
                                 mapIndicators,
                                 {frameWidth: 16, frameHeight: 8 })
