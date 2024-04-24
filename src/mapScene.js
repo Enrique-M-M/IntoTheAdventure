@@ -2,6 +2,7 @@ import { SpriteButton } from "./spriteButtom";
 import { TextButton } from "./textButtom";
 import { personajes  } from '../assets/CharactersInfo/CharactersDATA.js';
 import PlayerChar from "./playerChar.js";
+import PruebaDungeon_info from "../assets/Dungeons/PruebaDungeon_info.js";
 
 export default class Mapa extends Phaser.Scene {
 
@@ -13,13 +14,21 @@ export default class Mapa extends Phaser.Scene {
     indiceSeleccionado
     numPersSeleccionados
     hayIndiceSeleccionado
+
+    hayPartySeleccionada
     constructor() {
         super({ key: 'Mapa' });
     }
+
+    init (data)
+    {
+        this.playerTeam = data.peronajesEquipo
+        this.hayPartySeleccionada = this.playerTeam != undefined      
+        
+    }
     
     preload(){
-        this.playerChars = personajes
-        
+        this.playerChars = personajes 
     }
     create(){
         this.allCharacters = [new PlayerChar(this.playerChars.Caballero, this),
@@ -31,12 +40,13 @@ export default class Mapa extends Phaser.Scene {
             new PlayerChar(this.playerChars.Ranger, this),
             new PlayerChar(this.playerChars.Clerigo, this)
         ]
-        this.playerTeam = [0,0 ,0 ]
-
+        if(!this.hayPartySeleccionada){
+            this.menuSeleccionPersonajesVisible = true
+            this.playerTeam = [0,0,0]
+            this.numPersSeleccionados = 0
+        }
         this.indiceSeleccionado = -1
-        this.numPersSeleccionados = 0
         this.hayIndiceSeleccionado = false
-        this.menuSeleccionPersonajesVisible = true
         this._createUIMapa()
        }
 
@@ -111,11 +121,17 @@ export default class Mapa extends Phaser.Scene {
             this.botonesPersonajesSeleccionados[i].setDepth(6)
 
         }
+
+        if(this.hayPartySeleccionada){
+            for(let i = 0; i<3; i++ ){
+                this.updateListaSeleccionados(this.playerTeam[i], i)
+            }
+        }
                 
    }
     entraMazmorra(){
         if(this.numPersSeleccionados === 3)
-        this.scene.start('Combate',{mapa_id: 'Mapa_1', peronajesEquipo: this.playerTeam});
+        this.scene.start('Dungeon',{mapa_info: PruebaDungeon_info, peronajesEquipo: this.playerTeam});
     }
 
     mostrarMenuTaberna(v){

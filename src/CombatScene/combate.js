@@ -34,6 +34,8 @@ export default class Combate extends Phaser.Scene {
         console.log('init', data);
         this.mapa_id = data.mapa_id 
         this.playerTeam = data.peronajesEquipo
+        this.sala = data.sala
+        this.mapaDungeon = data.mapa
     }
 
     preload(){
@@ -354,6 +356,11 @@ export default class Combate extends Phaser.Scene {
 
     derrotaCombate(){
         console.log("HAN MUERTO TODOS LOS PERSONAJES")
+        this.scene.start('Mapa')
+    }
+
+    victoriaCombate(){
+        this.scene.start('Dungeon',{mapa_info: this.mapaDungeon, personajesEquipo: this.playerTeam, salaActual: sala})
     }
 
      //+++++++++++++ Controles +++++++++++++++++++++++++

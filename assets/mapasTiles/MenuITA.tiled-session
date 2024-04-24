@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Ui_assets.tsx",
+    "activeFile": "PruebaDungeon.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -12,6 +12,14 @@
         "": {
             "scaleInDock": 1,
             "scaleInEditor": 1
+        },
+        "PruebaDungeon.tmx": {
+            "scale": 1,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 183.5,
+                "y": 107
+            }
         },
         "PruebaMapa_index.tmx": {
             "scale": 4.37890625,
@@ -58,7 +66,7 @@
         },
         "UI_patrones_menu.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1,
+            "scaleInDock": 4,
             "scaleInEditor": 1
         },
         "Ui_assets.tsx": {
@@ -70,12 +78,12 @@
             "scale": 2.3354166666666667,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 120.32114183764496,
-                "y": 80.07136485280998
+                "x": 127.38626226583408,
+                "y": 80.28545941123996
             }
         }
     },
-    "last.exportedFilePath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/mapasTiles",
+    "last.exportedFilePath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/Dungeons",
     "last.externalTilesetPath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/mapasTiles",
     "last.imagePath": "C:/Users/emore/OneDrive/Documentos/IntoTheAdventure/assets/GUI",
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
@@ -85,16 +93,19 @@
     "openFiles": [
         "Ui_assets.tsx",
         "Tiles_Map.tsx",
-        "UI_patrones.tsx"
+        "tilesMenuTabernaSeleccion.tmx",
+        "PruebaDungeon.tmx"
     ],
     "project": "MenuITA.tiled-project",
     "recentFiles": [
+        "Ui_assets.tsx",
+        "Tiles_Map.tsx",
+        "tilesMenuTabernaSeleccion.tmx",
+        "PruebaDungeon.tmx",
         "Seleccion_Personajes.tmx",
         "Seleccion_Personajes..tmx",
         "UI_patrones.tsx",
-        "UI_patrones_menu.tsx",
-        "Tiles_Map.tsx",
-        "Ui_assets.tsx"
+        "UI_patrones_menu.tsx"
     ],
     "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
