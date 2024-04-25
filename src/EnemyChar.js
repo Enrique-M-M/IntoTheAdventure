@@ -146,60 +146,87 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
     }
     //Si no tiene personaje a rango, se mueve, si tiene personaje a rango, ataca.
     takeTurn(){
-        const matrizpath = this._generarPathfinding(targetVec);
-        const listaCasillas = generarCamino(targetVec,matrizpath);
-        this._recorrerCamino(listaCasillas);
+        let targetVec = this.getPersonajeMasCercano()
+        const matrizpath = this.generarPathfinding(targetVec);
+        const listaCasillas = this.generarCamino(matrizpath);
+        this.recorrerCamino(listaCasillas);
     }
-    _generarPathfinding(targetVec) {
+
+    getPersonajeMasCercano(){
+        return this.scene.combatManager.getAliadoMasCercano({x: this.tileX,y: this.tileY});
+    }
+
+    generarPathfinding(targetVec) { 
         // Crear matriz de 8x8 inicializada con valores de -1
-        const matriz = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => -1));
-    
+        let matriz = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => -1));
+        let tilesChecked = []
+        let tilesToCheck = []
+
+        this._generarPathfinding(targetVec, matriz, 0, tilesChecked, tilesToCheck)
+        return matriz;
         // Función auxiliar para verificar si una celda está dentro de los límites del mapa
-        function estaEnMapa(x, y) {
-            return x >= 0 && x < 8 && y >= 0 && y < 8;
-        }
-    
+        
+    }   
+    estaEnMapa(x, y) {
+        return x >= 0 && x < 8 && y >= 0 && y < 8;
+    }
 
-        matriz[targetVec.x][targetVec.y] = 0;
-    
-       
+    _generarPathfinding(targetVec, matriz, distancia, tilesChecked, tilesToCheck){
+        if(!this._arrayContieneVector(tilesChecked,targetVec) || matriz[targetVec.x][targetVec.y] > distancia){
+            matriz[targetVec.x][targetVec.y] = distancia
+            tilesChecked.push({x: targetVec.x, y: targetVec.y})
+            let newVec = new Phaser.Math.Vector2()
             for (const [dx, dy] of crossNeigbours) {
-                if(!indexBadTileBackground.find(i => i === this.capaSuelo.getTileAt(newVec.x, newVec.y, true).index)){
-                const nx = x + dx;
-                const ny = y + dy;
-    
-                    if (estaEnMapa(nx, ny) && matriz[nx][ny] === -1) {
-                        matriz[nx][ny] = matriz[x][y] + 1;
+                    newVec.x = dx + targetVec.x
+                    newVec.y = dy + targetVec.y
+                    if(this.estaEnMapa(newVec.x, newVec.y)){
+                        if(!indexBadTileBackground.find(i => i === this.scene.capaSuelo.getTileAt(newVec.x, newVec.y, true).index)
+                        //&& !this.scene.casillaOcupada(newVec)
+                    ){
+                            this._generarPathfinding(newVec, matriz, distancia + 1, tilesChecked, tilesToCheck)
+                        }
+                }
+        }
+       
+    }
+}
 
-                    }
+    
+    _arrayContieneVector(array, vector){
+        let ret = false
+        array.forEach(val => {
+            if(val.x == vector.x && val.y == vector.y) {
+                ret = true
+            }
+        })
+        return ret
+    }
+    //Generamos el camino hacia el objetivo.
+    generarCamino(matrizPath){
+        const cola = [];
+        let vect = {x: this.tileX, y: this.tileY}
+        while(matrizPath[vect.x][vect.y] > 1){
+            for (const [dx, dy] of crossNeigbours) {
+                const nx = vect.x + dx;
+                const ny = vect.y + dy; 
+                if (this.estaEnMapa(nx, ny) && matrizPath[vect.x][vect.y] > matrizPath[nx][ny]
+                 && matrizPath[nx][ny] !== -1)  {
+                    cola.push({x: nx, y: ny});  
+                    vect.x = nx
+                    vect.y = ny
                 }
             
             }
-    
-        return matriz;
-    }   
-
-    //Generamos el camino hacia el objetivo.
-    _generarCamino(targetVec, matrizPath){
-        const cola = [[targetVec.x, targetVec.y]];
-        for (const [dx, dy] of crossNeigbours) {
-            const nx = x + dx;
-            const ny = y + dy; 
-            if (estaEnMapa(nx, ny) && matrizPath[targetVec.x][targetVec.y] > matrizPath[nx][ny] && matrizPath[nx][ny] !== -1)  {
-                cola.push({x: nx, y: ny});  
-                targetVec.x = nx;
-                targetVec.y = ny;  
-            }
-           
         }
         return cola;
     }
     //recorremos el camino
-    _recorrerCamino(colaCasillas){
-        for(let i = 0; i < this.mov_remaining; i++){
-            this.mover(colaCasillas[i]);
+    recorrerCamino(colaCasillas){
+        let maxMove = this.mov_remaining > colaCasillas.length ? colaCasillas.length : this.mov_remaining
+        for(let i = 0; i < maxMove; i++){
+            if(!this.scene.casillaOcupada(colaCasillas[i]))
+                this.mover(colaCasillas[i]);
         }
-        _resetMov();
     }
 
     //reset de rango

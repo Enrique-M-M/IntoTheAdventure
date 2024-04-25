@@ -441,7 +441,7 @@ export default class Combate extends Phaser.Scene {
         //Corrige por abajo para + comodidad
         if(targetVec.x === 8) {targetVec.x=7 
             targetVec.y--}
-        if(targetVec.y === 8) {targetVec.y=7
+        if(targetVec.y === 8) {targetVec.y=7    
             targetVec.x--
         }
 
