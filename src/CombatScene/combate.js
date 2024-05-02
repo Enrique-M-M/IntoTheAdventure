@@ -354,13 +354,17 @@ export default class Combate extends Phaser.Scene {
 
     }
 
+    enemigoMuerto(char){
+        let index = this.combatManager.enemigoMuerto(char)
+    }
+
     derrotaCombate(){
         console.log("HAN MUERTO TODOS LOS PERSONAJES")
         this.scene.start('Mapa')
     }
 
     victoriaCombate(){
-        this.scene.start('Dungeon',{mapa_info: this.mapaDungeon, personajesEquipo: this.playerTeam, salaActual: sala})
+        this.scene.start('Dungeon',{mapa_info: this.mapaDungeon, personajesEquipo: this.playerTeam, salaActual: this.sala})
     }
 
      //+++++++++++++ Controles +++++++++++++++++++++++++

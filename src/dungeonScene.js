@@ -106,7 +106,7 @@ export default class Dungeon extends Phaser.Scene {
     }
 
     seleccionarHabitacion(hab){
-        this.scene.start('Combate',{mapa_id: hab.ruta, peronajesEquipo: this.playerTeam,sala:this.salaActual, mapa:this.mapaDungeon});
+        this.scene.start('Combate',{mapa_id: hab.ruta, peronajesEquipo: this.playerTeam,sala:this.salaActual, mapa:this.mapa_info});
     }
     salirDeLaMazmorra(){
         this.scene.start('Mapa',{peronajesEquipo: this.playerTeam});

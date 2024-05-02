@@ -280,4 +280,11 @@ export class    CombatManager {
         }
         return char.indexCombatManager
     }
+
+    enemigoMuerto(char){
+        this.livingEnemies--
+        if(this.livingEnemies === 0){
+            this.combatScene.victoriaCombate()
+        }
+    }
 }

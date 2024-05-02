@@ -338,13 +338,14 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
     //Se puede extender para utilizar el area y los diferentes tipos de daño
     hacerDano(targetVec){
         let ent = this.scene.combatManager.getEntityAt(targetVec)
-        if(ent != null && ent.recibeDano){
-            ent.recibeDano(this.danoBasico)
-        }
+        
         this.orientaPersonajeyPlayAnimation('atack', targetVec)
         this.once(Phaser.Animations.Events.ANIMATION_COMPLETE , 
             () => {
              this.orientaPersonajeyPlayAnimation('idle') })
+        if(ent != null && ent.recibeDano){
+        ent.recibeDano(this.danoBasico)
+        }
     }
 
     //Funcion necesaria para ser objetivo de un ataque

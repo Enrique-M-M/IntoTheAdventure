@@ -233,4 +233,24 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
     _resetMov(){
         this.mov_remaining=this.mov_range;
     }
+    recibeDano(num){
+        this.currentHp -= num
+        this.actualizaBarraDeVida()
+        if(this.currentHp <= 0)
+            this.muere()
+    }
+
+    actualizaBarraDeVida(){
+        let cpstep = this.maxHp/ 16
+        let currCrop = this.currentHp/cpstep
+        currCrop = Math.ceil(currCrop)
+        this.barraVida.setCrop(0,0,currCrop,3)
+    }
+        
+    //Gestiona la muerte de un personaje
+    //TODO
+    muere(){
+        this.scene.enemigoMuerto(this)
+        this.setVisible(false)
+    }
 }
