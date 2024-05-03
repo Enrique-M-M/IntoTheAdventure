@@ -81,7 +81,7 @@ export class    CombatManager {
                 
                 break;
             case 'resolveActions':
-                console.log("****resolveActions turn****")
+        console.log("****resolveActions turn****")
                 this._nextTurn = 'enemyTurn'
                 this.nextTurn()
                 break;
@@ -131,14 +131,14 @@ export class    CombatManager {
 
     borraPersonajeSeleccionado(){
         if(this.hayPersonajeSeleccionado){
-        switch(this.currentTurn){
-            case 'playerTurn':
-                this.combatScene.showUIChar(this.playerTeam.indexOf(this.ultimoPersonajeSeleccionado),false)        
+            switch(this.currentTurn){
+                case 'playerTurn':
+                    this.ultimoPersonajeSeleccionado.setSeleccionado(false)
+                    this.combatScene.showUIChar(this.playerTeam.indexOf(this.ultimoPersonajeSeleccionado),false)        
+            }
+            this.ultimoPersonajeSeleccionado = null
+            this.hayPersonajeSeleccionado = false
         }
-        this.ultimoPersonajeSeleccionado.setSeleccionado(false)
-        this.ultimoPersonajeSeleccionado = null
-        this.hayPersonajeSeleccionado = false
-     }
     }
 
     _selecccionaPersonaje(char){

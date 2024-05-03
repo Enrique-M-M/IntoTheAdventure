@@ -33,9 +33,10 @@ export default class Combate extends Phaser.Scene {
     {
         console.log('init', data);
         this.mapa_id = data.mapa_id 
-        this.playerTeam = data.peronajesEquipo
+        this.playerTeamDATA = data.personajesEquipo
         this.sala = data.sala
         this.mapaDungeon = data.mapa
+        this.inventario = data.inventario
     }
 
     preload(){
@@ -326,11 +327,11 @@ export default class Combate extends Phaser.Scene {
 
     createManager(){
         //input del player
-        this.playerTeam.forEach(c => {
-            c.scene = this
+        this.playerTeam = []
+        this.playerTeamDATA.forEach(cd => {
+            this.playerTeam.push(new PlayerChar(cd,this,0,0))
         });
         this.combatManager = new CombatManager(this.enemies,this.playerTeam,3 ,this,this.spritesEnCapaJuego);
-        console.log("Creado personaje "+ this.playerTeam[0].name)
         this.combatManager.nextTurn();
     }
 
@@ -355,7 +356,7 @@ export default class Combate extends Phaser.Scene {
     }
 
     enemigoMuerto(char){
-        let index = this.combatManager.enemigoMuerto(char)
+       this.combatManager.enemigoMuerto(char)
     }
 
     derrotaCombate(){
@@ -364,7 +365,7 @@ export default class Combate extends Phaser.Scene {
     }
 
     victoriaCombate(){
-        this.scene.start('Dungeon',{mapa_info: this.mapaDungeon, personajesEquipo: this.playerTeam, salaActual: this.sala})
+        this.scene.start('Dungeon',{mapa_info: this.mapaDungeon, personajesEquipo: this.playerTeamDATA, salaActual: this.sala, inventario: this.invent})
     }
 
      //+++++++++++++ Controles +++++++++++++++++++++++++

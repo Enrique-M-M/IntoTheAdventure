@@ -12,10 +12,11 @@ export default class Dungeon extends Phaser.Scene {
     init (data)
     {
         this.mapa_info = data.mapa_info
-        this.playerTeam = data.peronajesEquipo
+        this.playerTeam = data.personajesEquipo
         this.salaActual = data.salaActual
         this.haySalaSeleccionada = this.salaActual != undefined
         console.log(this.haySalaSeleccionada)
+        console.log(this.salaActual)
     }
 
     preload(){
@@ -61,7 +62,7 @@ export default class Dungeon extends Phaser.Scene {
                 }
             if(this.mapa_info.Grafo[hab].inicio){
                 if(!this.haySalaSeleccionada){
-                    this.salaActual =  hab + 1
+                    this.salaActual =  hab
                     this.haySalaSeleccionada = true
                 }
             }else if (this.mapa_info.Grafo[hab].final){
@@ -81,7 +82,7 @@ export default class Dungeon extends Phaser.Scene {
         this.actualizarSimboloSala()
     }
     compruebaCamino(hab){
-        return this.mapa_info.Grafo[this.salaActual - 1].caminos.findIndex(i => i == hab + 1) != -1
+        return this.mapa_info.Grafo[this.salaActual].caminos.findIndex(i => i == hab + 1) != -1
     }
 
     entrarASala(hab){
@@ -95,7 +96,7 @@ export default class Dungeon extends Phaser.Scene {
 
     actualizarSimboloSala(){
         let isaX = 0, isaY = 0, NumCasillas = 0
-        this.botonesSprite[this.salaActual - 1 ].forEach(t => {
+        this.botonesSprite[this.salaActual].forEach(t => {
             isaX += t.x
             isaY += t.y
             NumCasillas++
@@ -106,10 +107,10 @@ export default class Dungeon extends Phaser.Scene {
     }
 
     seleccionarHabitacion(hab){
-        this.scene.start('Combate',{mapa_id: hab.ruta, peronajesEquipo: this.playerTeam,sala:this.salaActual, mapa:this.mapa_info});
+        this.scene.start('Combate',{mapa_id: hab.ruta, personajesEquipo: this.playerTeam,sala:this.salaActual, mapa:this.mapa_info});
     }
     salirDeLaMazmorra(){
-        this.scene.start('Mapa',{peronajesEquipo: this.playerTeam});
+        this.scene.start('Mapa',{personajesEquipo: this.playerTeam});
     }
 
 }

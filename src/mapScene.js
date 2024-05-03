@@ -22,9 +22,13 @@ export default class Mapa extends Phaser.Scene {
 
     init (data)
     {
-        this.playerTeam = data.peronajesEquipo
-        this.hayPartySeleccionada = this.playerTeam != undefined      
-        
+        this.playerTeamDATA = data.personajesEquipo
+        this.hayPartySeleccionada = this.playerTeamDATA != undefined      
+        if(this.hayPartySeleccionada){
+            this.playerTeamDATA.forEach(cd => {
+                this.playerTeam.push(new PlayerChar(cd,this,0,0))
+            });
+        }
     }
     
     preload(){
@@ -130,8 +134,13 @@ export default class Mapa extends Phaser.Scene {
                 
    }
     entraMazmorra(){
-        if(this.numPersSeleccionados === 3)
-        this.scene.start('Dungeon',{mapa_info: PruebaDungeon_info, peronajesEquipo: this.playerTeam});
+        if(this.numPersSeleccionados === 3){
+            let playerTeamDATA = []
+            this.playerTeam.forEach(c => {
+                playerTeamDATA.push(c.getData())
+            });
+            this.scene.start('Dungeon',{mapa_info: PruebaDungeon_info, personajesEquipo: playerTeamDATA});
+        }
     }
 
     mostrarMenuTaberna(v){
@@ -172,9 +181,9 @@ export default class Mapa extends Phaser.Scene {
             return
         }
         if(this.hayIndiceSeleccionado){
-            this.updateListaSeleccionados(char,this.indiceSeleccionado)
-            if(this.numPersSeleccionados < 3)
+            if( this.botonesPersonajesSeleccionados[this.indiceSeleccionado].icon.texture.key != 'ui_characters')
                 this.numPersSeleccionados++
+            this.updateListaSeleccionados(char,this.indiceSeleccionado)
         }
         else if(this.numPersSeleccionados < 3){
             let i = 0;

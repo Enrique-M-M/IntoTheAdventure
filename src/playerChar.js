@@ -88,9 +88,7 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         //Acciones de personaje prototipo
         this.acciones = {Mover:{nombre: 'mover', rango: this.movementRange, accion: (areaSeleccion) => {if(this.realizarAccion(this.gastoAPTBasico)) this.mover(areaSeleccion[0])}, tipoSeleccion: 'Movimiento' },
          AtaqueBasico: {nombre: 'atacar', objetivo: 'enemy' , rango: this.rangoBasico, area: this.areaBasico, accion: (areaSeleccion) =>{if(this.realizarAccion(1)) this.ataqueBasico(areaSeleccion) }, tipoSeleccion: 'Habilidad'} }
-        charData.acciones.forEach(element => {
-            this.acciones.push(element)
-        });
+       
 
         this.inventario = charData.inventario
 
@@ -99,6 +97,14 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
        
     }
 
+    getData(){
+        return{name: this.name, maxHp: this.maxHp, movementRange: this.movementRange,
+        armorType: this.armorType, apt: this.maxApt, suerte: this.suerte, inteligence: this.inteligence, strength: this.strength, desterity:this.desterity,
+        spriteIndex: this.spriteIndex/8, ui_index:this.ui_icon,
+        acciones: this.acciones,
+        inventario: 0//TODO
+        }
+    }
      
     /**
      * @override
