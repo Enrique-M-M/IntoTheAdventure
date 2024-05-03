@@ -15,8 +15,6 @@ export default class Dungeon extends Phaser.Scene {
         this.playerTeam = data.personajesEquipo
         this.salaActual = data.salaActual
         this.haySalaSeleccionada = this.salaActual != undefined
-        console.log(this.haySalaSeleccionada)
-        console.log(this.salaActual)
     }
 
     preload(){
@@ -41,11 +39,21 @@ export default class Dungeon extends Phaser.Scene {
         this.mapaDungeon.setX(this.correccion_x) 
         this.mapaDungeon.setY(this.correccion_y)   
 
+        if(this.haySalaSeleccionada){//Victoria en combate
+            for (var key in this.mapa_info.Grafo[this.salaActual].recompensa){
+                if(key == 'exp'){
+                    for(let i = 0; i < 3 ; i++){
+                        this.playerTeam[i].freeExPoint += this.mapa_info.Grafo[this.salaActual].recompensa[key]
+                    }
+                }
+            }
+        }
+
         this.botonesDungeon = this.map.createLayer('botones',[tiles_map]);
         this.botonesDungeon.setScale(1.5,1.5) 
         this.botonesDungeon.setX(this.correccion_x) 
         this.botonesDungeon.setY(this.correccion_y)   
-          this.botonesDungeon.setVisible(false)
+        this.botonesDungeon.setVisible(false)
         this.botonesSprite = []
         this.botonesDungeon.forEachTile((tile) => {
 

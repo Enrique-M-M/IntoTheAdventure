@@ -26,6 +26,7 @@ export default class Mapa extends Phaser.Scene {
         this.playerTeamDATA = data.personajesEquipo
         this.hayPartySeleccionada = this.playerTeamDATA != undefined      
         if(this.hayPartySeleccionada){
+            this.playerTeam = []
             this.playerTeamDATA.forEach(cd => {
                 this.playerTeam.push(new PlayerChar(cd,this,0,0))
             });
@@ -49,6 +50,9 @@ export default class Mapa extends Phaser.Scene {
             this.menuSeleccionPersonajesVisible = true
             this.playerTeam = [0,0,0]
             this.numPersSeleccionados = 0
+            this.vueltaEscena = false
+        } else{
+            this.vueltaEscena = true
         }
         this.indiceSeleccionado = -1
         this.hayIndiceSeleccionado = false
@@ -130,6 +134,9 @@ export default class Mapa extends Phaser.Scene {
         this.botonesMejoraPersonajes = []
         for(let i = 0; i< 3;i++){
             this.crearMenuMejoraPersonaje(i)
+            if(this.vueltaEscena){
+                this.setMenuMejoraPersonaje(i)
+            }
         }
 
         if(this.hayPartySeleccionada){
@@ -142,11 +149,25 @@ export default class Mapa extends Phaser.Scene {
 
    crearMenuMejoraPersonaje(i){
         this.botonesMejoraPersonajes.push({})
-        this.botonesMejoraPersonajes[i].textoVida = this.add.text(530,245,"Vida - c: 1 ",{fill: '#000'}).setDepth(7)
+        this.botonesMejoraPersonajes[i].textoPuntosDeMejora = this.add.text(670,245,"Exp - c: ",{fill: '#000'}).setDepth(7)
+
+        this.botonesMejoraPersonajes[i].textoVida = this.add.text(530,245,"Vida - c: ",{fill: '#000'}).setDepth(7)
         this.botonesMejoraPersonajes[i].textoAPT = this.add.text(530,295,"Acciones - c: 2",{fill: '#000'}).setDepth(7)
         this.botonesMejoraPersonajes[i].textoSTR = this.add.text(530,345,"Fue - c: 1",{fill: '#000'}).setDepth(7)
         this.botonesMejoraPersonajes[i].textoINT = this.add.text(530,390,"Int - c: 1",{fill: '#000'}).setDepth(7)
         this.botonesMejoraPersonajes[i].textoDES = this.add.text(530,437,"Des - c: 1",{fill: '#000'}).setDepth(7)
+   }
+
+   actualizarUIMejora(i){
+    this.botonesMejoraPersonajes[i].textoPuntosDeMejora.setText("Exp - c: " + this.playerTeam[i].freeExPoint)
+    this.botonesMejoraPersonajes[i].textoVida.setText("Vida - c: " + this.playerTeam[i].maxHp)
+    this.botonesMejoraPersonajes[i].textoAPT.setText("Acciones - c: " +this.playerTeam[i].maxApt )
+    this.botonesMejoraPersonajes[i].textoSTR.setText("Fue - c: " +this.playerTeam[i].strength )
+    this.botonesMejoraPersonajes[i].textoINT.setText("Int - c: " +this.playerTeam[i].inteligence )
+    this.botonesMejoraPersonajes[i].textoDES.setText("Des - c: " +this.playerTeam[i].desterity )
+
+
+
    }
    setMenuMejoraPersonaje(i){
         let depthBotones = 7
@@ -157,23 +178,24 @@ export default class Mapa extends Phaser.Scene {
         let mejoraVida = 20
 
 
-        this.botonesMejoraPersonajes[i].mejoraVida1 = new UpgradeButtom(this,posX_i, 275,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'maxHp' ,1, 50,'mejoraVida1')
+        this.botonesMejoraPersonajes[i].mejoraVida1 = new UpgradeButtom(this,posX_i, 275,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i],i, 'maxHp' ,1, mejoraVida,'mejoraVida1')
   
-        this.botonesMejoraPersonajes[i].mejoraVida2 = new UpgradeButtom(this,posX_i + diferencia_pos_x, 275,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'maxHp' ,1, mejoraVida,'mejoraVida2')
+        this.botonesMejoraPersonajes[i].mejoraVida2 = new UpgradeButtom(this,posX_i + diferencia_pos_x, 275,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i],i, 'maxHp' ,1, mejoraVida,'mejoraVida2')
         
-        this.botonesMejoraPersonajes[i].mejoraAPT = new UpgradeButtom(this,posX_i, 328,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'maxApt' ,2, 1,'mejoraAPT1')
+        this.botonesMejoraPersonajes[i].mejoraAPT = new UpgradeButtom(this,posX_i, 328,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], i,'maxApt' ,2, 1,'mejoraAPT1')
         
-        this.botonesMejoraPersonajes[i].mejoraSTR1 = new UpgradeButtom(this,posX_i, 375,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'strength' ,1, 1,'STR1')
-        this.botonesMejoraPersonajes[i].mejoraSTR2 = new UpgradeButtom(this,posX_i+ diferencia_pos_x, 375,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'strength' ,1, 1,'STR2')
-        this.botonesMejoraPersonajes[i].mejoraSTR3 = new UpgradeButtom(this,posX_i+ 2*diferencia_pos_x, 375,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'strength' ,1, 1,'STR3')
+        this.botonesMejoraPersonajes[i].mejoraSTR1 = new UpgradeButtom(this,posX_i, 375,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], i,'strength' ,1, 1,'STR1')
+        this.botonesMejoraPersonajes[i].mejoraSTR2 = new UpgradeButtom(this,posX_i+ diferencia_pos_x, 375,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i],i, 'strength' ,1, 1,'STR2')
+        this.botonesMejoraPersonajes[i].mejoraSTR3 = new UpgradeButtom(this,posX_i+ 2*diferencia_pos_x, 375,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i],i, 'strength' ,1, 1,'STR3')
         
-        this.botonesMejoraPersonajes[i].mejoraINT1 = new UpgradeButtom(this,posX_i, 418,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'inteligence' ,1, 1,'INT1')
-        this.botonesMejoraPersonajes[i].mejoraINT2 = new UpgradeButtom(this,posX_i+ diferencia_pos_x, 418,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'inteligence' ,1, 1,'INT2')
-        this.botonesMejoraPersonajes[i].mejoraINT3 = new UpgradeButtom(this,posX_i+ 2*diferencia_pos_x, 418,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'inteligence' ,1, 1,'INT3')
+        this.botonesMejoraPersonajes[i].mejoraINT1 = new UpgradeButtom(this,posX_i, 418,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i],i, 'inteligence' ,1, 1,'INT1')
+        this.botonesMejoraPersonajes[i].mejoraINT2 = new UpgradeButtom(this,posX_i+ diferencia_pos_x, 418,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i],i, 'inteligence' ,1, 1,'INT2')
+        this.botonesMejoraPersonajes[i].mejoraINT3 = new UpgradeButtom(this,posX_i+ 2*diferencia_pos_x, 418,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i],i, 'inteligence' ,1, 1,'INT3')
 
-        this.botonesMejoraPersonajes[i].mejoraDES1 = new UpgradeButtom(this,posX_i, 465,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'desterity' ,1, 1,'DES1')
-        this.botonesMejoraPersonajes[i].mejoraDES2 = new UpgradeButtom(this,posX_i+ diferencia_pos_x, 465,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'desterity' ,1, 1,'DES1')
-        this.botonesMejoraPersonajes[i].mejoraDES3 = new UpgradeButtom(this,posX_i+ 2*diferencia_pos_x, 465,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'desterity' ,1, 1,'DES1')
+        this.botonesMejoraPersonajes[i].mejoraDES1 = new UpgradeButtom(this,posX_i, 465,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i],i, 'desterity' ,1, 1,'DES1')
+        this.botonesMejoraPersonajes[i].mejoraDES2 = new UpgradeButtom(this,posX_i+ diferencia_pos_x, 465,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i],i, 'desterity' ,1, 1,'DES1')
+        this.botonesMejoraPersonajes[i].mejoraDES3 = new UpgradeButtom(this,posX_i+ 2*diferencia_pos_x, 465,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i],i, 'desterity' ,1, 1,'DES1')
+        this.actualizarUIMejora(i)
     }
 
     setVisibleBotonesMejora(i,val){
@@ -190,10 +212,11 @@ export default class Mapa extends Phaser.Scene {
             this.playerTeam.forEach(c => {
                 playerTeamDATA.push(c.getData())
             });
+            console.log(playerTeamDATA)
             this.scene.start('Dungeon',{mapa_info: PruebaDungeon_info, personajesEquipo: playerTeamDATA});
         }
     }
-
+ 
     mostrarMenuTaberna(v){
         this.menuTabernaVisible = v
         this.actualizarUI()
@@ -202,7 +225,6 @@ export default class Mapa extends Phaser.Scene {
         this.menuSeleccionPersonajesVisible = false
         for(let i = 0; i < 3; i++){
             this.setMenuMejoraPersonaje(i)
-
         }
         this.actualizarUI()
     }

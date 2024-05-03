@@ -18,6 +18,7 @@ export class    CombatManager {
     objectList;
 
     constructor(enemyTeam,playerTeam,partySize,scene, objectList){
+        console.log(playerTeam)
         this.enemyTeam = enemyTeam;
         this.enemySize = enemyTeam.length;
         this.livingEnemies = this.enemySize;

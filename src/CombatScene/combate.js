@@ -328,6 +328,7 @@ export default class Combate extends Phaser.Scene {
     createManager(){
         //input del player
         this.playerTeam = []
+        console.log(this.playerTeam)
         this.playerTeamDATA.forEach(cd => {
             this.playerTeam.push(new PlayerChar(cd,this,0,0))
         });
@@ -365,7 +366,7 @@ export default class Combate extends Phaser.Scene {
     }
 
     victoriaCombate(){
-        this.scene.start('Dungeon',{mapa_info: this.mapaDungeon, personajesEquipo: this.playerTeamDATA, salaActual: this.sala, inventario: this.invent})
+        this.scene.start('Dungeon',{mapa_info: this.mapaDungeon, personajesEquipo: this.playerTeamDATA, salaActual: this.sala, inventario: this.inventario})
     }
 
      //+++++++++++++ Controles +++++++++++++++++++++++++

@@ -107,7 +107,8 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         armorType: this.armorType, apt: this.maxApt, suerte: this.suerte, inteligence: this.inteligence, strength: this.strength, desterity:this.desterity,
         spriteIndex: this.spriteIndex/8, ui_index:this.ui_icon,
         acciones: this.acciones,
-        inventario: 0//TODO
+        inventario: 0,
+        freeExPoint: this.freeExPoint, mejorasAplicadas:this.mejorasAplicadas
         }
     }
      
