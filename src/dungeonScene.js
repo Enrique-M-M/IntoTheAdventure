@@ -1,5 +1,5 @@
 import PruebaDungeon_info from "../assets/Dungeons/PruebaDungeon_info";
-import { SpriteButton } from "./spriteButtom";
+import { SpriteButton } from "./Botones/spriteButtom";
 
 export default class Dungeon extends Phaser.Scene {
     

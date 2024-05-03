@@ -17,3 +17,9 @@ Tiles Background Index
     Lava: 25, 36
     Agua: 5,6,7,8, 16, 17, 18, 19
     AguaVerde: 27,28, 29, 30, 38, 39, 40, 4
+
+Mejoras de los personajes:
+    mejoraVida1 - coste 1 , mejoraVida2 - coste 1, mejoraAPT - coste 2,
+    mejoraSTR1 - coste 1, mejoraSTR2 - coste 1, mejoraSTR3 - coste 1, 
+    mejoraINT1 - coste 1, mejoraINT2 - coste 1, mejoraINT3 - coste 1, 
+    mejoraDES1 - coste 1, mejoraDES2 - coste 1, mejoraDES3 - coste 1, 

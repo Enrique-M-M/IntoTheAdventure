@@ -54,6 +54,8 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
 
     indexCombatManager
 
+    mejorasAplicadas
+
     //-------------------- Constructor, setters y getters ---------------------
     constructor(charData, scene, x, y) {
         super(scene, x ,y ,'characters_sp');
@@ -84,6 +86,9 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         this.rangoBasico = 2
         this.areaBasico = 2
         this.gastoAPTBasico = 1
+
+        this.freeExPoint = charData.freeExPoint
+        this.mejorasAplicadas = charData.mejorasAplicadas
 
         //Acciones de personaje prototipo
         this.acciones = {Mover:{nombre: 'mover', rango: this.movementRange, accion: (areaSeleccion) => {if(this.realizarAccion(this.gastoAPTBasico)) this.mover(areaSeleccion[0])}, tipoSeleccion: 'Movimiento' },
@@ -379,6 +384,17 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         }
         return false
     }
+    //------------------- Funciones de mejoras -----------------------------
+    quitarMejora(nombre){
+        this.mejorasAplicadas.splice(this.mejorasAplicadas.indexOf(nombre), 1)
+    }
+    anadirMejora(nombre){
+        this.mejorasAplicadas.push(nombre)
+    }
+    checkMejora(nombre){
+        return this.mejorasAplicadas.indexOf(nombre) >= 0
+    }
+
 }
 
 /**LISTA DE IDEAS Y TODOS:

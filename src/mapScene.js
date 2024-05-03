@@ -1,8 +1,9 @@
-import { SpriteButton } from "./spriteButtom";
-import { TextButton } from "./textButtom";
+import { SpriteButton } from "./Botones/spriteButtom.js";
+import { TextButton } from "./Botones/textButtom.js";
 import { personajes  } from '../assets/CharactersInfo/CharactersDATA.js';
 import PlayerChar from "./playerChar.js";
 import PruebaDungeon_info from "../assets/Dungeons/PruebaDungeon_info.js";
+import { UpgradeButtom } from "./Botones/upgradeButtom.js";
 
 export default class Mapa extends Phaser.Scene {
 
@@ -125,6 +126,11 @@ export default class Mapa extends Phaser.Scene {
             this.botonesPersonajesSeleccionados[i].setDepth(6)
 
         }
+        
+        this.botonesMejoraPersonajes = []
+        for(let i = 0; i< 3;i++){
+            this.crearMenuMejoraPersonaje(i)
+        }
 
         if(this.hayPartySeleccionada){
             for(let i = 0; i<3; i++ ){
@@ -133,6 +139,51 @@ export default class Mapa extends Phaser.Scene {
         }
                 
    }
+
+   crearMenuMejoraPersonaje(i){
+        this.botonesMejoraPersonajes.push({})
+        this.botonesMejoraPersonajes[i].textoVida = this.add.text(530,245,"Vida - c: 1 ",{fill: '#000'}).setDepth(7)
+        this.botonesMejoraPersonajes[i].textoAPT = this.add.text(530,295,"Acciones - c: 2",{fill: '#000'}).setDepth(7)
+        this.botonesMejoraPersonajes[i].textoSTR = this.add.text(530,345,"Fue - c: 1",{fill: '#000'}).setDepth(7)
+        this.botonesMejoraPersonajes[i].textoINT = this.add.text(530,390,"Int - c: 1",{fill: '#000'}).setDepth(7)
+        this.botonesMejoraPersonajes[i].textoDES = this.add.text(530,437,"Des - c: 1",{fill: '#000'}).setDepth(7)
+   }
+   setMenuMejoraPersonaje(i){
+        let depthBotones = 7
+        let scaleXY = 2
+        let posX_i = 600
+        
+        let diferencia_pos_x = 20
+        let mejoraVida = 20
+
+
+        this.botonesMejoraPersonajes[i].mejoraVida1 = new UpgradeButtom(this,posX_i, 275,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'maxHp' ,1, 50,'mejoraVida1')
+  
+        this.botonesMejoraPersonajes[i].mejoraVida2 = new UpgradeButtom(this,posX_i + diferencia_pos_x, 275,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'maxHp' ,1, mejoraVida,'mejoraVida2')
+        
+        this.botonesMejoraPersonajes[i].mejoraAPT = new UpgradeButtom(this,posX_i, 328,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'maxApt' ,2, 1,'mejoraAPT1')
+        
+        this.botonesMejoraPersonajes[i].mejoraSTR1 = new UpgradeButtom(this,posX_i, 375,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'strength' ,1, 1,'STR1')
+        this.botonesMejoraPersonajes[i].mejoraSTR2 = new UpgradeButtom(this,posX_i+ diferencia_pos_x, 375,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'strength' ,1, 1,'STR2')
+        this.botonesMejoraPersonajes[i].mejoraSTR3 = new UpgradeButtom(this,posX_i+ 2*diferencia_pos_x, 375,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'strength' ,1, 1,'STR3')
+        
+        this.botonesMejoraPersonajes[i].mejoraINT1 = new UpgradeButtom(this,posX_i, 418,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'inteligence' ,1, 1,'INT1')
+        this.botonesMejoraPersonajes[i].mejoraINT2 = new UpgradeButtom(this,posX_i+ diferencia_pos_x, 418,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'inteligence' ,1, 1,'INT2')
+        this.botonesMejoraPersonajes[i].mejoraINT3 = new UpgradeButtom(this,posX_i+ 2*diferencia_pos_x, 418,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'inteligence' ,1, 1,'INT3')
+
+        this.botonesMejoraPersonajes[i].mejoraDES1 = new UpgradeButtom(this,posX_i, 465,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'desterity' ,1, 1,'DES1')
+        this.botonesMejoraPersonajes[i].mejoraDES2 = new UpgradeButtom(this,posX_i+ diferencia_pos_x, 465,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'desterity' ,1, 1,'DES1')
+        this.botonesMejoraPersonajes[i].mejoraDES3 = new UpgradeButtom(this,posX_i+ 2*diferencia_pos_x, 465,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i], 'desterity' ,1, 1,'DES1')
+    }
+
+    setVisibleBotonesMejora(i,val){
+        for (var key in this.botonesMejoraPersonajes[i]){
+            this.botonesMejoraPersonajes[i][key].setVisible(val)
+        }
+    }
+
+    
+
     entraMazmorra(){
         if(this.numPersSeleccionados === 3){
             let playerTeamDATA = []
@@ -149,6 +200,10 @@ export default class Mapa extends Phaser.Scene {
     }
     cerrarSeleccion(){
         this.menuSeleccionPersonajesVisible = false
+        for(let i = 0; i < 3; i++){
+            this.setMenuMejoraPersonaje(i)
+
+        }
         this.actualizarUI()
     }
 
@@ -163,16 +218,18 @@ export default class Mapa extends Phaser.Scene {
         this.menuSeleccionBotonCerrar.setVisible(this.menuSeleccionPersonajesVisible && this.numPersSeleccionados === 3)
 
         this.menuTabernaBotonCerrar.setVisible(this.menuTabernaVisible)
-        this.menuPersonajeSimbolos.setVisible(this.menuTabernaVisible && this.hayIndiceSeleccionado && this.playerTeam[this.indiceSeleccionado] != 0)
-        this.menuPersonajesBcgnd.setVisible(this.menuTabernaVisible && this.hayIndiceSeleccionado && this.playerTeam[this.indiceSeleccionado] != 0)
-
+        this.menuPersonajeSimbolos.setVisible(this.menuTabernaVisible && this.hayIndiceSeleccionado && this.playerTeam[this.indiceSeleccionado] != 0 && !this.menuSeleccionPersonajesVisible)
+        this.menuPersonajesBcgnd.setVisible(this.menuTabernaVisible && this.hayIndiceSeleccionado && this.playerTeam[this.indiceSeleccionado] != 0 && !this.menuSeleccionPersonajesVisible)
+        
 
         for(let i = 0; i <this.allCharacters.length; i++){
             this.botonesSeleconarPersonajes[i].setVisible(this.menuSeleccionPersonajesVisible) 
         }
         for(let i = 0; i < 3; i++){
             this.botonesPersonajesSeleccionados[i].setVisible(this.menuTabernaVisible || this.menuSeleccionPersonajesVisible)
+            this.setVisibleBotonesMejora(i,this.menuTabernaVisible && this.hayIndiceSeleccionado && this.playerTeam[this.indiceSeleccionado] != 0 && !this.menuSeleccionPersonajesVisible && i == this.indiceSeleccionado)
         }
+     
     }
 
 

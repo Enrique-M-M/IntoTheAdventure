@@ -4,8 +4,8 @@ import Phaser from 'phaser'
 
 
 
-import { TextButton } from '../textButtom.js';
-import {SpriteButton } from '../spriteButtom.js'
+import { TextButton } from '../Botones/textButtom.js';
+import {SpriteButton } from '../Botones/spriteButtom.js'
 
 
 import { neigbours, frontNeigbours, crossNeigbours, indexBadTileBackground } from '../constants.js';
