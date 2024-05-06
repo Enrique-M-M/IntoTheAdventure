@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import { CombatManager } from './CombatScene/combatManager';
+import { catalogoObjetos } from '../assets/CharactersInfo/ObjectsDATA';
 
 /*
 Personaje del Jugagor
@@ -90,12 +91,13 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         this.freeExPoint = charData.freeExPoint
         this.mejorasAplicadas = charData.mejorasAplicadas
 
+        this.inventario = charData.inventario
+
+        this.arma = catalogoObjetos.armas[this.inventario.arma]
         //Acciones de personaje prototipo
         this.acciones = {Mover:{nombre: 'mover', rango: this.movementRange, accion: (areaSeleccion) => {if(this.realizarAccion(this.gastoAPTBasico)) this.mover(areaSeleccion[0])}, tipoSeleccion: 'Movimiento' },
-         AtaqueBasico: {nombre: 'atacar', objetivo: 'enemy' , rango: this.rangoBasico, area: this.areaBasico, accion: (areaSeleccion) =>{if(this.realizarAccion(1)) this.ataqueBasico(areaSeleccion) }, tipoSeleccion: 'Habilidad'} }
+         AtaqueBasico: {nombre: 'atacar', objetivo: 'enemy' , rango: this.arma.rango, area: this.arma.area, accion: (areaSeleccion) =>{if(this.realizarAccion(this.arma.gastoAPT)) this.ataqueBasico(areaSeleccion) }, tipoSeleccion: 'Habilidad'} }
        
-
-        this.inventario = charData.inventario
 
         this.setVisible(true)
         this.crearAnimaciones()
@@ -107,7 +109,7 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         armorType: this.armorType, apt: this.maxApt, suerte: this.suerte, inteligence: this.inteligence, strength: this.strength, desterity:this.desterity,
         spriteIndex: this.spriteIndex/8, ui_index:this.ui_icon,
         acciones: this.acciones,
-        inventario: 0,
+        inventario: this.inventario,
         freeExPoint: this.freeExPoint, mejorasAplicadas:this.mejorasAplicadas
         }
     }
@@ -326,8 +328,8 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
 
     ataqueBasico(areaSeleccion){
         areaSeleccion.forEach(targetVec => {
-            console.log("Ataque en " + targetVec.x+ " "+ targetVec.y)
-            this.hacerDano(targetVec)
+            console.log("Ataque en " + targetVec.x+ " "+ targetVec.y + " daño: " +(this.arma.dmg + this.arma.escalado * this[this.arma.tipoEscalado]))
+            this.hacerDano(targetVec,(this.arma.dmg + this.arma.escalado * this[this.arma.tipoEscalado]))
         });
     }
     
@@ -348,7 +350,7 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
 
     //Hacer daño en una casilla
     //Se puede extender para utilizar el area y los diferentes tipos de daño
-    hacerDano(targetVec){
+    hacerDano(targetVec,dano){
         let ent = this.scene.combatManager.getEntityAt(targetVec)
         
         this.orientaPersonajeyPlayAnimation('atack', targetVec)
@@ -356,7 +358,7 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
             () => {
              this.orientaPersonajeyPlayAnimation('idle') })
         if(ent != null && ent.recibeDano){
-        ent.recibeDano(this.danoBasico)
+            ent.recibeDano(dano)
         }
     }
 

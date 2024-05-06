@@ -25,11 +25,13 @@ export default class Mapa extends Phaser.Scene {
     {
         this.playerTeamDATA = data.personajesEquipo
         this.hayPartySeleccionada = this.playerTeamDATA != undefined      
+        this.inventario = []
         if(this.hayPartySeleccionada){
             this.playerTeam = []
             this.playerTeamDATA.forEach(cd => {
                 this.playerTeam.push(new PlayerChar(cd,this,0,0))
             });
+            this.inventario = data.inventario
         }
     }
     
@@ -142,29 +144,37 @@ export default class Mapa extends Phaser.Scene {
         if(this.hayPartySeleccionada){
             for(let i = 0; i<3; i++ ){
                 this.updateListaSeleccionados(this.playerTeam[i], i)
-            }
-        }
                 
+            }
+            let i = 0
+            this.inventario.forEach(obj => {
+                this.createUIInventario(obj,i)
+            });
+        } 
+   }
+
+   createUIInventario(obj,i){
+
    }
 
    crearMenuMejoraPersonaje(i){
         this.botonesMejoraPersonajes.push({})
-        this.botonesMejoraPersonajes[i].textoPuntosDeMejora = this.add.text(670,245,"Exp - c: ",{fill: '#000'}).setDepth(7)
+        this.botonesMejoraPersonajes[i].textoPuntosDeMejora = this.add.text(670,245,"Exp - ",{fill: '#000'}).setDepth(7)
 
-        this.botonesMejoraPersonajes[i].textoVida = this.add.text(530,245,"Vida - c: ",{fill: '#000'}).setDepth(7)
-        this.botonesMejoraPersonajes[i].textoAPT = this.add.text(530,295,"Acciones - c: 2",{fill: '#000'}).setDepth(7)
-        this.botonesMejoraPersonajes[i].textoSTR = this.add.text(530,345,"Fue - c: 1",{fill: '#000'}).setDepth(7)
-        this.botonesMejoraPersonajes[i].textoINT = this.add.text(530,390,"Int - c: 1",{fill: '#000'}).setDepth(7)
-        this.botonesMejoraPersonajes[i].textoDES = this.add.text(530,437,"Des - c: 1",{fill: '#000'}).setDepth(7)
+        this.botonesMejoraPersonajes[i].textoVida = this.add.text(530,245,"Vida - ",{fill: '#000'}).setDepth(7)
+        this.botonesMejoraPersonajes[i].textoAPT = this.add.text(530,295,"Acciones - 2",{fill: '#000'}).setDepth(7)
+        this.botonesMejoraPersonajes[i].textoSTR = this.add.text(530,345,"Fue - 1",{fill: '#000'}).setDepth(7)
+        this.botonesMejoraPersonajes[i].textoINT = this.add.text(530,390,"Int - 1",{fill: '#000'}).setDepth(7)
+        this.botonesMejoraPersonajes[i].textoDES = this.add.text(530,437,"Des - 1",{fill: '#000'}).setDepth(7)
    }
 
    actualizarUIMejora(i){
-    this.botonesMejoraPersonajes[i].textoPuntosDeMejora.setText("Exp - c: " + this.playerTeam[i].freeExPoint)
-    this.botonesMejoraPersonajes[i].textoVida.setText("Vida - c: " + this.playerTeam[i].maxHp)
-    this.botonesMejoraPersonajes[i].textoAPT.setText("Acciones - c: " +this.playerTeam[i].maxApt )
-    this.botonesMejoraPersonajes[i].textoSTR.setText("Fue - c: " +this.playerTeam[i].strength )
-    this.botonesMejoraPersonajes[i].textoINT.setText("Int - c: " +this.playerTeam[i].inteligence )
-    this.botonesMejoraPersonajes[i].textoDES.setText("Des - c: " +this.playerTeam[i].desterity )
+    this.botonesMejoraPersonajes[i].textoPuntosDeMejora.setText("Exp - " + this.playerTeam[i].freeExPoint)
+    this.botonesMejoraPersonajes[i].textoVida.setText("Vida - " + this.playerTeam[i].maxHp)
+    this.botonesMejoraPersonajes[i].textoAPT.setText("Acciones - " +this.playerTeam[i].maxApt )
+    this.botonesMejoraPersonajes[i].textoSTR.setText("Fue - " +this.playerTeam[i].strength )
+    this.botonesMejoraPersonajes[i].textoINT.setText("Int - " +this.playerTeam[i].inteligence )
+    this.botonesMejoraPersonajes[i].textoDES.setText("Des - " +this.playerTeam[i].desterity )
 
 
 

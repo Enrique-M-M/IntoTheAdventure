@@ -4,7 +4,7 @@ export var personajes = {
         armorType: 3, apt: 2,suete: 0, inteligence:0, strength: 1, desterity:0,
         spriteIndex: 0, ui_index: 2,
         acciones: ['mover', 'atacar'],
-        inventario: {arma: -1, armaduraSup: -1, armaduraInf: -1, amuleto: -1},
+        inventario: {arma: 1, armaduraSup: -1, armaduraInf: -1, amuleto: -1},
         freeExPoint: 2 , mejorasAplicadas:[]
     },
     Vampiro: {
@@ -12,7 +12,7 @@ export var personajes = {
         armorType: 3, apt: 2, suerte: 0, inteligence: 0, strength: 1, desterity:0,
         spriteIndex: 7, ui_index: 7,
         acciones: ['mover', 'atacar'],
-        inventario: {arma: -1, armaduraSup: -1, armaduraInf: -1, amuleto: -1} ,
+        inventario: {arma: 1, armaduraSup: -1, armaduraInf: -1, amuleto: -1} ,
         freeExPoint: 0, mejorasAplicadas:[]
     },
     Clerigo:{
@@ -20,7 +20,7 @@ export var personajes = {
         armorType: 1, apt: 3, suerte: 0, inteligence:1,strength:0,desterity:0,
         spriteIndex:6, ui_index: 6,
         acciones: ['mover', 'atacar'],
-        inventario: {arma: -1, armaduraSup: -1, armaduraInf: -1, amuleto: -1} ,
+        inventario: {arma: 3, armaduraSup: -1, armaduraInf: -1, amuleto: -1} ,
         freeExPoint: 0, mejorasAplicadas:[]
     },
     Ranger:{
@@ -28,7 +28,7 @@ export var personajes = {
         armorType: 2, apt: 3, suerte:0,inteligence:0,strength:0,desterity:1,
         spriteIndex:2, ui_index: 3,
         acciones: ['mover', 'atacar'],
-        inventario: {arma: -1, armaduraSup: -1, armaduraInf: -1, amuleto: -1},
+        inventario: {arma: 4, armaduraSup: -1, armaduraInf: -1, amuleto: -1},
         freeExPoint: 0 , mejorasAplicadas:[]
     },
     Guerrero:{
@@ -36,7 +36,7 @@ export var personajes = {
         armorType:3,apt:3,suerte:1,inteligence:0,strength:1,desterity:1,
         spriteIndex:1, ui_index: 1,
         acciones: ['mover', 'atacar'],
-        inventario: {arma: -1, armaduraSup: -1, armaduraInf: -1, amuleto: -1} ,
+        inventario: {arma: 2, armaduraSup: -1, armaduraInf: -1, amuleto: -1} ,
         freeExPoint: 0, mejorasAplicadas:[]
     },
     Mago:{
@@ -44,7 +44,7 @@ export var personajes = {
         armorType:1,apt:3,suerte:0,inteligence:1,strength:0,desterity:0,
         spriteIndex:4, ui_index: 0,
         acciones:['mover', 'atacar'],
-        inventario: {arma: -1, armaduraSup: -1, armaduraInf: -1, amuleto: -1} ,
+        inventario: {arma: 3, armaduraSup: -1, armaduraInf: -1, amuleto: -1} ,
         freeExPoint: 0, mejorasAplicadas:[]
     },
     Picaro:{
@@ -52,7 +52,7 @@ export var personajes = {
         armorType: 2, apt: 4, suerte:1,inteligence:0,strength:0,desterity:1,
         spriteIndex:3, ui_index:4,
         acciones: ['mover', 'atacar'],
-        inventario: {arma: -1, armaduraSup: -1, armaduraInf: -1, amuleto: -1} ,
+        inventario: {arma: 6, armaduraSup: -1, armaduraInf: -1, amuleto: -1} ,
         freeExPoint: 0, mejorasAplicadas:[]
     },
     Brujo:{
@@ -60,7 +60,7 @@ export var personajes = {
         armorType:1,apt:3,suerte:0,inteligence:1,strength:0,desterity:0,
         spriteIndex:5, ui_index: 5,
         acciones: ['mover', 'atacar'],
-        inventario: {arma: -1, armaduraSup: -1, armaduraInf: -1, amuleto: -1},
+        inventario: {arma: 5, armaduraSup: -1, armaduraInf: -1, amuleto: -1},
         freeExPoint: 0, mejorasAplicadas:[]
     
     }

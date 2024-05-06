@@ -21,6 +21,7 @@ import ui_actions_icon from '../assets/sprites/ActionsIcons.png'
 import ui_barraVida from '../assets/sprites/LifeBar_UI.png'
 import ui_barraVida_ex from '../assets/sprites/LifeBar_Exterior_UI.png'
 import ui_indicadorAPT from '../assets/sprites/UI_IndicadorAPT.png'
+import ui_iconosObjetos from '../assets/sprites/Ui_iconos_objetos.png'
 
 
 /**
@@ -83,6 +84,12 @@ export default class Boot extends Phaser.Scene {
         this.load.spritesheet('ui_indicadorAPT', 
                                 ui_indicadorAPT,
                                 {frameWidth: 8, frameHeight:8})
+        this.load.spritesheet('ui_iconosObjetos', 
+                                ui_iconosObjetos,
+                                {frameWidth: 8, frameHeight:8})
+
+
+
     //MAPASTILES
   }
 
