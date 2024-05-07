@@ -15,6 +15,7 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
     mov_range;
     mov_remaining;
     attackRange;
+    attackDamage;
     spriteIndex;
 
     lookingBackward;
@@ -25,6 +26,8 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
         this.name = enemyData.name;
         this.maxHp = enemyData.maxHp;
         this.currentHp = enemyData.maxHp;
+        this.attackDamage = enemyData.attackDamage
+        this.attackRange = enemyData.attackRange
         this.movementRange = enemyData.mov_Range
         this.mov_remaining = enemyData.movementRange
         this.spriteIndex = enemyData.spriteIndex*8
@@ -146,9 +149,19 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
     }
     //Si no tiene personaje a rango, se mueve, si tiene personaje a rango, ataca.
     takeTurn(){
-        let targetVec = this.getPersonajeMasCercano()
+        let targetVec = this.getPersonajeMasCercano();
+        console.log("target mas cercano: "+targetVec.x+" "+targetVec.y);
+        console.log(" mi posicion es: "+this.tileX + " " + this.tileY);
         const matrizpath = this.generarPathfinding(targetVec);
         const listaCasillas = this.generarCamino(matrizpath);
+        if((Math.abs(targetVec.x-this.tileX) + Math.abs(targetVec.y-this.tileY)) > this.attackRange){
+            this.recorrerCamino(listaCasillas);
+        }else{
+            this.hacerDano(targetVec,this.attackDamage);
+        }
+        // for(let i=0; i< listaCasillas.length;i++){
+        //     console.log("Casilla: "+listaCasillas[i].x+" " + listaCasillas[i].y);
+        // }
         this.recorrerCamino(listaCasillas);
     }
 
@@ -246,7 +259,22 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
         currCrop = Math.ceil(currCrop)
         this.barraVida.setCrop(0,0,currCrop,3)
     }
+    hacerDano(targetVec,dano){
+        let ent = this.scene.combatManager.getEntityAt(targetVec)
         
+        this.orientaPersonajeyPlayAnimation('atack', targetVec)
+        this.once(Phaser.Animations.Events.ANIMATION_COMPLETE , 
+            () => {
+             this.orientaPersonajeyPlayAnimation('idle') })
+        if(ent != null && ent.recibeDano){
+            ent.recibeDano(dano)
+        }
+    }
+        
+
+    ataqueBasico(targetVec){
+        this.hacerDano(targetVec,)
+    }
     //Gestiona la muerte de un personaje
     //TODO
     muere(){

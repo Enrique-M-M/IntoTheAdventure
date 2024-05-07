@@ -231,13 +231,17 @@ export class    CombatManager {
         let dist, distMenor = 9999
         let charR
         this.playerTeam.forEach(char => {
-            dist = (targetVec.x - char.x)^2 + (targetVec.y - char.y)^2
-            if(dist < distMenor)
+        if(char.isAlive()){    
+            dist = Math.abs(targetVec.x - char.tileX) + Math.abs(targetVec.y - char.tileY)
+            //console.log("distancia a enemigo en x: "+targetVec.x + " y: " +targetVec.y +" "+dist);
+            if(dist < distMenor){
                 distMenor = dist
                 charR = char
+            }}
         }); 
         return {x: charR.tileX, y: charR.tileY}
     }
+  
 
     getEntityAt(targetVec){
         let enc = false
