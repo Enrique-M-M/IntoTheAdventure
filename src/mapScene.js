@@ -1,9 +1,11 @@
-import { SpriteButton } from "./Botones/spriteButtom.js";
-import { TextButton } from "./Botones/textButtom.js";
+import { SpriteButton } from "./ClasesUI/spriteButtom.js";
+import { TextButton } from "./ClasesUI/textButtom.js";
 import { personajes  } from '../assets/CharactersInfo/CharactersDATA.js';
 import PlayerChar from "./playerChar.js";
 import PruebaDungeon_info from "../assets/Dungeons/PruebaDungeon_info.js";
-import { UpgradeButtom } from "./Botones/upgradeButtom.js";
+import { UpgradeButtom } from "./ClasesUI/upgradeButtom.js";
+import { catalogoObjetos } from "../assets/CharactersInfo/ObjectsDATA.js";
+import { UI_Obj, inventarioObj } from "./ClasesUI/inventarioObj.js";
 
 export default class Mapa extends Phaser.Scene {
 
@@ -25,7 +27,7 @@ export default class Mapa extends Phaser.Scene {
     {
         this.playerTeamDATA = data.personajesEquipo
         this.hayPartySeleccionada = this.playerTeamDATA != undefined      
-        this.inventario = []
+        this.inventario = [{tipo:'armas', id:1},{tipo:'armas', id:2},{tipo:'armas', id:3},{tipo:'armas', id:4},{tipo:'armas', id:5},{tipo:'armas', id:6}]
         if(this.hayPartySeleccionada){
             this.playerTeam = []
             this.playerTeamDATA.forEach(cd => {
@@ -58,6 +60,7 @@ export default class Mapa extends Phaser.Scene {
         }
         this.indiceSeleccionado = -1
         this.hayIndiceSeleccionado = false
+        this.controlInventario()
         this._createUIMapa()
        }
 
@@ -76,6 +79,13 @@ export default class Mapa extends Phaser.Scene {
         this.actualizarUI()
     }
 
+    _crearUIInventario(){
+        let i = 0
+        this.inventario.forEach(obj => {
+            this.createUIInventario(obj,i)
+            i++
+        });
+    }
    _createUITaberna(){
         this.menuTaberna = this.make.tilemap({
             key: "tilesMenuTabernaSeleccion"
@@ -140,23 +150,88 @@ export default class Mapa extends Phaser.Scene {
                 this.setMenuMejoraPersonaje(i)
             }
         }
-
+        
+        this.ui_inventario = []
         if(this.hayPartySeleccionada){
             for(let i = 0; i<3; i++ ){
                 this.updateListaSeleccionados(this.playerTeam[i], i)
                 
             }
-            let i = 0
-            this.inventario.forEach(obj => {
-                this.createUIInventario(obj,i)
-            });
+            this._crearUIInventario()
         } 
    }
 
+   controlInventario(){
+    this.input.on('dragstart', (pointer, gameObject)=> {
+    if(this.hayIndiceSeleccionado){
+        this.dragedOriginX = gameObject.x
+        this.dragedOriginY = gameObject.y
+    }
+    })
+    this.input.on('drag',(activePointer, gameObject,dragX, dragY) => {
+        if(this.hayIndiceSeleccionado){
+            gameObject.mover(dragX,dragY)
+        }
+    })
+    this.input.on('dragend', (pointer, gameObject)=> {
+        if(this.hayIndiceSeleccionado){
+            let placeholder = this.getPlaceholder(gameObject.tipoObj)
+            if(Phaser.Geom.Intersects.RectangleToRectangle(gameObject.getBounds(), placeholder.getBounds())){
+                this.objetoEnPlaceholder(gameObject,placeholder)
+                Phaser.Utils.Array.Remove(this.ui_inventario,gameObject) 
+                gameObject.destruir()
+                
+                this.reordenarInventario()
+
+            } else {
+                gameObject.mover(this.dragedOriginX, this.dragedOriginY)
+            }
+        }
+    })}
+
    createUIInventario(obj,i){
+        var x = 220
+        var y = 108 + 60 * i
+        let objeto = catalogoObjetos[obj.tipo][obj.id]
+        let ui_obj = new inventarioObj(objeto, x,y, this, obj.tipo, obj.id)
 
+        this.ui_inventario.push(ui_obj)
+        ui_obj.setInteractive({ useHandCursor: true })
+        this.input.setDraggable(ui_obj)
+        
+   } 
+
+   objetoEnPlaceholder(obj, placeholder){
+        switch(placeholder.tipoObj){
+            case 'armas':
+                this.botonesMejoraPersonajes[this.indiceSeleccionado].armaPlaceholder.setTexture('ui_iconosObjetos',obj.obj.icono)
+
+                let armaAnterior =  this.playerTeam[this.indiceSeleccionado].inventario.arma
+                this.playerTeam[this.indiceSeleccionado].arma = obj.obj
+                this.playerTeam[this.indiceSeleccionado].inventario.arma = obj.index
+
+                if(armaAnterior != -1){
+                    console.log(1)
+                    this.createUIInventario({tipo:'armas', id:armaAnterior},this.ui_inventario.indexOf(obj))
+                } 
+        }
    }
-
+   reordenarInventario(){
+    this.ui_inventario = this.ui_inventario.filter(function( element ) {
+        return element !== undefined;
+     });
+    var  i = 0
+    this.ui_inventario.forEach(element => {
+        element.mover(220, 108 + 60 * i)
+        i++
+    });
+   }
+   getPlaceholder(tipoObj){
+        switch(tipoObj){
+            case 'armas':
+                return this.botonesMejoraPersonajes[this.indiceSeleccionado].armaPlaceholder
+        }
+   }
    crearMenuMejoraPersonaje(i){
         this.botonesMejoraPersonajes.push({})
         this.botonesMejoraPersonajes[i].textoPuntosDeMejora = this.add.text(670,245,"Exp - ",{fill: '#000'}).setDepth(7)
@@ -175,9 +250,6 @@ export default class Mapa extends Phaser.Scene {
     this.botonesMejoraPersonajes[i].textoSTR.setText("Fue - " +this.playerTeam[i].strength )
     this.botonesMejoraPersonajes[i].textoINT.setText("Int - " +this.playerTeam[i].inteligence )
     this.botonesMejoraPersonajes[i].textoDES.setText("Des - " +this.playerTeam[i].desterity )
-
-
-
    }
    setMenuMejoraPersonaje(i){
         let depthBotones = 7
@@ -205,6 +277,55 @@ export default class Mapa extends Phaser.Scene {
         this.botonesMejoraPersonajes[i].mejoraDES1 = new UpgradeButtom(this,posX_i, 465,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i],i, 'desterity' ,1, 1,'DES1')
         this.botonesMejoraPersonajes[i].mejoraDES2 = new UpgradeButtom(this,posX_i+ diferencia_pos_x, 465,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i],i, 'desterity' ,1, 1,'DES1')
         this.botonesMejoraPersonajes[i].mejoraDES3 = new UpgradeButtom(this,posX_i+ 2*diferencia_pos_x, 465,'ui_indicadorAPT',1,depthBotones,scaleXY,this.playerTeam[i],i, 'desterity' ,1, 1,'DES1')
+
+        this.botonesMejoraPersonajes[i].armaPlaceholder = this.add.sprite(736,135,'ui_buttons', 7)
+        this.botonesMejoraPersonajes[i].armaPlaceholder.setDepth(30)
+        this.botonesMejoraPersonajes[i].armaPlaceholder.tipoObj = 'armas'
+
+        if(this.playerTeam[i].inventario.arma != -1){
+            this.botonesMejoraPersonajes[i].armaPlaceholder.setTexture('ui_iconosObjetos',this.playerTeam[i].arma.icono)
+            this.botonesMejoraPersonajes[i].armaPlaceholder.setScale(7,7)
+        } else{
+            this.botonesMejoraPersonajes[i].armaPlaceholder.setAlpha(0.1)  
+            this.botonesMejoraPersonajes[i].armaPlaceholder.setScale(4.5,4.5)
+        }
+
+        this.botonesMejoraPersonajes[i].armaduraSupPlaceholder = this.add.sprite(568,135,'ui_buttons', 7)
+        this.botonesMejoraPersonajes[i].armaduraSupPlaceholder.setDepth(30)
+        this.botonesMejoraPersonajes[i].armaduraSupPlaceholder.tipoObj = 'armadurasSup'
+
+        if(this.playerTeam[i].inventario.armaduraSup != -1){
+            this.botonesMejoraPersonajes[i].armaduraSupPlaceholder.setTexture('ui_iconosObjetos',this.playerTeam[i].armaduraSup.icono)
+            this.botonesMejoraPersonajes[i].armaduraSupPlaceholder.setScale(7,7)
+        } else{
+            this.botonesMejoraPersonajes[i].armaduraSupPlaceholder.setAlpha(0.1)  
+            this.botonesMejoraPersonajes[i].armaduraSupPlaceholder.setScale(4.5,4.5)
+        }
+
+        this.botonesMejoraPersonajes[i].armaduraInfPlaceholder = this.add.sprite(568,205,'ui_buttons', 7)
+        this.botonesMejoraPersonajes[i].armaduraInfPlaceholder.setDepth(30)
+        this.botonesMejoraPersonajes[i].armaduraInfPlaceholder.tipoObj = 'armadurasInf'
+
+        if(this.playerTeam[i].inventario.armaduraInf != -1){
+            this.botonesMejoraPersonajes[i].armaduraInfPlaceholder.setTexture('ui_iconosObjetos',this.playerTeam[i].armaduraInf.icono)
+            this.botonesMejoraPersonajes[i].armaduraInfPlaceholder.setScale(7,7)
+        } else{
+            this.botonesMejoraPersonajes[i].armaduraInfPlaceholder.setAlpha(0.1)  
+            this.botonesMejoraPersonajes[i].armaduraInfPlaceholder.setScale(4.5,4.5)
+        }
+
+        this.botonesMejoraPersonajes[i].amuletoPlaceholder = this.add.sprite(736,205,'ui_buttons', 7)
+        this.botonesMejoraPersonajes[i].amuletoPlaceholder.setDepth(30)
+        this.botonesMejoraPersonajes[i].amuletoPlaceholder.tipoObj = 'amuletos'
+
+        if(this.playerTeam[i].inventario.armaduraInf != -1){
+            this.botonesMejoraPersonajes[i].amuletoPlaceholder.setTexture('ui_iconosObjetos',this.playerTeam[i].amuleto.icono)
+            this.botonesMejoraPersonajes[i].amuletoPlaceholder.setScale(7,7)
+        } else{
+            this.botonesMejoraPersonajes[i].amuletoPlaceholder.setAlpha(0.1)  
+            this.botonesMejoraPersonajes[i].amuletoPlaceholder.setScale(4.5,4.5)
+        }
+      
         this.actualizarUIMejora(i)
     }
 
@@ -223,7 +344,7 @@ export default class Mapa extends Phaser.Scene {
                 playerTeamDATA.push(c.getData())
             });
             console.log(playerTeamDATA)
-            this.scene.start('Dungeon',{mapa_info: PruebaDungeon_info, personajesEquipo: playerTeamDATA});
+            this.scene.start('Dungeon',{mapa_info: PruebaDungeon_info, personajesEquipo: playerTeamDATA, inventario: this.inventario});
         }
     }
  
@@ -236,6 +357,8 @@ export default class Mapa extends Phaser.Scene {
         for(let i = 0; i < 3; i++){
             this.setMenuMejoraPersonaje(i)
         }
+        this._crearUIInventario()
+
         this.actualizarUI()
     }
 
@@ -252,7 +375,6 @@ export default class Mapa extends Phaser.Scene {
         this.menuTabernaBotonCerrar.setVisible(this.menuTabernaVisible)
         this.menuPersonajeSimbolos.setVisible(this.menuTabernaVisible && this.hayIndiceSeleccionado && this.playerTeam[this.indiceSeleccionado] != 0 && !this.menuSeleccionPersonajesVisible)
         this.menuPersonajesBcgnd.setVisible(this.menuTabernaVisible && this.hayIndiceSeleccionado && this.playerTeam[this.indiceSeleccionado] != 0 && !this.menuSeleccionPersonajesVisible)
-        
 
         for(let i = 0; i <this.allCharacters.length; i++){
             this.botonesSeleconarPersonajes[i].setVisible(this.menuSeleccionPersonajesVisible) 
@@ -261,6 +383,10 @@ export default class Mapa extends Phaser.Scene {
             this.botonesPersonajesSeleccionados[i].setVisible(this.menuTabernaVisible || this.menuSeleccionPersonajesVisible)
             this.setVisibleBotonesMejora(i,this.menuTabernaVisible && this.hayIndiceSeleccionado && this.playerTeam[this.indiceSeleccionado] != 0 && !this.menuSeleccionPersonajesVisible && i == this.indiceSeleccionado)
         }
+        this.ui_inventario.forEach(objUI => {
+            objUI.setvisible(this.menuTabernaVisible)
+
+        });
      
     }
 

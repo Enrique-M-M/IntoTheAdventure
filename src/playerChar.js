@@ -94,6 +94,9 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         this.inventario = charData.inventario
 
         this.arma = catalogoObjetos.armas[this.inventario.arma]
+        this.armaduraSup = catalogoObjetos.armas[this.inventario.armaduraSup]
+        this.armaduraInf = catalogoObjetos.armas[this.inventario.armaduraInf]
+        this.amuleto = catalogoObjetos.armas[this.inventario.amuleto]
         //Acciones de personaje prototipo
         this.acciones = {Mover:{nombre: 'mover', rango: this.movementRange, accion: (areaSeleccion) => {if(this.realizarAccion(this.gastoAPTBasico)) this.mover(areaSeleccion[0])}, tipoSeleccion: 'Movimiento' },
          AtaqueBasico: {nombre: 'atacar', objetivo: 'enemy' , rango: this.arma.rango, area: this.arma.area, accion: (areaSeleccion) =>{if(this.realizarAccion(this.arma.gastoAPT)) this.ataqueBasico(areaSeleccion) }, tipoSeleccion: 'Habilidad'} }

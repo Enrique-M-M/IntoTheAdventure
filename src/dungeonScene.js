@@ -14,6 +14,7 @@ export default class Dungeon extends Phaser.Scene {
         this.mapa_info = data.mapa_info
         this.playerTeam = data.personajesEquipo
         this.salaActual = data.salaActual
+        this.inventario = data.inventario
         this.haySalaSeleccionada = this.salaActual != undefined
     }
 
@@ -45,6 +46,11 @@ export default class Dungeon extends Phaser.Scene {
                     for(let i = 0; i < 3 ; i++){
                         this.playerTeam[i].freeExPoint += this.mapa_info.Grafo[this.salaActual].recompensa[key]
                     }
+                }
+                if(key == 'items'){
+                    this.mapa_info.Grafo[this.salaActual].recompensa.items.forEach(item => {
+                        this.inventario.push(item)
+                    });
                 }
             }
         }
@@ -115,10 +121,10 @@ export default class Dungeon extends Phaser.Scene {
     }
 
     seleccionarHabitacion(hab){
-        this.scene.start('Combate',{mapa_id: hab.ruta, personajesEquipo: this.playerTeam,sala:this.salaActual, mapa:this.mapa_info});
+        this.scene.start('Combate',{mapa_id: hab.ruta, personajesEquipo: this.playerTeam,sala:this.salaActual, mapa:this.mapa_info, inventario:this.inventario});
     }
     salirDeLaMazmorra(){
-        this.scene.start('Mapa',{personajesEquipo: this.playerTeam});
+        this.scene.start('Mapa',{personajesEquipo: this.playerTeam, inventario:this.inventario});
     }
 
 }
