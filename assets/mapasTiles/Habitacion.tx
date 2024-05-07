@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<template>
- <object name="1" width="32" height="32">
-  <properties>
-   <property name="Caminos" value="{Inicio,2,Fin}"/>
-   <property name="Mapa" value="Nombre_Mapa"/>
-  </properties>
- </object>
-</template>

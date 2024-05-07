@@ -1,0 +1,140 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Menus/tilesMenuTabernaSeleccion.tmx",
+    "expandedProjectPaths": [
+        ".",
+        "Menus"
+    ],
+    "file.lastUsedOpenFilter": "Todos los archivos (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "C:/Users/emore/Documents/GitHub/IntoTheAdventure/assets/mapasTiles/UI_patrones_menu.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Combate/D1_Mapa_2.tmx": {
+            "expandedObjectLayers": [
+                4
+            ],
+            "scale": 4,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 102,
+                "y": 28.5
+            }
+        },
+        "Combate/Mapa1.tmx": {
+            "scale": 7.64453125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 64.09810935104753,
+                "y": 28.124680633622894
+            }
+        },
+        "Combate/Mapa_1.tmx": {
+            "expandedObjectLayers": [
+                4
+            ],
+            "scale": 3,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 47,
+                "y": 23.666666666666657
+            }
+        },
+        "Combate/Mapa_11.tmx": {
+            "expandedObjectLayers": [
+                4
+            ],
+            "scale": 5.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 46.727272727272734,
+                "y": 26.18181818181818
+            }
+        },
+        "Dungeons/Dungeon1.tmx": {
+            "scale": 2,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 237,
+                "y": 62.5
+            }
+        },
+        "Menus/UI_patrones_menu.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Menus/menu_recompensas_dungeon.tmx": {
+            "scale": 3.479375,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 119.70540686186456,
+                "y": 119.84911083168672
+            }
+        },
+        "Menus/tilesMenuTabernaSeleccion.json": {
+            "scale": 3.479375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 119.70540686186456,
+                "y": 79.32459134183583
+            }
+        },
+        "Menus/tilesMenuTabernaSeleccion.json#UI_patrones_menu": {
+            "scaleInDock": 1
+        },
+        "Menus/tilesMenuTabernaSeleccion.tmx": {
+            "scale": 3,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 135.66666666666663,
+                "y": 94.99999999999999
+            }
+        },
+        "Menus/tilesMenuTabernaSeleccion.tmx#UI_patrones_menu": {
+            "scaleInDock": 1
+        },
+        "UI_patrones_menu.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        }
+    },
+    "last.exportedFilePath": "C:/Users/emore/Documents/GitHub/IntoTheAdventure/assets/tiled/Combate",
+    "last.externalTilesetPath": "C:/Users/emore/Documents/GitHub/IntoTheAdventure/assets/tiled/Menus",
+    "last.imagePath": "C:/Users/emore/Documents/GitHub/IntoTheAdventure/assets/sprites",
+    "map.height": 8,
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.orientation": null,
+    "map.tileHeight": 8,
+    "map.tileWidth": 16,
+    "map.width": 8,
+    "openFiles": [
+        "Menus/tilesMenuTabernaSeleccion.tmx",
+        "Menus/UI_patrones_menu.tsx",
+        "Menus/menu_recompensas_dungeon.tmx",
+        "C:/Users/emore/Documents/GitHub/IntoTheAdventure/assets/mapasTiles/UI_patrones_menu.tsx"
+    ],
+    "project": "IntoTheAdventure.tiled-project",
+    "recentFiles": [
+        "Combate/Mapa_11.tmx",
+        "Combate/Mapa1.tmx",
+        "C:/Users/emore/Documents/GitHub/IntoTheAdventure/assets/mapasTiles/UI_patrones_menu.tsx",
+        "Menus/menu_recompensas_dungeon.tmx",
+        "Menus/UI_patrones_menu.tsx",
+        "Menus/tilesMenuTabernaSeleccion.tmx"
+    ],
+    "tileset.lastUsedFilter": "Archivos de conjuntos de patrones Tiled (*.tsx *.xml)",
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 17,
+        "width": 16
+    }
+}

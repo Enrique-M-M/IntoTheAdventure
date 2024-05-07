@@ -6,6 +6,7 @@ import PruebaDungeon_info from "../assets/Dungeons/PruebaDungeon_info.js";
 import { UpgradeButtom } from "./ClasesUI/upgradeButtom.js";
 import { catalogoObjetos } from "../assets/CharactersInfo/ObjectsDATA.js";
 import { inventarioObj } from "./ClasesUI/inventarioObj.js";
+import Dungeon1_info from "../assets/Dungeons/Dungeon1_info.js";
 
 export default class Mapa extends Phaser.Scene {
 
@@ -344,7 +345,7 @@ export default class Mapa extends Phaser.Scene {
                 playerTeamDATA.push(c.getData())
             });
             console.log(playerTeamDATA)
-            this.scene.start('Dungeon',{mapa_info: PruebaDungeon_info, personajesEquipo: playerTeamDATA, inventario: this.inventario});
+            this.scene.start('Dungeon',{mapa_info: Dungeon1_info, personajesEquipo: playerTeamDATA, inventario: this.inventario});
         }
     }
  

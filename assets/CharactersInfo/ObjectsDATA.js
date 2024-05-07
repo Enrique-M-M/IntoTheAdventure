@@ -8,12 +8,12 @@ export var catalogoObjetos = {
         6: {nombre: 'Daga' ,dmg: 30, rango:1, area: 1, gastoAPT:1, escalado: 10, tipoEscalado:'desterity', tipo: 6, icono: 0},//daga b
     },
     armadurasSup:{
-
+        1: {nombre: 'Basica', hp: 3, rdmg: 5}
     },
     armadurasInf:{
-
+        1: {nombre: 'Basica', hp: 2, rdmg: 5}
     },
     amuletos:{
-
+        1: {nombre: 'Amuleto INT', efecto:'add int 1'}
     },
 }

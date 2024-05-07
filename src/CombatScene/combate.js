@@ -35,6 +35,7 @@ export default class Combate extends Phaser.Scene {
         this.mapa_id = data.mapa_id 
         this.playerTeamDATA = data.personajesEquipo
         this.sala = data.sala
+        this.salasRecorridas = data.salasRecorridas
         this.mapaDungeon = data.mapa
         this.inventario = data.inventario
     }
@@ -366,14 +367,14 @@ export default class Combate extends Phaser.Scene {
     }
 
     victoriaCombate(){
-        this.scene.start('Dungeon',{mapa_info: this.mapaDungeon, personajesEquipo: this.playerTeamDATA, salaActual: this.sala, inventario: this.inventario})
+        this.scene.start('Dungeon',{mapa_info: this.mapaDungeon, personajesEquipo: this.playerTeamDATA, salaActual: this.sala, salasRecorridas: this.salasRecorridas , inventario: this.inventario})
     }
 
      //+++++++++++++ Controles +++++++++++++++++++++++++
     
      //TODO?: Si se clicka en una casilla para seleccion de una habilidad no hacer visible el marcador
     controlInputMouseClick(){
-        this.input.on(Phaser.Input.Events.POINTER_UP, (pointer) => {
+        this.input.on(Phaser.Input.Events.POINTER_DOWN, (pointer) => {
             
             //Consigue Index XY de la tile de la capaJuego
             const { worldX, worldY } = pointer;

@@ -7,6 +7,7 @@ export default class Dungeon extends Phaser.Scene {
     
     
     salaActual
+    salasRecorridas
 
     constructor() {
         super({ key: 'Dungeon' });
@@ -18,6 +19,7 @@ export default class Dungeon extends Phaser.Scene {
         this.salaActual = data.salaActual
         this.inventario = data.inventario
         this.haySalaSeleccionada = this.salaActual != undefined
+        this.salasRecorridas = data.salasRecorridas
     }
 
     preload(){
@@ -41,9 +43,19 @@ export default class Dungeon extends Phaser.Scene {
         this.mapaDungeon.setScale(1.5,1.5) 
         this.mapaDungeon.setX(this.correccion_x) 
         this.mapaDungeon.setY(this.correccion_y)   
+        this.Decoracion1 = this.map.createLayer('Decoracion1', [tiles_map]);        
+        this.Decoracion1.setScale(1.5,1.5) 
+        this.Decoracion1.setX(this.correccion_x) 
+        this.Decoracion1.setY(this.correccion_y)   
+        this.Decoracion2 = this.map.createLayer('Decoracion2', [tiles_map]);        
+        this.Decoracion2.setScale(1.5,1.5) 
+        this.Decoracion2.setX(this.correccion_x) 
+        this.Decoracion2.setY(this.correccion_y)   
         
 
         if(this.haySalaSeleccionada){//Victoria en combate
+            this.salasRecorridas.push(this.salaActual)
+
             this.menuRecompensas = this.make.tilemap({
                     key: 'menu_recompensas_dungeon'
             })
@@ -95,12 +107,14 @@ export default class Dungeon extends Phaser.Scene {
             this.uiRecompensas.forEach(element => {
                 element.setDepth(21)
             });
+        } else{
+            this.salasRecorridas = []
         }
 
         this.botonesDungeon = this.map.createLayer('botones',[tiles_map]);
         this.botonesDungeon.setScale(1.5,1.5) 
         this.botonesDungeon.setX(this.correccion_x) 
-        this.botonesDungeon.setY(this.correccion_y)   
+        this.botonesDungeon.setY(this.correccion_y - 12)   
         this.botonesDungeon.setVisible(false)
         this.botonesSprite = []
         this.botonesDungeon.forEachTile((tile) => {
@@ -111,7 +125,7 @@ export default class Dungeon extends Phaser.Scene {
             let spr = this.add.sprite(tile.getCenterX(),tile.getCenterY(),'Tiles_Map_Spr',tile.index)
             spr.setAlpha(0.1)
             let hab = this.mapa_info.Grafo.findIndex((h) => 
-                h.id === tile.index)
+                h.id === tile.index -1)
 
             if(this.botonesSprite[hab] == undefined){
                     this.botonesSprite[hab] = []
@@ -123,7 +137,7 @@ export default class Dungeon extends Phaser.Scene {
                 }
             }else if (this.mapa_info.Grafo[hab].final){
                 spr.setInteractive({ useHandCursor: true })
-                .on('pointerdown', () => this.salirDeLaMazmorra() )
+                .on('pointerdown', () => this.salirDeLaMazmorra(hab) )
             } else{
                 spr.setInteractive({ useHandCursor: true })
                 .on('pointerdown', () => this.entrarASala(hab) )
@@ -151,7 +165,7 @@ export default class Dungeon extends Phaser.Scene {
         
     }
     compruebaCamino(hab){
-        return this.mapa_info.Grafo[this.salaActual].caminos.findIndex(i => i == hab + 1) != -1
+        return this.mapa_info.Grafo[this.salaActual].caminos.findIndex(i => i == hab) != -1
     }
 
     entrarASala(hab){
@@ -171,15 +185,22 @@ export default class Dungeon extends Phaser.Scene {
             NumCasillas++
         });
         this.indicadorSalaActual.x = isaX/NumCasillas
-        this.indicadorSalaActual.y = isaY/NumCasillas
-        this.indicadorSalaActual.setScale(NumCasillas/2)
+        this.indicadorSalaActual.y = isaY/NumCasillas -20
+        this.indicadorSalaActual.setScale(5,5)
     }
 
     seleccionarHabitacion(hab){
-        this.scene.start('Combate',{mapa_id: hab.ruta, personajesEquipo: this.playerTeam,sala:this.salaActual, mapa:this.mapa_info, inventario:this.inventario});
+        if(this.salasRecorridas.indexOf(hab.id) == -1){
+            this.scene.start('Combate',{mapa_id: hab.ruta, personajesEquipo: this.playerTeam,sala:this.salaActual,salasRecorridas: this.salasRecorridas, mapa:this.mapa_info, inventario:this.inventario});
+        } else{
+            this.salaActual=hab.id
+            this.actualizarSimboloSala()
+        }
     }
-    salirDeLaMazmorra(){
-        this.scene.start('Mapa',{personajesEquipo: this.playerTeam, inventario:this.inventario});
+    salirDeLaMazmorra(hab){
+        if(this.compruebaCamino(hab)){
+            this.scene.start('Mapa',{personajesEquipo: this.playerTeam, inventario:this.inventario});
+        }
     }
 
 }
