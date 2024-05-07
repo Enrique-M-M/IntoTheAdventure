@@ -23,3 +23,7 @@ Mejoras de los personajes:
     mejoraSTR1 - coste 1, mejoraSTR2 - coste 1, mejoraSTR3 - coste 1, 
     mejoraINT1 - coste 1, mejoraINT2 - coste 1, mejoraINT3 - coste 1, 
     mejoraDES1 - coste 1, mejoraDES2 - coste 1, mejoraDES3 - coste 1, 
+
+Recompensas Dungeons: 
+ recompensa: {exp: 1, items: [{tipo:'armas', id:2}]}
+ */no mas de 2 items

@@ -12,6 +12,7 @@ import characters_sp from '../assets/sprites/CharactersSprites.png'
 
 import tilesMenuSet from '../assets/GUI/GUI_1x.png' 
 import tilesMenuTabernaSeleccion from '../assets/mapasTiles/Seleccion_Personajes.json'
+import menu_recompensas_dungeon from '../assets/mapasTiles/menu_recompensas_dungeon.json'
 
 import mapa_mundo from '../assets/imagenes/mapa_mundo.png'
 
@@ -52,6 +53,8 @@ export default class Boot extends Phaser.Scene {
 
 
         this.load.tilemapTiledJSON('tilesMenuTabernaSeleccion', tilesMenuTabernaSeleccion);
+        this.load.tilemapTiledJSON('menu_recompensas_dungeon', menu_recompensas_dungeon);
+
         this.load.image('tilesMenuSet', tilesMenuSet);  
 
         this.load.spritesheet('mapIndicators',

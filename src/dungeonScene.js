@@ -1,9 +1,11 @@
+import { catalogoObjetos } from "../assets/CharactersInfo/ObjectsDATA";
 import PruebaDungeon_info from "../assets/Dungeons/PruebaDungeon_info";
-import { SpriteButton } from "./Botones/spriteButtom";
+import { inventarioObj } from "./ClasesUI/inventarioObj";
+import { SpriteButton } from "./ClasesUI/spriteButtom";
 
 export default class Dungeon extends Phaser.Scene {
     
-    haySalaSeleccionada
+    
     salaActual
 
     constructor() {
@@ -39,20 +41,60 @@ export default class Dungeon extends Phaser.Scene {
         this.mapaDungeon.setScale(1.5,1.5) 
         this.mapaDungeon.setX(this.correccion_x) 
         this.mapaDungeon.setY(this.correccion_y)   
+        
 
         if(this.haySalaSeleccionada){//Victoria en combate
+            this.menuRecompensas = this.make.tilemap({
+                    key: 'menu_recompensas_dungeon'
+            })
+            const tiles_menu = this.menuRecompensas.addTilesetImage('UI_patrones_menu','tilesMenuSet')
+            this.pantallaRecompensas = []
+            this.pantallaRecompensas.push(this.menuRecompensas.createLayer('capa1',tiles_menu))
+            this.pantallaRecompensas.push(this.menuRecompensas.createLayer('capa2',tiles_menu))
+            this.pantallaRecompensas.push(this.menuRecompensas.createLayer('capa3',tiles_menu))
+        
+        
+            this.pantallaRecompensas.forEach(capa => {
+                capa.setScale(1.5,1.5)             
+                capa.setX(this.correccion_x-200) 
+                capa.setY(this.correccion_y)   
+                capa.setDepth(20)
+            });
+        
+            this.uiRecompensas = []
+            this.uiRecompensas.push(this.add.text(330,170 ,"VICTORIA",{fill:'#000',fontStyle:'bold',fontSize:30}))
+            let cerrarBtn = new SpriteButton(this,300,150,'ui_indicadorAPT',1,()=>this.cerrarRecompensas(),'ui_indicadorAPT',1,false,'cerrarTaberna')
+            cerrarBtn.icon.setVisible(false)
+            cerrarBtn.setScale(2,2)
+            this.uiRecompensas.push(cerrarBtn)
+            
+            
+            
             for (var key in this.mapa_info.Grafo[this.salaActual].recompensa){
                 if(key == 'exp'){
+                    this.uiRecompensas.push(this.add.text(330,200 ,"EXP GANADO - " + this.mapa_info.Grafo[this.salaActual].recompensa[key],{fill:'#000',fontStyle:'bold',fontSize:20}))
+
                     for(let i = 0; i < 3 ; i++){
                         this.playerTeam[i].freeExPoint += this.mapa_info.Grafo[this.salaActual].recompensa[key]
                     }
                 }
                 if(key == 'items'){
+                    this.uiRecompensas.push(this.add.text(330,220 ,"OBJETOS OBTENIDOS:",{fill:'#000',fontStyle:'bold',fontSize:16}))
+                    this.uiRecompensasObj = []
+                    let i = 0
                     this.mapa_info.Grafo[this.salaActual].recompensa.items.forEach(item => {
+                        let obj = catalogoObjetos[item.tipo][item.id]
+                        let uiObj = new inventarioObj(obj,420,260 + 80 * i,this,item.tipo,item.id)
+                        uiObj.escalar(10,3,16,14)
+                        this.uiRecompensasObj.push(uiObj)
                         this.inventario.push(item)
+                        i++
                     });
                 }
             }
+            this.uiRecompensas.forEach(element => {
+                element.setDepth(21)
+            });
         }
 
         this.botonesDungeon = this.map.createLayer('botones',[tiles_map]);
@@ -94,6 +136,19 @@ export default class Dungeon extends Phaser.Scene {
         
         this.indicadorSalaActual = this.add.sprite(0, 0, 'mapIndicators', 4)
         this.actualizarSimboloSala()
+    }
+
+    cerrarRecompensas(){
+        this.uiRecompensas.forEach(e => {
+            e.setVisible(false)
+        })
+        this.pantallaRecompensas.forEach(e => {
+            e.setVisible(false)
+        })
+        this.uiRecompensasObj.forEach(e => {
+            e.setvisible(false)
+        })
+        
     }
     compruebaCamino(hab){
         return this.mapa_info.Grafo[this.salaActual].caminos.findIndex(i => i == hab + 1) != -1

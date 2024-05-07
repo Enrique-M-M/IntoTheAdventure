@@ -53,18 +53,6 @@
                 {
                  "gid":2147483829,
                  "height":17,
-                 "id":20,
-                 "name":"Shadowy_Rogue",
-                 "rotation":0,
-                 "type":"EnemyChar",
-                 "visible":true,
-                 "width":16,
-                 "x":32,
-                 "y":24
-                }, 
-                {
-                 "gid":2147483829,
-                 "height":17,
                  "id":21,
                  "name":"Shadowy_Rogue",
                  "rotation":0,
@@ -73,30 +61,6 @@
                  "width":16,
                  "x":48,
                  "y":32
-                }, 
-                {
-                 "gid":2147483837,
-                 "height":17,
-                 "id":22,
-                 "name":"Wizard",
-                 "rotation":0,
-                 "type":"EnemyChar",
-                 "visible":true,
-                 "width":16,
-                 "x":16,
-                 "y":24
-                }, 
-                {
-                 "gid":3221225661,
-                 "height":17,
-                 "id":23,
-                 "name":"Wizard",
-                 "rotation":0,
-                 "type":"EnemyChar",
-                 "visible":true,
-                 "width":16,
-                 "x":64,
-                 "y":64
                 }],
          "offsetx":0,
          "offsety":-8,

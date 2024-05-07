@@ -93,21 +93,57 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
 
         this.inventario = charData.inventario
 
+        this.reduccionDmg = 0
+
         this.arma = catalogoObjetos.armas[this.inventario.arma]
-        this.armaduraSup = catalogoObjetos.armas[this.inventario.armaduraSup]
-        this.armaduraInf = catalogoObjetos.armas[this.inventario.armaduraInf]
-        this.amuleto = catalogoObjetos.armas[this.inventario.amuleto]
+        this.armaduraSup = catalogoObjetos.armadurasSup[this.inventario.armaduraSup]
+        this.armaduraInf = catalogoObjetos.armadurasInf[this.inventario.armaduraInf]
+        this.amuleto = catalogoObjetos.amuletos[this.inventario.amuleto]
         //Acciones de personaje prototipo
         this.acciones = {Mover:{nombre: 'mover', rango: this.movementRange, accion: (areaSeleccion) => {if(this.realizarAccion(this.gastoAPTBasico)) this.mover(areaSeleccion[0])}, tipoSeleccion: 'Movimiento' },
          AtaqueBasico: {nombre: 'atacar', objetivo: 'enemy' , rango: this.arma.rango, area: this.arma.area, accion: (areaSeleccion) =>{if(this.realizarAccion(this.arma.gastoAPT)) this.ataqueBasico(areaSeleccion) }, tipoSeleccion: 'Habilidad'} }
-       
+         this.equiparObjetos()
 
         this.setVisible(true)
         this.crearAnimaciones()
        
     }
+    
+    equiparObjetos(){
+        let addedHp = 0
+        if(this.inventario.armaduraSup != -1){
+            addedHp+=this.armaduraSup.hp
+            this.reduccionDmg += this.armaduraSup.rdmg
+        }
+        if(this.inventario.armaduraInf != -1){
+            addedHp+=this.armaduraInf.hp
+            this.reduccionDmg += this.armaduraInf.rdmg
+        }
+        this.maxHp += addedHp
+        this.currentHp += addedHp
+        if(this.inventario.amuleto != -1){
 
+        }
+    }
+
+    desequiparObjetos(){
+        let addedHp = 0
+        if(this.inventario.armaduraSup != -1){
+            addedHp+=this.armaduraSup.hp
+            this.reduccionDmg += this.armaduraSup.rdmg
+        }
+        if(this.inventario.armaduraInf != -1){
+            addedHp+=this.armaduraInf.hp
+            this.reduccionDmg += this.armaduraInf.rdmg
+        }
+        this.maxHp += addedHp
+        this.currentHp += addedHp
+        if(this.inventario.amuleto != -1){
+            
+        }
+    }
     getData(){
+        this.desequiparObjetos()
         return{name: this.name, maxHp: this.maxHp, movementRange: this.movementRange,
         armorType: this.armorType, apt: this.maxApt, suerte: this.suerte, inteligence: this.inteligence, strength: this.strength, desterity:this.desterity,
         spriteIndex: this.spriteIndex/8, ui_index:this.ui_icon,

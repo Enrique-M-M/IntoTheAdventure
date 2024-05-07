@@ -5,7 +5,7 @@ import PlayerChar from "./playerChar.js";
 import PruebaDungeon_info from "../assets/Dungeons/PruebaDungeon_info.js";
 import { UpgradeButtom } from "./ClasesUI/upgradeButtom.js";
 import { catalogoObjetos } from "../assets/CharactersInfo/ObjectsDATA.js";
-import { UI_Obj, inventarioObj } from "./ClasesUI/inventarioObj.js";
+import { inventarioObj } from "./ClasesUI/inventarioObj.js";
 
 export default class Mapa extends Phaser.Scene {
 

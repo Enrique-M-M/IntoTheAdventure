@@ -59,4 +59,12 @@ export class inventarioObj extends Phaser.GameObjects.Sprite{
         this.info.destroy()
         this.destroy()
     }
+
+    escalar(x,y,fs1,fs2){
+        this.icon.setScale(y+1,y+1)
+        this.nombre.setFontSize(fs1)
+        this.tipoEscalado.setFontSize(fs2)
+        this.info.setFontSize(fs2)
+        this.setScale(x,y)
+    }
 }
