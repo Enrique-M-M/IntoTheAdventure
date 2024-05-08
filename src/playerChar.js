@@ -100,8 +100,8 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         this.armaduraInf = catalogoObjetos.armadurasInf[this.inventario.armaduraInf]
         this.amuleto = catalogoObjetos.amuletos[this.inventario.amuleto]
         //Acciones de personaje prototipo
-        this.acciones = {Mover:{nombre: 'mover', rango: this.movementRange, accion: (areaSeleccion) => {if(this.realizarAccion(this.gastoAPTBasico)) this.mover(areaSeleccion[0])}, tipoSeleccion: 'Movimiento' },
-         AtaqueBasico: {nombre: 'atacar', objetivo: 'enemy' , rango: this.arma.rango, area: this.arma.area, accion: (areaSeleccion) =>{if(this.realizarAccion(this.arma.gastoAPT)) this.ataqueBasico(areaSeleccion) }, tipoSeleccion: 'Habilidad'} }
+        this.acciones = {Mover:{nombre: 'mover', rango: this.movementRange, accion: (areaSeleccion) => {if(this.realizarAccion(this.gastoAPTBasico)) this.mover(areaSeleccion[0])}, tipoSeleccion: 'Movimiento', index: 1 },
+         AtaqueBasico: {nombre: 'atacar', objetivo: 'enemy' , rango: this.arma.rango, area: this.arma.area, accion: (areaSeleccion) =>{if(this.realizarAccion(this.arma.gastoAPT)) this.ataqueBasico(areaSeleccion) }, tipoSeleccion: 'Habilidad', index:3} }
          this.equiparObjetos()
 
         this.setVisible(true)
@@ -409,6 +409,16 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         this.actualizaBarraDeVida()
         if(this.currentHp <= 0)
             this.muere()
+    }
+
+    recibeCuracion(num){
+        if(this.currentHp + num >= this.maxHp){
+            this.currentHp = this.maxHp
+        }
+        else{
+            this.currentHp += num
+        }
+        this.actualizaBarraDeVida()
     }
 
    

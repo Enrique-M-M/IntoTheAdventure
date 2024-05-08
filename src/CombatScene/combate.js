@@ -13,6 +13,7 @@ import { CombatManager } from './combatManager.js';
 import PlayerChar from '../playerChar.js';
 import EnemyChar from '../EnemyChar.js';
 import { enemigos } from '../../assets/CharactersInfo/EnemyDATA.js';
+import CharacterFactory from '../Characters/CharacterFactory.js';
 /* 
  * @abstract 
  * @extends Phaser.Scene
@@ -103,8 +104,14 @@ export default class Combate extends Phaser.Scene {
         this.botonerasPersonajes = []
         for(let i = 0; i < 3; i++){
             //TODO: Refactor de la creaccion para comodarse al array de acciones
-            let botonera = [new SpriteButton(this, this.botonesPersonajes[i].x + 17, this.botonesPersonajes[i].y, 'ui_buttons', 1, () => {this.seleccionaAccion(this.playerTeam[i].acciones.Mover, i)}, 'ui_actions_icon', 1,true, this.playerTeam[i].acciones.Mover.nombre),
-            new SpriteButton(this, this.botonesPersonajes[i].x + 16*2 +1, this.botonesPersonajes[i].y, 'ui_buttons', 1, () => {this.seleccionaAccion(this.playerTeam[i].acciones.AtaqueBasico,i)}, 'ui_actions_icon', 3, true, this.playerTeam[i].acciones.AtaqueBasico.nombre)]
+            let botonera = []
+            let j = 1
+            for(let key in this.playerTeam[i].acciones){
+                let accion = this.seleccionaAccion.bind(this.playerTeam[i].acciones[key], i)
+                botonera.push(new SpriteButton(this, this.botonesPersonajes[i].x + 16*j +1, this.botonesPersonajes[i].y, 'ui_buttons', 1,() => this.seleccionaAccion(this.playerTeam[i].acciones[key], i), 'ui_actions_icon', this.playerTeam[i].acciones[key].index, true, this.playerTeam[i].acciones[key].nombre))
+                j++
+            }
+            
             botonera.forEach(btn => {
                 btn.setScale(0.8,0.8)
                 btn.setVisible(false)
@@ -331,7 +338,7 @@ export default class Combate extends Phaser.Scene {
         this.playerTeam = []
         console.log(this.playerTeam)
         this.playerTeamDATA.forEach(cd => {
-            this.playerTeam.push(new PlayerChar(cd,this,0,0))
+            this.playerTeam.push(CharacterFactory.CreateCharacter(cd, this,0 ,0))
         });
         this.combatManager = new CombatManager(this.enemies,this.playerTeam,3 ,this,this.spritesEnCapaJuego);
         this.combatManager.nextTurn();

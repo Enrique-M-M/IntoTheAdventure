@@ -7,6 +7,7 @@ import { UpgradeButtom } from "./ClasesUI/upgradeButtom.js";
 import { catalogoObjetos } from "../assets/CharactersInfo/ObjectsDATA.js";
 import { inventarioObj } from "./ClasesUI/inventarioObj.js";
 import Dungeon1_info from "../assets/Dungeons/Dungeon1_info.js";
+import CharacterFactory from "./Characters/CharacterFactory.js";
 
 export default class Mapa extends Phaser.Scene {
 
@@ -42,15 +43,11 @@ export default class Mapa extends Phaser.Scene {
         this.playerChars = personajes 
     }
     create(){
-        this.allCharacters = [new PlayerChar(this.playerChars.Caballero, this),
-            new PlayerChar(this.playerChars.Guerrero, this),
-            new PlayerChar(this.playerChars.Vampiro, this),
-            new PlayerChar(this.playerChars.Mago, this),
-            new PlayerChar(this.playerChars.Picaro, this),
-            new PlayerChar(this.playerChars.Brujo, this),
-            new PlayerChar(this.playerChars.Ranger, this),
-            new PlayerChar(this.playerChars.Clerigo, this)
-        ]
+        this.allCharacters = []
+        for (var key in this.playerChars){
+            this.allCharacters.push(CharacterFactory.CreateCharacter(this.playerChars[key], this,0 ,0))
+        }
+
         if(!this.hayPartySeleccionada){
             this.menuSeleccionPersonajesVisible = true
             this.playerTeam = [0,0,0]

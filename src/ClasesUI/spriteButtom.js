@@ -15,21 +15,17 @@ export class SpriteButton extends Phaser.GameObjects.Sprite {
       this.clicked = false
 
       this.nombreA = nombreA
+      this.callback = callback
 
       this.activo = true
       this.setInteractive({ useHandCursor: true })
-        .on('pointerover', () => this.enterButtonHoverState() )
         .on('pointerout', () => this.enterButtonRestState() )
         .on('pointerdown', () => this.enterButtonActiveState() )
         .on('pointerup', () => {
-          this.enterButtonHoverState();
-          callback();
+          this.callback();
         });
     }
     
-    enterButtonHoverState() {
-      
-    }
   
     enterButtonRestState() {
       if(!this.togle)
