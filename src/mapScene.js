@@ -71,7 +71,10 @@ export default class Mapa extends Phaser.Scene {
         let scaleY = this.cameras.main.height / this.bcgnd_map  .height 
         let scale = Math.max(scaleX, scaleY) 
         this.bcgnd_map.setScale(scale).setScrollFactor(0)
-        this.botonMazmorra = new TextButton(this,150,50,'Entrar a Mazmorra',  {fill: '#FFF'}, () => this.entraMazmorra(),'ui_buttons',4, 20)
+        this.botonMazmorraBosque = new TextButton(this,120,490,'Bosque',  {fill: '#FFF'}, () => this.entraMazmorra(),'ui_buttons',4, 20)
+        this.botonMazmorraCamino = new TextButton(this,300,280,'Coliseo',  {fill: '#FFF'}, () => this.entraMazmorra(),'ui_buttons',4, 20)
+        this.botonMazmorraCastillo = new TextButton(this,170,150,'Castillo',  {fill: '#FFF'}, () => this.entraMazmorra(),'ui_buttons',4, 20)
+        
         this.botonTaberna =  new TextButton(this,900,180,'TABERNA',  {fill: '#FFF'}, () => this.mostrarMenuTaberna(true),'ui_buttons',4, 20)
         
         
@@ -368,7 +371,9 @@ export default class Mapa extends Phaser.Scene {
         this.menuTabernaSeleccionadosBcgnd.setVisible(this.menuTabernaVisible || this.menuSeleccionPersonajesVisible)
 
         let visibleBotonesMapa = !this.menuTabernaVisible && !this.menuSeleccionPersonajesVisible
-        this.botonMazmorra.setVisible(visibleBotonesMapa)
+        this.botonMazmorraBosque.setVisible(visibleBotonesMapa)
+        this.botonMazmorraCamino.setVisible(visibleBotonesMapa)
+        this.botonMazmorraCastillo.setVisible(visibleBotonesMapa)
         this.botonTaberna.setVisible(visibleBotonesMapa)
 
         this.menuSeleccionBotonCerrar.setVisible(this.menuSeleccionPersonajesVisible && this.numPersSeleccionados === 3)
