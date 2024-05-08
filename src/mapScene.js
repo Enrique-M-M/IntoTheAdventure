@@ -29,7 +29,7 @@ export default class Mapa extends Phaser.Scene {
     {
         this.playerTeamDATA = data.personajesEquipo
         this.hayPartySeleccionada = this.playerTeamDATA != undefined      
-        this.inventario = [{tipo:'armas', id:1},{tipo:'armas', id:2},{tipo:'armas', id:3},{tipo:'armas', id:4},{tipo:'armas', id:5},{tipo:'armas', id:6}]
+        this.inventario = [{tipo:'armas', id:5},{tipo:'armas', id:6}]
         if(this.hayPartySeleccionada){
             this.playerTeam = []
             this.playerTeamDATA.forEach(cd => {
@@ -326,6 +326,8 @@ export default class Mapa extends Phaser.Scene {
             this.botonesMejoraPersonajes[i].amuletoPlaceholder.setAlpha(0.1)  
             this.botonesMejoraPersonajes[i].amuletoPlaceholder.setScale(4.5,4.5)
         }
+
+        
       
         this.actualizarUIMejora(i)
     }
@@ -388,7 +390,6 @@ export default class Mapa extends Phaser.Scene {
         }
         this.ui_inventario.forEach(objUI => {
             objUI.setvisible(this.menuTabernaVisible)
-
         });
      
     }
