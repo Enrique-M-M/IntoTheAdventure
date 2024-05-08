@@ -12,7 +12,7 @@ export class Vampiro extends PlayerChar{
     }
 
     Habilidad1(){
-        return {nombre: 'Escudo', rango: 1,area:1, accion: (areaSeleccion) => {if(this.realizarAccion(1)){
+        return {nombre: 'Golpe Sangriento', rango: 1,area:1, accion: (areaSeleccion) => {if(this.realizarAccion(2)){
         console.log('Golpe Sangriento')
         this.golpeSangriento(areaSeleccion)
         }}, tipoSeleccion: 'Habilidad', index: 4}

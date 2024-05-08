@@ -280,5 +280,7 @@ export default class EnemyChar extends Phaser.GameObjects.Sprite{
     muere(){
         this.scene.enemigoMuerto(this)
         this.setVisible(false)
+        this.barraVida.setVisible(false)
+        this.barraVidaEx.setVisible(false)
     }
 }
