@@ -1,3 +1,37 @@
 h1 {
+  font-family: 'Roboto', sans-serif; /* Usamos la fuente personalizada */
+  font-size: 48px;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(30, 128, 17, 0.5); /* Sombra para resaltar el texto */
   text-align: center;
+  color: rgba(31, 15, 121, 0.904);
+  background-color: rgb(255, 255, 0);
+  background: linear-gradient(0.25turn, #1f632e, #30b146, #70340b);
 }
+.button-container {
+  margin-top: 10px; /* Espacio entre el título y los botones */
+  text-align: center; /* Alineación central del contenido */
+}
+.button-container button {
+  font-size: 18px; /* Tamaño de fuente más grande para los botones */
+  padding: 10px 20px; /* Aumentamos el espacio interno de los botones */
+  margin: 0 10px; /* Agregamos margen entre los botones */
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-image: url('BGWEB.jpg'); /* Cambia 'background.jpg' por la ruta de tu imagen de fondo */
+  background-size: cover; /* Ajusta el tamaño de la imagen para cubrir todo el cuerpo */
+  background-position: center; /* Centra la imagen de fondo */
+  background-repeat: no-repeat; /* Evita que la imagen de fondo se repita */
+}
+p {
+  font-family: 'Roboto', sans-serif; /* Usamos la fuente personalizada */
+  font-size: 26px;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(30, 128, 17, 0.5); /* Sombra para resaltar el texto */
+  text-align: center;
+  color: rgba(11, 10, 20, 0.904);
+}
+

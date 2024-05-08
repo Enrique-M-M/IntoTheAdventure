@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 
 import enemies_sp from '../assets/sprites/IsometricTRPGAssetPack_Entities.png'
 import tileset from '../assets/sprites/Isometric_MedievalFantasy_Tiles.png'
-import tilemap from '../assets/mapasTiles/Mapa_1.json'
+//import tilemap from '../assets/mapasTiles/Mapa_1.json'
 
 import d1_mapa1 from '../assets/tiled/Combate/D1_Mapa_1.json'
 import d1_mapa2 from '../assets/tiled/Combate/D1_Mapa_2.json'
@@ -53,7 +53,7 @@ export default class Boot extends Phaser.Scene {
     this.load.image('mapa_mundo' , mapa_mundo)
 
         this.load.image('Tiles_Map', tileset);  
-        this.load.tilemapTiledJSON('Mapa_1', tilemap);
+     //   this.load.tilemapTiledJSON('Mapa_1', tilemap);
 
 
         this.load.tilemapTiledJSON('PruebaDungeon', PruebaDungeon);
