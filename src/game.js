@@ -1,7 +1,11 @@
+
+
+import Combate from './CombatScene/combate.js';
 import Boot from './boot.js';
 import End from './end.js';
-import Level from './level.js';
 import Phaser from 'phaser'
+import Mapa from './mapScene.js';
+import Dungeon from './dungeonScene.js';
 
 /**
  * Inicio del juego en Phaser. Creamos el archivo de configuración del juego y creamos
@@ -10,13 +14,13 @@ import Phaser from 'phaser'
 let config = {
     type: Phaser.AUTO,
     width: 1000,
-    height: 500,
+    height: 600,
     scale: {
-        // mode: Phaser.Scale.FIT,  
-        autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
+        mode: Phaser.Scale.FIT,  
+        autoCenter: Phaser.Scale.CENTER_BOTH,
     },
     pixelArt: true,
-    scene: [Boot, Level, End],
+    scene: [Boot, Mapa, Combate, Dungeon, End],
     physics: {
         default: 'arcade',
         arcade: {

@@ -3,16 +3,27 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="assets/sprites/player.png" type="image/png" />
+    <link rel="shortcut icon" href="assets/sprites/CharactersSprites.png" type="image/png" />
     <meta name="viewport" content="width=device-width, initial-scale=2.0">
     <link rel="stylesheet" href="./css/game.css">
 
-    <title>¡Juego con Phaser!</title>
+    <title>Into the Adventure</title>
 </head>
 
 <body>
-    <h1>Juego con Phaser</h1>
+    <header>
+    <div class="title-wrapper">
+        <h1 class="game-title">Into the Adventure</h1>
+    <div class="button-container">
+        <button id="button1">Historia</button>
+        <button id="button2">Jugabilidad</button>
+        <button id="button3">Controles</button>
+    </div>
+</header>   
+<div id="content"> 
     <script src="./src/game.js" type="module"></script>
+    <script src="buttonscript.js"></script>
+</div>
 </body>
 
 </html>
