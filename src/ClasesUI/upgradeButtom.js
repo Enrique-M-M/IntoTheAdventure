@@ -25,14 +25,14 @@ export class UpgradeButtom extends Phaser.GameObjects.Sprite {
             this.char[this.stat] -= this.val
             this.char.quitarMejora(this.nombreA)
             this.char.freeExPoint += this.coste
-            this.scene.actualizarUIMejora(this.i)
+            this.scene.menuMejora.actualizarUIMejora(this.i)
             this.setFrame(1)
           } else if(this.char.freeExPoint >= this.coste){
             this.Aplied = true
             this.char.freeExPoint -= this.coste
             this.char[this.stat] += this.val
             this.char.anadirMejora(this.nombreA)
-            this.scene.actualizarUIMejora(this.i)
+            this.scene.menuMejora.actualizarUIMejora(this.i)
             this.setFrame(0)
           }
           console.log(this.char[this.stat])
