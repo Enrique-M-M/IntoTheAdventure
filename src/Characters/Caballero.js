@@ -3,7 +3,6 @@ import PlayerChar from "../playerChar";
 export class Caballero extends PlayerChar{
     constructor(char,scene,x,y){
         super(char,scene,x,y)
-        this.acciones.Habilidad1 = this.Habilidad1()
         if(this.mejorasAplicadas.indexOf('Habilidad1') != -1){
             this.acciones.Habilidad1 = this.Habilidad1()
         }

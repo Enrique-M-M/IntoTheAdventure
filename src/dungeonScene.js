@@ -1,7 +1,9 @@
 import { catalogoObjetos } from "../assets/CharactersInfo/ObjectsDATA";
 import PruebaDungeon_info from "../assets/Dungeons/PruebaDungeon_info";
+import CharacterFactory from "./Characters/CharacterFactory";
 import { inventarioObj } from "./ClasesUI/inventarioObj";
 import { SpriteButton } from "./ClasesUI/spriteButtom";
+import MenuMejora from "./menuMejora";
 
 export default class Dungeon extends Phaser.Scene {
     
@@ -15,10 +17,10 @@ export default class Dungeon extends Phaser.Scene {
     init (data)
     {
         this.mapa_info = data.mapa_info
-        this.playerTeam = data.personajesEquipo
+        this.personajesEquipo = data.personajesEquipo
         this.salaActual = data.salaActual
         this.inventario = data.inventario
-        this.haySalaSeleccionada = this.salaActual != undefined
+        this.victoriaEnCombate = this.salaActual != undefined
         this.salasRecorridas = data.salasRecorridas
     }
 
@@ -30,30 +32,19 @@ export default class Dungeon extends Phaser.Scene {
 
         this.correccion_y = 150
         this.correccion_x = 500
-
-        this.mapa_id = this.mapa_info.id
-        this.map = this.make.tilemap({ 
-            key: this.mapa_id
-          });
-
-        //nombre de la paleta de tiles usado para pintar en tiled 
-        //Mantener nombres constantes al crear mapa -> Tiles_Map
-        const tiles_map = this.map.addTilesetImage('Tiles_Map', 'Tiles_Map');
-        this.mapaDungeon = this.map.createLayer('MapaDungeon', [tiles_map]);        
-        this.mapaDungeon.setScale(1.5,1.5) 
-        this.mapaDungeon.setX(this.correccion_x) 
-        this.mapaDungeon.setY(this.correccion_y)   
-        this.Decoracion1 = this.map.createLayer('Decoracion1', [tiles_map]);        
-        this.Decoracion1.setScale(1.5,1.5) 
-        this.Decoracion1.setX(this.correccion_x) 
-        this.Decoracion1.setY(this.correccion_y)   
-        this.Decoracion2 = this.map.createLayer('Decoracion2', [tiles_map]);        
-        this.Decoracion2.setScale(1.5,1.5) 
-        this.Decoracion2.setX(this.correccion_x) 
-        this.Decoracion2.setY(this.correccion_y)   
+        this.playerTeam = []
+        for(let i = 0; i< 3; i++){
+            this.playerTeam.push(CharacterFactory.CreateCharacter(this.personajesEquipo[i],this,0,0))
+        } 
+        this.menuMejora = new MenuMejora(this, this.playerTeam)
         
+        this.menuMejora.playerTeam = this.playerTeam
+        this.crearMapa()
+        this.crearMenuMejora()
+        this.recompensasVisible = false
 
-        if(this.haySalaSeleccionada){//Victoria en combate
+
+        if(this.victoriaEnCombate){//Victoria en combate
             this.salasRecorridas.push(this.salaActual)
 
             this.menuRecompensas = this.make.tilemap({
@@ -65,14 +56,14 @@ export default class Dungeon extends Phaser.Scene {
             this.pantallaRecompensas.push(this.menuRecompensas.createLayer('capa2',tiles_menu))
             this.pantallaRecompensas.push(this.menuRecompensas.createLayer('capa3',tiles_menu))
         
-        
+            
             this.pantallaRecompensas.forEach(capa => {
                 capa.setScale(1.5,1.5)             
                 capa.setX(this.correccion_x-200) 
                 capa.setY(this.correccion_y)   
                 capa.setDepth(20)
             });
-        
+            this.recompensasVisible = true
             this.uiRecompensas = []
             this.uiRecompensas.push(this.add.text(330,170 ,"VICTORIA",{fill:'#000',fontStyle:'bold',fontSize:30}))
             let cerrarBtn = new SpriteButton(this,300,150,'ui_indicadorAPT',1,()=>this.cerrarRecompensas(),'ui_indicadorAPT',1,false,'cerrarTaberna')
@@ -111,6 +102,36 @@ export default class Dungeon extends Phaser.Scene {
             this.salasRecorridas = []
         }
 
+
+        
+        this.indicadorSalaActual = this.add.sprite(0, 0, 'mapIndicators', 4)
+        this.actualizarSimboloSala()
+        this.actualizarUI()
+    }
+
+    crearMapa(){
+        this.mapa_id = this.mapa_info.id
+        this.map = this.make.tilemap({ 
+            key: this.mapa_id
+          });
+          const tiles_map = this.map.addTilesetImage('Tiles_Map', 'Tiles_Map');
+        
+        //nombre de la paleta de tiles usado para pintar en tiled 
+        //Mantener nombres constantes al crear mapa -> Tiles_Map
+        this.mapaDungeon = this.map.createLayer('MapaDungeon', [tiles_map]);        
+        this.mapaDungeon.setScale(1.5,1.5) 
+        this.mapaDungeon.setX(this.correccion_x) 
+        this.mapaDungeon.setY(this.correccion_y)   
+        this.Decoracion1 = this.map.createLayer('Decoracion1', [tiles_map]);        
+        this.Decoracion1.setScale(1.5,1.5) 
+        this.Decoracion1.setX(this.correccion_x) 
+        this.Decoracion1.setY(this.correccion_y)   
+        this.Decoracion2 = this.map.createLayer('Decoracion2', [tiles_map]);        
+        this.Decoracion2.setScale(1.5,1.5) 
+        this.Decoracion2.setX(this.correccion_x) 
+        this.Decoracion2.setY(this.correccion_y)  
+
+        
         this.botonesDungeon = this.map.createLayer('botones',[tiles_map]);
         this.botonesDungeon.setScale(1.5,1.5) 
         this.botonesDungeon.setX(this.correccion_x) 
@@ -146,10 +167,113 @@ export default class Dungeon extends Phaser.Scene {
         
         })
         console.log(this.salaActual)
+    }
+    _crearUIInventario() {
+        let i = 0
+        this.inventario.forEach(obj => {
+            this.menuMejora.createUIInventario(obj, i)
+            i++
+        });
+    }
+    seleccionaSlot(i) {
+        if (this.hayIndiceSeleccionado) {
+            this.botonesPersonajesSeleccionados[this.indiceSeleccionado].unSelect()
+        }
+        if (this.indiceSeleccionado === i) {
+            this.hayIndiceSeleccionado = false
+            this.menuMejora.seleccionarIndice(-1)
+            this.indiceSeleccionado = -1
+        } else {
+            this.indiceSeleccionado = i
+            this.hayIndiceSeleccionado = true
+            this.menuMejora.seleccionarIndice(i)
+        }
+        this.actualizarUI()
+    }
+crearMenuMejora(){
+    this.menuTaberna = this.make.tilemap({
+        key: "tilesMenuTabernaSeleccion"
+    });
+    const tiles_desp = this.menuTaberna.addTilesetImage('UI_patrones_menu', 'tilesMenuSet')
+    this.menuTabernaSeleccionBcgnd = this.menuTaberna.createLayer('Seleccion_Personajes', [tiles_desp])
+    this.menuTabernaSeleccionadosBcgnd = this.menuTaberna.createLayer('Personajes_Seleccionados', [tiles_desp])
+    this.menuPersonajeSimbolos = this.menuTaberna.createLayer('Simbolos', [tiles_desp])
+    this.menuPersonajesBcgnd = this.menuTaberna.createLayer('DetallesDePersonaje', [tiles_desp])
 
-        
-        this.indicadorSalaActual = this.add.sprite(0, 0, 'mapIndicators', 4)
-        this.actualizarSimboloSala()
+    this.menuTabernaSeleccionBcgnd.setScale(3, 3)
+    this.menuTabernaSeleccionBcgnd.setX(100)
+    this.menuTabernaSeleccionBcgnd.setY(50)
+    this.menuTabernaSeleccionBcgnd.setDepth(5)
+
+    this.menuTabernaSeleccionadosBcgnd.setScale(3, 3)
+    this.menuTabernaSeleccionadosBcgnd.setX(100)
+    this.menuTabernaSeleccionadosBcgnd.setY(50)
+    this.menuTabernaSeleccionadosBcgnd.setDepth(4)
+
+    this.menuPersonajeSimbolos.setScale(3, 3)
+    this.menuPersonajeSimbolos.setX(100)
+    this.menuPersonajeSimbolos.setY(50)
+    this.menuPersonajeSimbolos.setDepth(4)
+
+    this.menuPersonajesBcgnd.setScale(3, 3)
+    this.menuPersonajesBcgnd.setX(100)
+    this.menuPersonajesBcgnd.setY(50)
+    this.menuPersonajesBcgnd.setDepth(3)
+
+    this.menuMejoraBotonCerrar = new SpriteButton(this, 100, 50, 'ui_buttons', 1, () => this.mostrarMenuTaberna(false), 'ui_indicadorAPT', 1, false, 'cerrarTaberna')
+    this.menuMejoraBotonCerrar.setDepth(6)
+    this.menuMejoraBotonCerrar.icon.setScale(1.5, 1.5)
+
+    this.botonesPersonajesSeleccionados = []
+    for (let i = 0; i < 3; i++) {
+        this.botonesPersonajesSeleccionados.push(new SpriteButton(this, 415, 110 + (70 * i), 'ui_buttons', 7, () => this.seleccionaSlot(i), 'ui_buttons', 9, true))
+        this.botonesPersonajesSeleccionados[i].setScale(4, 4)
+        this.botonesPersonajesSeleccionados[i].icon.setScale(4, 4)
+        this.botonesPersonajesSeleccionados[i].setDepth(6)
+
+    }
+
+    for (let i = 0; i < 3; i++) {
+        this.menuMejora.crearMenuMejoraPersonaje(i)
+        this.menuMejora.setMenuMejoraPersonaje(i)            
+    }
+
+    this.ui_inventario = []
+        for (let i = 0; i < 3; i++) {
+            this.updateListaSeleccionados(this.playerTeam[i], i)
+
+        }
+        this._crearUIInventario()
+
+    }
+    setVisibleBotonesMejora(i, val) {
+        for (var key in this.botonesMejoraPersonajes[i]) {
+            this.botonesMejoraPersonajes[i][key].setVisible(val)
+        }
+    }
+    mostrarMenuTaberna(v) {
+        this.menuMejoraVisible = v
+        this.actualizarUI()
+    }
+    updateListaSeleccionados(char, i) {
+        this.botonesPersonajesSeleccionados[i].icon.setTexture('ui_characters', char.getUi_icon())
+        this.playerTeam[i] = char
+
+    }
+
+    actualizarUI(){
+        this.menuTabernaSeleccionBcgnd.setVisible(this.menuMejoraVisible)
+        this.menuTabernaSeleccionadosBcgnd.setVisible(this.menuMejoraVisible)
+        this.menuMejora.botonMenuMejora.setVisible(!this.recompensasVisible && !this.menuMejoraVisible)
+        this.menuMejoraBotonCerrar.setVisible(this.menuMejoraVisible)
+        this.menuPersonajeSimbolos.setVisible(this.menuMejoraVisible && this.hayIndiceSeleccionado && this.playerTeam[this.indiceSeleccionado] != 0 && !this.menuSeleccionPersonajesVisible)
+        this.menuPersonajesBcgnd.setVisible(this.menuMejoraVisible && this.hayIndiceSeleccionado && this.playerTeam[this.indiceSeleccionado] != 0 && !this.menuSeleccionPersonajesVisible)
+        for (let i = 0; i < 3; i++) {
+            this.botonesPersonajesSeleccionados[i].setVisible(this.menuMejoraVisible || this.menuSeleccionPersonajesVisible)
+    
+            this.menuMejora.setVisibleBotonesMejora(i, this.menuMejoraVisible && this.hayIndiceSeleccionado && this.playerTeam[this.indiceSeleccionado] != 0 && !this.menuSeleccionPersonajesVisible && i == this.indiceSeleccionado)
+            }
+        this.menuMejora.setVisibleInventario(this.menuMejoraVisible)
     }
 
     cerrarRecompensas(){
@@ -162,6 +286,7 @@ export default class Dungeon extends Phaser.Scene {
         this.uiRecompensasObj.forEach(e => {
             e.setvisible(false)
         })
+        this.recompensasVisible = false
         
     }
     compruebaCamino(hab){
@@ -191,7 +316,7 @@ export default class Dungeon extends Phaser.Scene {
 
     seleccionarHabitacion(hab){
         if(this.salasRecorridas.indexOf(hab.id) == -1){
-            this.scene.start('Combate',{mapa_id: hab.ruta, personajesEquipo: this.playerTeam,sala:this.salaActual,salasRecorridas: this.salasRecorridas, mapa:this.mapa_info, inventario:this.inventario});
+            this.scene.start('Combate',{mapa_id: hab.ruta, personajesEquipo: this.personajesEquipo,sala:this.salaActual,salasRecorridas: this.salasRecorridas, mapa:this.mapa_info, inventario:this.inventario});
         } else{
             this.salaActual=hab.id
             this.actualizarSimboloSala()
@@ -199,7 +324,7 @@ export default class Dungeon extends Phaser.Scene {
     }
     salirDeLaMazmorra(hab){
         if(this.compruebaCamino(hab)){
-            this.scene.start('Mapa',{personajesEquipo: this.playerTeam, inventario:this.inventario});
+            this.scene.start('Mapa',{personajesEquipo: this.personajesEquipo, inventario:this.inventario});
         }
     }
 

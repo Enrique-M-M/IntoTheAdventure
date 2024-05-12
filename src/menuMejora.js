@@ -2,11 +2,12 @@ import { catalogoObjetos } from "../assets/CharactersInfo/ObjectsDATA"
 import { inventarioObj } from "./ClasesUI/inventarioObj"
 import { TextButton } from "./ClasesUI/textButtom"
 import { UpgradeButtom } from "./ClasesUI/upgradeButtom"
+import { UpgradeButtomHabilidad } from "./ClasesUI/upgradeButtomHabilidad"
 
 export default class MenuMejora {
     constructor(scene, playerTeam) {
         this.scene = scene
-        this.playerTeam = playerTeam
+        this.playerTeamData = playerTeam
         this.controlInventario()
         this.botonesMejoraPersonajes = []
         this.botonMenuMejora = new TextButton(this.scene, 900, 180, 'MEJORAR\nPERSONAES', { fill: '#FFF' }, () => this.scene.mostrarMenuTaberna(true), 'ui_buttons', 4, 20)
@@ -141,8 +142,32 @@ export default class MenuMejora {
             this.botonesMejoraPersonajes[i].amuletoPlaceholder.setScale(4.5, 4.5)
         }
 
+        this.botonesMejoraPersonajes[i].habilidad1Sprt = this.scene.add.sprite(748, 314, 'ui_actions_icon', this.playerTeam[i].Habilidad1().index)
+        this.botonesMejoraPersonajes[i].habilidad1Sprt.setDepth(30)
+        this.botonesMejoraPersonajes[i].habilidad1Sprt.setScale(4, 4)
 
 
+        this.botonesMejoraPersonajes[i].habilidad1Btn = new UpgradeButtomHabilidad(this.scene, 746, 344, 'ui_indicadorAPT', 1, depthBotones, scaleXY, this.playerTeam[i], i, 2, 'Habilidad1')
+
+        if (this.playerTeam[i].hasHbilidad2) {
+            console.log(this.playerTeam[i].name)
+            this.botonesMejoraPersonajes[i].habilidad2Sprt = this.scene.add.sprite(748, 384, 'ui_actions_icon', this.playerTeam[i].Habilidad2().index)
+            this.botonesMejoraPersonajes[i].habilidad2Sprt.setDepth(30)
+            this.botonesMejoraPersonajes[i].habilidad2Sprt.setScale(4, 4)
+
+
+            this.botonesMejoraPersonajes[i].habilidad2Btn = new UpgradeButtomHabilidad(this.scene, 746, 414, 'ui_indicadorAPT', 1, depthBotones, scaleXY, this.playerTeam[i], i, 2, 'Habilidad2')
+        }
+
+        if (this.playerTeam[i].pasiva) {
+            console.log(this.playerTeam[i].name)
+            this.botonesMejoraPersonajes[i].pasivaSprt = this.scene.add.sprite(748, 454, 'ui_actions_icon', this.playerTeam[i].Pasiva().index)
+            this.botonesMejoraPersonajes[i].pasivaSprt.setDepth(30)
+            this.botonesMejoraPersonajes[i].pasivaSprt.setScale(4, 4)
+
+
+            this.botonesMejoraPersonajes[i].pasivaBtn = new UpgradeButtomHabilidad(this.scene, 746, 484, 'ui_indicadorAPT', 1, depthBotones, scaleXY, this.playerTeam[i], i, 2, 'Pasiva')
+        }
         this.actualizarUIMejora(i)
     }
 
@@ -152,7 +177,7 @@ export default class MenuMejora {
         }
     }
 
-    seleccionarIndice(i){
+    seleccionarIndice(i) {
         this.indiceSeleccionado = i
         this.hayIndiceSeleccionado = (i != -1)
     }
@@ -208,7 +233,7 @@ export default class MenuMejora {
         }
     }
 
-    setVisibleInventario(val){
+    setVisibleInventario(val) {
         this.ui_inventario.forEach(objUI => {
             objUI.setvisible(val)
         });

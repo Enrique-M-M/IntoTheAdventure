@@ -424,7 +424,7 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
     }
 
     recibeCuracion(num){
-        if(this.currentHp + num >= this.maxHp){
+        if(this.currentHp +  num >= this.maxHp){
             this.currentHp = this.maxHp
         }
         else{

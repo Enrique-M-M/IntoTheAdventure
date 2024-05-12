@@ -29,7 +29,7 @@ export var personajes = {
         spriteIndex:2, ui_index: 3,
         acciones: ['mover', 'atacar'],
         inventario: {arma: 4, armaduraSup: -1, armaduraInf: -1, amuleto: -1},
-        freeExPoint: 0 , mejorasAplicadas:[]
+        freeExPoint: 4 , mejorasAplicadas:[]
     },
     Guerrero:{
         name:'Guerrero',maxHp:40,movementRange:3,

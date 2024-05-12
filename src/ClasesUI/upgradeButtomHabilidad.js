@@ -1,7 +1,7 @@
-export class UpgradeButtom extends Phaser.GameObjects.Sprite {
+export class UpgradeButtomHabilidad extends Phaser.GameObjects.Sprite {
   
     
-    constructor(scene, x, y, bckgnd, style, depth,scaleXY, char,charindex, stat,coste, valorMejora, nombreA) {
+    constructor(scene, x, y, bckgnd, style, depth,scaleXY, char,charindex, coste, nombreA) {
       super(scene, x, y, bckgnd, style);
       this.setDepth(depth)
       this.scene.add.existing(this)
@@ -9,25 +9,39 @@ export class UpgradeButtom extends Phaser.GameObjects.Sprite {
       this.setScale(scaleXY,scaleXY)
       this.i = charindex
 
-      this.tooltipBckgnd =  scene.add.sprite(x-30,y+30,'ui_buttons', 1)
+      switch (nombreA){
+        case 'Habilidad1':
+            this.habilidad = char.Habilidad1()
+            break
+        case 'Habilidad2':
+            this.habilidad = char.Habilidad2()
+            break
+        case 'Pasiva':
+            this.habilidad = char.Pasiva()  
+            break
+      }
+
+      this.tooltipBckgnd =  scene.add.sprite(x-120,y+50,'ui_buttons', 1)
       this.tooltipBckgnd.setDepth(20)
-      this.tooltipBckgnd.setScale(4,3)
+      this.tooltipBckgnd.setScale(18,6)
       this.tooltipBckgnd.setVisible(false)
 
-      this.tooltipCoste = scene.add.text(x-55,y+10,coste + " Exp",{fill:'#000'})
+      this.tooltipCoste = scene.add.text(x-245,y+10,coste + ' EXP',{fill:'#000'})
       this.tooltipCoste.setDepth(21)
       this.tooltipCoste.setVisible(false)
 
-      this.tooltipMejora = scene.add.text(x-55,y+30,"+ " + valorMejora,{fill:'#000'})
+      this.tooltipMejora = scene.add.text(x-245,y+30,this.habilidad.nombre,{fill:'#000'})
       this.tooltipMejora.setDepth(21)
       this.tooltipMejora.setVisible(false)
+
+      this.tooltipTextoHab = scene.add.text(x-245,y+50,this.habilidad.texto,{fill:'#000'})
+      this.tooltipTextoHab.setDepth(21)
+      this.tooltipTextoHab.setVisible(false)
 
       if(this.Aplied) { this.setFrame(0)}
 
       this.char = char
       this.coste = coste
-      this.val = valorMejora
-      this.stat = stat
 
       this.nombreA = nombreA
 
@@ -51,7 +65,6 @@ export class UpgradeButtom extends Phaser.GameObjects.Sprite {
             this.scene.menuMejora.actualizarUIMejora(this.i)
             this.setFrame(0)
           }
-          console.log(this.char[this.stat])
         });
     }
     
@@ -60,5 +73,6 @@ export class UpgradeButtom extends Phaser.GameObjects.Sprite {
       this.tooltipCoste.setVisible(v)
       this.tooltipBckgnd.setVisible(v)
       this.tooltipMejora.setVisible(v)
+      this.tooltipTextoHab.setVisible(v)
     }
   }

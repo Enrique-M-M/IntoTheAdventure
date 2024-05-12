@@ -1,7 +1,6 @@
 import PlayerChar from "../playerChar";
 
-export class Vampiro extends PlayerChar{
-
+export class Mago extends PlayerChar{
 
     constructor(char,scene,x,y){
         super(char,scene,x,y)
@@ -10,6 +9,7 @@ export class Vampiro extends PlayerChar{
         }
     }
 
+    //TODO
     Habilidad1(){
         return {nombre: 'Golpe Sangriento', rango: 1,area:1, accion: (areaSeleccion) => {if(this.realizarAccion(2)){
         console.log('Golpe Sangriento')
