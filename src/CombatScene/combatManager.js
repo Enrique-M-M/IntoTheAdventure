@@ -70,7 +70,8 @@ export class    CombatManager {
             case 'enemyTurn':
                 console.log("****enemy turn****")
                 this.enemyTeam.forEach(element => {
-                    element.takeTurn()
+                    if(!this.combatScene.finCombate)
+                         element.takeTurn()
                 });
                 this._nextTurn = 'playerTurn'
                 this.nextTurn()

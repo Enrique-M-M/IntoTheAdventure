@@ -29,7 +29,6 @@ export default class Dungeon extends Phaser.Scene {
     }
 
     create(){  
-
         this.correccion_y = 150
         this.correccion_x = 500
         this.playerTeam = []
@@ -46,7 +45,7 @@ export default class Dungeon extends Phaser.Scene {
 
         if(this.victoriaEnCombate){//Victoria en combate
             this.salasRecorridas.push(this.salaActual)
-
+            this.haySalaSeleccionada = true
             this.menuRecompensas = this.make.tilemap({
                     key: 'menu_recompensas_dungeon'
             })
@@ -100,6 +99,8 @@ export default class Dungeon extends Phaser.Scene {
             });
         } else{
             this.salasRecorridas = []
+            this.haySalaSeleccionada = false
+
         }
 
 
@@ -304,6 +305,7 @@ crearMenuMejora(){
 
     actualizarSimboloSala(){
         let isaX = 0, isaY = 0, NumCasillas = 0
+        console.log(this.botonesSprite[this.salaActual])
         this.botonesSprite[this.salaActual].forEach(t => {
             isaX += t.x
             isaY += t.y

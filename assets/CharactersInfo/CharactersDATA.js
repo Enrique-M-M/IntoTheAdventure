@@ -53,7 +53,7 @@ export var personajes = {
         spriteIndex:3, ui_index:4,
         acciones: ['mover', 'atacar'],
         inventario: {arma: 6, armaduraSup: -1, armaduraInf: -1, amuleto: -1} ,
-        freeExPoint: 0, mejorasAplicadas:[]
+        freeExPoint: 4, mejorasAplicadas:[]
     },
     Brujo:{
         name:'Brujo',maxHp:35,movementRange:3,

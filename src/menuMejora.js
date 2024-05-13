@@ -7,7 +7,7 @@ import { UpgradeButtomHabilidad } from "./ClasesUI/upgradeButtomHabilidad"
 export default class MenuMejora {
     constructor(scene, playerTeam) {
         this.scene = scene
-        this.playerTeamData = playerTeam
+        this.playerTeam = playerTeam
         this.controlInventario()
         this.botonesMejoraPersonajes = []
         this.botonMenuMejora = new TextButton(this.scene, 900, 180, 'MEJORAR\nPERSONAES', { fill: '#FFF' }, () => this.scene.mostrarMenuTaberna(true), 'ui_buttons', 4, 20)
