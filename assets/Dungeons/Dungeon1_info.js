@@ -1,4 +1,4 @@
-export default dungeon1 = {
+export default Dungeon1_info = {
     id: 'Dungeon1',
     Grafo: [{
             id:0, inicio: true, final: false,

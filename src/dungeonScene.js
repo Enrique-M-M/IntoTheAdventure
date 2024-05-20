@@ -1,5 +1,4 @@
 import { catalogoObjetos } from "../assets/CharactersInfo/ObjectsDATA";
-import PruebaDungeon_info from "../assets/Dungeons/PruebaDungeon_info";
 import CharacterFactory from "./Characters/CharacterFactory";
 import { inventarioObj } from "./ClasesUI/inventarioObj";
 import { SpriteButton } from "./ClasesUI/spriteButtom";
