@@ -401,6 +401,18 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
         }
     }
 
+    realizarCuracion(targetVec,val){
+        let ent = this.scene.combatManager.getEntityAt(targetVec)
+        
+        this.orientaPersonajeyPlayAnimation('atack', targetVec)
+        this.once(Phaser.Animations.Events.ANIMATION_COMPLETE , 
+            () => {
+             this.orientaPersonajeyPlayAnimation('idle') })
+        if(ent != null && ent.recibeDano){
+            ent.recibeCuracion(val)
+        }
+    }
+
     //Funcion necesaria para ser objetivo de un ataque
     //Se puede extender para incluir la defensa y el aplicado de estados
     //Evelua si el personaje muere
@@ -412,7 +424,7 @@ export default class PlayerChar extends Phaser.GameObjects.Sprite{
     }
 
     recibeCuracion(num){
-        if(this.currentHp + num >= this.maxHp){
+        if(this.currentHp +  num >= this.maxHp){
             this.currentHp = this.maxHp
         }
         else{

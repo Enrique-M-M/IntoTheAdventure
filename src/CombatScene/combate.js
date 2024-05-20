@@ -46,6 +46,8 @@ export default class Combate extends Phaser.Scene {
     }
 
     create(){  
+        this.finCombate = false
+
         console.log("create map");
         this.createMap()
         this.createManager();
@@ -156,6 +158,26 @@ export default class Combate extends Phaser.Scene {
     }
 
     //-------------- Algoritmo para mostrar el rango para la seleccion de casillas de una accion --------------------------
+
+    mostrarRangoAccionCruz(char, range,area, tipoSeleccion){
+        this._casillaAMostrar({x:char.tileX, y: char.tileY}, tipoSeleccion, area)
+        for(let i = 1; i <= range; i++){
+        //x
+        if(this.checkCasillaEnTablero({x:char.tileX + i, y: char.tileY}))
+            this._casillaAMostrar({x:char.tileX + i, y: char.tileY}, tipoSeleccion, area)
+        //-x
+        if(this.checkCasillaEnTablero({x:char.tileX - i, y: char.tileY}))
+            this._casillaAMostrar({x:char.tileX - i, y: char.tileY}, tipoSeleccion, area)
+        //y
+        if(this.checkCasillaEnTablero({x:char.tileX, y: char.tileY + i}))
+            this._casillaAMostrar({x:char.tileX, y: char.tileY + i}, tipoSeleccion, area)
+        //-y
+        if(this.checkCasillaEnTablero({x:char.tileX, y: char.tileY - i}))
+            this._casillaAMostrar({x:char.tileX, y: char.tileY - i}, tipoSeleccion, area)
+        }
+    }
+
+
     mostrarRangoAccion(char, range,area, tipoSeleccion){
         this.combatManager.resetrAlpha()
         let tilesChecked = []
@@ -179,9 +201,8 @@ export default class Combate extends Phaser.Scene {
             if(this.checkCasillaEnTablero(newVec) && range > dist
              && (!this._arrayContieneVector(tilesChecked,newVec) || !this._arrayObjetoEnVector(tilesChecked,newVec).di < dist + 1 )
             ){
-                if((tipoSeleccion != 'Movimiento' 
-                    || (!indexBadTileBackground.find(i => i === this.capaSuelo.getTileAt(newVec.x, newVec.y, true).index) && !this.casillaOcupada(newVec)))
-                    ){
+                if(tipoSeleccion != 'Movimiento' 
+                    || this.casillaValidaMovimiento(newVec)){
                         if(this.capaJuego.getTileAt(newVec.x,newVec.y,true).index === -1 ){
                             this._mostrarRango(originVec, newVec, range, area, dist + 1,  tipoSeleccion,tilesToCheck, tilesChecked)
                         }
@@ -190,7 +211,10 @@ export default class Combate extends Phaser.Scene {
         }
         
     }
-
+    casillaValidaMovimiento(newVec){
+        return (!indexBadTileBackground.find(i => i === this.capaSuelo.getTileAt(newVec.x, newVec.y, true).index) 
+        && !this.casillaOcupada(newVec))
+    }
     //Crea un sprite en la posicion targetVec. 
     _casillaAMostrar(targetVec,tipoSeleccion, area){
         let cS;
@@ -370,6 +394,7 @@ export default class Combate extends Phaser.Scene {
 
     derrotaCombate(){
         console.log("HAN MUERTO TODOS LOS PERSONAJES")
+        this.finCombate = true
         this.scene.start('Mapa')
     }
 
@@ -421,16 +446,20 @@ export default class Combate extends Phaser.Scene {
 
 
     seleccionaAccion(accion, indexChar){
-        if(!this.combatManager.accionSeleccionada){
-            if(this.combatManager.seleccionaAccion(accion, indexChar))
-            this.mostrarRangoAccion(this.playerTeam[indexChar],accion.rango,accion.area, accion.tipoSeleccion)
-        }
-        else if(this.combatManager.accionSeleccionada && this.combatManager.ultimaAccionSeleccionada === accion ){
+        if(this.combatManager.accionSeleccionada && this.combatManager.ultimaAccionSeleccionada === accion ){
             this.combatManager.deseleccionaAccion()
-        } else {
-            findButton({indexP: indexChar, nombreA: accion.nombre}).unSelect()
-            if(this.combatManager.seleccionaAccion(accion, indexChar))
-            this.mostrarRangoAccion(this.playerTeam[indexChar],accion.rango,accion.area,accion.tipoSeleccion)
+            
+        }else{
+            if(this.combatManager.accionSeleccionada){
+                findButton({indexP: indexChar, nombreA: accion.nombre}).unSelect()
+            }
+            if(this.combatManager.seleccionaAccion(accion, indexChar)){
+                if(!accion.hasOwnProperty('formaSeleccion'))
+                    this.mostrarRangoAccion(this.playerTeam[indexChar],accion.rango,accion.area,accion.tipoSeleccion)
+                else if(accion.formaSeleccion == 'cruz'){
+                    this.mostrarRangoAccionCruz(this.playerTeam[indexChar],accion.rango,accion.area,accion.tipoSeleccion)
+                }
+            }
         }
     }
 

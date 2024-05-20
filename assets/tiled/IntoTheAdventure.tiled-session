@@ -5,10 +5,10 @@
     },
     "activeFile": "Dungeons/Dungeon1.tmx",
     "expandedProjectPaths": [
-        "Combate",
+        "Dungeons",
         ".",
-        "Menus",
-        "Dungeons"
+        "Combate",
+        "Menus"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
@@ -65,8 +65,8 @@
             "scale": 2,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 130,
-                "y": 59.75
+                "x": 255.25,
+                "y": 61.5
             }
         },
         "Dungeons/Tiles_Map.tsx": {
@@ -80,8 +80,8 @@
             "scale": 3.479375,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 118.69947907310939,
-                "y": 119.27429495239805
+                "x": 119.84911083168672,
+                "y": 80.04311119094663
             }
         },
         "Menus/tilesMenuTabernaSeleccion.json": {
@@ -99,8 +99,8 @@
             "scale": 3,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 119.66666666666667,
-                "y": 79.66666666666667
+                "x": 120,
+                "y": 79.83333333333334
             }
         },
         "Menus/tilesMenuTabernaSeleccion.tmx#UI_patrones_menu": {
