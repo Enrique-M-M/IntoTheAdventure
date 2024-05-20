@@ -77,3 +77,6 @@ El castillo de Ythalian que será el objetivo del juego. Se podra acceder en tod
 Dinero para usar en la tienda
 Comida para avanzar en cualquier mazmorra
 Luz (antorchas) para avanzar en mazmorras dificiles
+
+### VIDEOTUTORIAL
+https://youtu.be/m_IdWe3ze2o
