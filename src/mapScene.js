@@ -2,7 +2,7 @@ import { SpriteButton } from "./ClasesUI/spriteButtom.js";
 import { TextButton } from "./ClasesUI/textButtom.js";
 import { personajes } from '../assets/CharactersInfo/CharactersDATA.js';
 import PlayerChar from "./playerChar.js";
-import Dungeon1_info from "../assets/Dungeons/Dungeon1_info.js";
+import {Dungeon1_info} from "../assets/Dungeons/Dungeon1_info.js";
 import CharacterFactory from "./Characters/CharacterFactory.js";
 import MenuMejora from "./menuMejora.js";
 
