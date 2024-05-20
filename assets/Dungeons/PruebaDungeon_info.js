@@ -1,3 +1,4 @@
+/*
 export default dungeonPrueba = {
     id: 'PruebaDungeon',
     Grafo: [{
@@ -15,3 +16,4 @@ export default dungeonPrueba = {
     }
     ]
 }
+*/
